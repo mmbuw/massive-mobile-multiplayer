@@ -13,5 +13,23 @@ int main()
 		return 1;
 	}
 
+	bool running(true);
+
+	while (running)
+	{
+		std::string message;
+		std::getline(std::cin, message);
+
+		sf::Packet toSend;
+		toSend << message;
+
+		if (client.Send(toSend) != sf::Socket::Done)
+		{
+			std::cout << "Error: Sending message failed." << std::endl;
+			return 1;
+		}
+
+	}
+
     return 0;
 }
