@@ -2,6 +2,7 @@
 #include <SFML/Network.hpp>
 
 #include <iostream>
+#include <vector>
 
 #include "PlayerSocket.hpp"
 
@@ -9,6 +10,7 @@ int main()
 {
 	bool running(true);
 	int globalConnectionCounter(0);
+	std::vector<PlayerSocket> currentConnections;
 
 	//create a socket listener
 	sf::SocketTCP listener;
@@ -31,13 +33,14 @@ int main()
 			if (socket == listener)
 		    {
 		        sf::IPAddress address;
-		        ++globalConnectionCounter;
-		        PlayerSocket client(globalConnectionCounter);
-		        
+		        sf::SocketTCP client;
 		        listener.Accept(client, &address);
 		        std::cout << "Client connected ! (" << address << ")" << std::endl;
 
 		        //add the new socket to the selector
+		        ++globalConnectionCounter;
+		        PlayerSocket playerSocket(globalConnectionCounter, address, client);
+		        currentConnections.push_back(playerSocket);
 		        selector.Add(client);
 		    }
 
@@ -51,7 +54,19 @@ int main()
 		         	//extract the message and print it
 		            std::string message;
 		            packet >> message;
-		            std::cout << "A client says : \"" << message << "\"" << std::endl;
+
+		            PlayerSocket playerSocket;
+
+		            for (std::vector<PlayerSocket>::iterator it = currentConnections.begin(); it < currentConnections.end(); ++it)
+		            {
+		            	if ( it->socket_ == socket )
+		            	{
+		            		playerSocket = (*it);
+		            		break;
+		            	}
+		            }
+
+		            std::cout << "[Client " << playerSocket.id_ << "]: \"" << message << "\"" << std::endl;
 		        }
 		        else
 		        {
