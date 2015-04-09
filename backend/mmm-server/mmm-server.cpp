@@ -3,14 +3,15 @@
 
 #include <iostream>
 #include <vector>
+#include <map>
 
-#include "PlayerSocket.hpp"
+#include "PlayerConnection.hpp"
 
 int main()
 {
 	bool running(true);
 	int globalConnectionCounter(0);
-	std::vector<PlayerSocket> currentConnections;
+	std::map<sf::SocketTCP, PlayerConnection> socketPlayerConnetions;
 
 	//create a socket listener
 	sf::SocketTCP listener;
@@ -35,13 +36,14 @@ int main()
 		        sf::IPAddress address;
 		        sf::SocketTCP client;
 		        listener.Accept(client, &address);
-		        std::cout << "Client connected ! (" << address << ")" << std::endl;
 
 		        //add the new socket to the selector
 		        ++globalConnectionCounter;
-		        PlayerSocket playerSocket(globalConnectionCounter, address, client);
-		        currentConnections.push_back(playerSocket);
+		        PlayerConnection playerConnection(globalConnectionCounter, address, client);
+		        socketPlayerConnetions.insert(std::make_pair(client, playerConnection));
 		        selector.Add(client);
+
+		        std::cout << "Client " << globalConnectionCounter << " (" << address << ") connected." << std::endl;
 		    }
 
 		    //else it is a client socket, so we read the message which was sent
@@ -55,23 +57,17 @@ int main()
 		            std::string message;
 		            packet >> message;
 
-		            PlayerSocket playerSocket;
+		            PlayerConnection playerConnection = socketPlayerConnetions.find(socket)->second;
 
-		            for (std::vector<PlayerSocket>::iterator it = currentConnections.begin(); it < currentConnections.end(); ++it)
-		            {
-		            	if ( it->socket_ == socket )
-		            	{
-		            		playerSocket = (*it);
-		            		break;
-		            	}
-		            }
-
-		            std::cout << "[Client " << playerSocket.id_ << "]: \"" << message << "\"" << std::endl;
+		            std::cout << "[Client " << playerConnection.id_ << "]: \"" << message << "\"" << std::endl;
 		        }
 		        else
 		        {
 		            //the connection is lost
-		            std::cout << "Remove a client" << std::endl;
+		            std::map<sf::SocketTCP, PlayerConnection>::iterator mapIteratorToDelete = socketPlayerConnetions.find(socket);
+		            std::cout << "Client " << mapIteratorToDelete->second.id_ << " disconnected." << std::endl;
+
+		            socketPlayerConnetions.erase(mapIteratorToDelete);
 		            selector.Remove(socket);
 		        }
 		    }
