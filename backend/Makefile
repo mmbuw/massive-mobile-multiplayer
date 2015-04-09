@@ -1,7 +1,7 @@
 all:
-	g++ -c *.cpp
-	g++ -o sfml-app *.o -L/usr/local/lib -lsfml-system
+	cd mmm-server && $(MAKE)
+	cd mmm-client && $(MAKE)
 
 clean:
-	rm *.o
-	rm sfml-app
+	cd mmm-server && $(MAKE) clean
+	cd mmm-client && $(MAKE) clean
