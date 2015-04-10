@@ -2,7 +2,6 @@
 #include <SFML/Network.hpp>
 
 #include <iostream>
-#include <vector>
 #include <map>
 
 #include "PlayerConnection.hpp"
@@ -11,7 +10,7 @@ int main()
 {
 	bool running(true);
 	int globalConnectionCounter(0);
-	std::map<sf::SocketTCP, PlayerConnection> socketPlayerConnetions;
+	std::map<sf::SocketTCP, PlayerConnection*> socketPlayerConnetions;
 
 	//create a socket listener
 	sf::SocketTCP listener;
@@ -39,7 +38,7 @@ int main()
 
 		        //add the new socket to the selector
 		        ++globalConnectionCounter;
-		        PlayerConnection playerConnection(globalConnectionCounter, address, client);
+		        PlayerConnection* playerConnection = new PlayerConnection(globalConnectionCounter, address, client);
 		        socketPlayerConnetions.insert(std::make_pair(client, playerConnection));
 		        selector.Add(client);
 
@@ -57,16 +56,18 @@ int main()
 		            std::string message;
 		            packet >> message;
 
-		            PlayerConnection playerConnection = socketPlayerConnetions.find(socket)->second;
+		            PlayerConnection* playerConnection = socketPlayerConnetions.find(socket)->second;
 
-		            std::cout << "[Client " << playerConnection.id_ << "]: \"" << message << "\"" << std::endl;
+		            std::cout << "[Client " << playerConnection->id_ << "]: \"" << message << "\"" << std::endl;
+		            playerConnection->injectEvent(EV_KEY, KEY_D);
 		        }
 		        else
 		        {
 		            //the connection is lost
-		            std::map<sf::SocketTCP, PlayerConnection>::iterator mapIteratorToDelete = socketPlayerConnetions.find(socket);
-		            std::cout << "Client " << mapIteratorToDelete->second.id_ << " disconnected." << std::endl;
+		            std::map<sf::SocketTCP, PlayerConnection*>::iterator mapIteratorToDelete = socketPlayerConnetions.find(socket);
+		            std::cout << "Client " << mapIteratorToDelete->second->id_ << " disconnected." << std::endl;
 
+		            delete mapIteratorToDelete->second;
 		            socketPlayerConnetions.erase(mapIteratorToDelete);
 		            selector.Remove(socket);
 		        }

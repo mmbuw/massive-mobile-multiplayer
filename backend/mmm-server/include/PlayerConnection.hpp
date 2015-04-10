@@ -3,14 +3,28 @@
 
 #include <SFML/Network.hpp>
 
+#include <linux/input.h>
+#include <linux/uinput.h>
+#include <unistd.h>
+#include <fcntl.h>
+
+#include <iostream>
+#include <cstring>
+#include <cstdio>
+#include <sstream>
+
 class PlayerConnection
 {
 	public:
 		PlayerConnection(int id, sf::IPAddress const& ip, sf::SocketTCP const& socket);
+		~PlayerConnection();
+		void injectEvent(int eventType, int eventCode) const;
 
 		int id_;
 		sf::IPAddress ip_;
 		sf::SocketTCP socket_;
+		int uinputHandle_;
+		uinput_user_dev eventDevice_;
 };
 
 
