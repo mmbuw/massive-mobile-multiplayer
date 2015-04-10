@@ -18,7 +18,8 @@ class PlayerConnection
 	public:
 		PlayerConnection(int id, sf::IPAddress const& ip, sf::SocketTCP const& socket);
 		~PlayerConnection();
-		void injectEvent(int eventType, int eventCode) const;
+		void injectKeyEvent(int eventCode) const;
+		void injectRelEvent(int xCoord, int yCoord) const;
 
 		int id_;
 		sf::IPAddress ip_;

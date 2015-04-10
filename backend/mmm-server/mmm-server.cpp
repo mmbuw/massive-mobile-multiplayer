@@ -59,11 +59,14 @@ int main()
 		            PlayerConnection* playerConnection = socketPlayerConnetions.find(socket)->second;
 
 		            std::cout << "[Client " << playerConnection->id_ << "]: \"" << message << "\"" << std::endl;
-		            playerConnection->injectEvent(EV_KEY, KEY_D);
+
+		            //react on messages by injecting keystrokes
+		            //playerConnection->injectKeyEvent(BTN_A);
+		            playerConnection->injectRelEvent(100,100);
 		        }
 		        else
 		        {
-		            //the connection is lost
+		            //the connection is lost, perform cleanup
 		            std::map<sf::SocketTCP, PlayerConnection*>::iterator mapIteratorToDelete = socketPlayerConnetions.find(socket);
 		            std::cout << "Client " << mapIteratorToDelete->second->id_ << " disconnected." << std::endl;
 

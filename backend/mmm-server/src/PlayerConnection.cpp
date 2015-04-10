@@ -12,11 +12,15 @@ PlayerConnection::PlayerConnection(int id, sf::IPAddress const& ip, sf::SocketTC
 	}
 
 	//define allowed event types
+	ioctl(uinputHandle_, UI_SET_EVBIT, EV_REL);
 	ioctl(uinputHandle_, UI_SET_EVBIT, EV_KEY);
 	ioctl(uinputHandle_, UI_SET_EVBIT, EV_SYN);
 
 	//define allowed events
-	ioctl(uinputHandle_, UI_SET_KEYBIT, KEY_D);
+	ioctl(uinputHandle_, UI_SET_RELBIT, REL_X);
+	ioctl(uinputHandle_, UI_SET_RELBIT, REL_Y);
+	ioctl(uinputHandle_, UI_SET_KEYBIT, BTN_A);
+	ioctl(uinputHandle_, UI_SET_KEYBIT, BTN_B);
 
 	//create event device
 	std::stringstream nameStream;
@@ -24,6 +28,11 @@ PlayerConnection::PlayerConnection(int id, sf::IPAddress const& ip, sf::SocketTC
 
 	memset(&eventDevice_, 0, sizeof(eventDevice_));
 	snprintf(eventDevice_.name, UINPUT_MAX_NAME_SIZE, nameStream.str().c_str());
+
+	eventDevice_.absmin[REL_X] = 0;
+	eventDevice_.absmax[REL_X] = 1023;
+	eventDevice_.absmin[REL_Y] = 0;
+	eventDevice_.absmax[REL_Y] = 1023;
 
 	/* set event device properties */
 	//eventDevice_.id.bustype = BUS_USB;
@@ -40,18 +49,18 @@ PlayerConnection::~PlayerConnection()
 	ioctl(uinputHandle_, UI_DEV_DESTROY);
 }
 
-void PlayerConnection::injectEvent(int eventType, int eventCode) const
+void PlayerConnection::injectKeyEvent(int eventCode) const
 {
 	struct input_event eventHandle;
 	memset(&eventHandle, 0, sizeof(eventHandle));
 
-	eventHandle.type = eventType;
+	eventHandle.type = EV_KEY;
 	eventHandle.code = eventCode;
 	eventHandle.value = 1;
 
 	write(uinputHandle_, &eventHandle, sizeof(eventHandle));
 
-	eventHandle.type = eventType;
+	eventHandle.type = EV_KEY;
 	eventHandle.code = eventCode;
 	eventHandle.value = 0;
 
@@ -62,4 +71,29 @@ void PlayerConnection::injectEvent(int eventType, int eventCode) const
 	eventHandle.value = 1;
 
 	write(uinputHandle_, &eventHandle, sizeof(eventHandle));
+}
+
+void PlayerConnection::injectRelEvent(int xCoord, int yCoord) const
+{
+	struct input_event eventHandle[2];
+	memset(&eventHandle, 0, sizeof(eventHandle));
+
+	eventHandle[0].type = EV_REL;
+	eventHandle[0].code = REL_X;
+	eventHandle[0].value = xCoord;
+
+	eventHandle[1].type = EV_REL;
+	eventHandle[1].code = REL_Y;
+	eventHandle[1].value = yCoord;
+
+	write(uinputHandle_, &eventHandle, sizeof(eventHandle));
+
+	struct input_event syncEventHandle;
+	memset(&syncEventHandle, 0, sizeof(syncEventHandle));
+
+	syncEventHandle.type = EV_SYN;
+	syncEventHandle.code = SYN_REPORT;
+	syncEventHandle.value = 1;
+
+	write(uinputHandle_, &syncEventHandle, sizeof(syncEventHandle));
 }
