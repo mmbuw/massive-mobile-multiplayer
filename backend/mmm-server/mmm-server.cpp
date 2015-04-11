@@ -3,6 +3,8 @@
 
 #include <iostream>
 #include <map>
+#include <bitset>
+#include <vector>
 
 #include "PlayerConnection.hpp"
 #include "base64.hpp"
@@ -48,10 +50,10 @@ int main()
 		        socketPlayerConnetions.insert(std::make_pair(client, playerConnection));
 		        selector.Add(client);
 		    	
-		    	/* Perform WebSocket handshake */
+		    	/* Perform WebSocket handshake (RFC 6455) */
 
 		    	//receive request
-		    	char requestBuffer[1024];
+		    	char requestBuffer[10000];
 		    	std::size_t receivedSize;
 		    	
 		    	if (client.Receive(requestBuffer, sizeof(requestBuffer), receivedSize) != sf::Socket::Done)
@@ -74,7 +76,7 @@ int main()
 				sha1::calc(concatenatedString.c_str(), concatenatedString.size(), sha1Hash);
 				std::string secWebSocketAccept = base64_encode(reinterpret_cast<const unsigned char*>(sha1Hash), 20);
 				
-				//send acceptance responseStream
+				//send acceptance response
 				std::stringstream responseStream;
 				responseStream << "HTTP/1.1 101 Switching Protocols\r\n";
 				responseStream << "Upgrade: websocket\r\n";
@@ -102,17 +104,67 @@ int main()
 		    //else it is a client socket, so we read the message which was sent
 		    else
 		    {
-		        sf::Packet packet;
+		        char receiveBuffer[50];
+		    	std::size_t receiveSize;
 
-		        if (socket.Receive(packet) == sf::Socket::Done)
+		        if (socket.Receive(receiveBuffer, sizeof(receiveBuffer), receiveSize) == sf::Socket::Done)
 		        {
-		         	//extract the message and print it
-		            std::string message;
-		            packet >> message;
-
+		        	//get client information using its PlayerConnection instance
 		            PlayerConnection* playerConnection = socketPlayerConnetions.find(socket)->second;
 
-		            std::cout << "[Client " << playerConnection->id_ << "]: \"" << message << "\"" << std::endl;
+		            /* Decoding the client message using the WebSocket protocol */
+		            /* (http://stackoverflow.com/questions/8125507/how-can-i-send-and-receive-websocket-messages-on-the-server-side) */
+
+		            //the bit masks used for decode WebSocket messages
+		            //unfortunately cannot be stored in a std::vector for some reason
+		            std::bitset<8> mask_0;
+		            std::bitset<8> mask_1;
+		            std::bitset<8> mask_2;
+		            std::bitset<8> mask_3;
+
+            		//omit leading 1 in second byte (length)
+		            int indexOfFirstMask(2);
+            		std::bitset<8> length = ((std::bitset<8>) receiveBuffer[i] ^= std::bitset<8>(std::string("01111111")));
+            		unsigned long lengthLong = length.to_ulong();
+
+            		if (lengthLong == 126)
+            			indexOfFirstMask = 4;
+            		else if (lengthLong == 127)
+            			indexOfFirstMask = 10;
+
+            		int indexOfFirstDataByte(indexOfFirstMask+4);
+            		int numDataBytes(receiveSize-indexOfFirstDataByte);
+		            unsigned long decodedLong[numDataBytes];
+
+		            //get decoding masks
+		            mask_0 = (std::bitset<8>) receiveBuffer[indexOfFirstMask];
+		            mask_1 = (std::bitset<8>) receiveBuffer[indexOfFirstMask+1];
+		            mask_2 = (std::bitset<8>) receiveBuffer[indexOfFirstMask+2];
+		            mask_3 = (std::bitset<8>) receiveBuffer[indexOfFirstMask+3];
+
+		            //decode data bytes with respective mask
+		            for (int i = indexOfFirstDataByte; i < receiveSize; ++i)
+		            {
+		            	if ( (i-indexOfFirstDataByte) % 4 == 0)
+		            		decodedLong[i-indexOfFirstDataByte] = ((std::bitset<8>) receiveBuffer[i] ^= mask_0).to_ulong();
+		            	else if ( (i-indexOfFirstDataByte) % 4 == 1)
+		            		decodedLong[i-indexOfFirstDataByte] = ((std::bitset<8>) receiveBuffer[i] ^= mask_1).to_ulong();
+		            	else if ( (i-indexOfFirstDataByte) % 4 == 2)
+		            		decodedLong[i-indexOfFirstDataByte] = ((std::bitset<8>) receiveBuffer[i] ^= mask_2).to_ulong();
+		            	else
+		            		decodedLong[i-indexOfFirstDataByte] = ((std::bitset<8>) receiveBuffer[i] ^= mask_3).to_ulong();
+		            }
+
+		            //convert decoded long values to characters
+		            char decodedChar[numDataBytes];
+
+		            for (int i = 0; i < numDataBytes; ++i)
+		            {
+		            	decodedChar[i] = (char) decodedLong[i];
+		            }
+
+		            //print message
+		            std::cout << "[Client " << playerConnection->id_ << "]: " << decodedChar << std::endl;
 
 		            //react on messages by injecting keystrokes
 		            //playerConnection->injectKeyEvent(BTN_A);
