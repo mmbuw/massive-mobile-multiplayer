@@ -21,6 +21,10 @@ int main()
 	sf::SelectorTCP selector;
 	selector.Add(listener);
 
+	//information needed for WebSocket handshake (RFC 6455)
+	std::string globallyUniqueIdentifier("258EAFA5-E914-47DA-95CA-C5AB0DC85B11"); //RFC 4122
+	std::string requestSearchString("Sec-WebSocket-Key: ");
+
 	while(running)
 	{
 		//wait until at least one socket has news
@@ -58,41 +62,36 @@ int main()
 		    	std::string request(requestBuffer);
 
 		    	//find Sec-WebSocket-Key
-		    	std::string searchString("Sec-WebSocket-Key: ");
-
-		    	std::size_t stringPosition = request.find(searchString);
+		    	std::size_t stringPosition = request.find(requestSearchString);
 		    	std::size_t endPosition = request.find("\r\n", stringPosition);
-		    	std::string socketKey = request.substr(stringPosition + searchString.size(), 
-		    		                                   endPosition-stringPosition-searchString.size());
+		    	std::string secWebSocketKey = request.substr(stringPosition + requestSearchString.size(), 
+		    		                                         endPosition-stringPosition-requestSearchString.size());
 
 		    	//generate Sec-WebSocket-Accept
-		    	std::string globallyUniqueIdentifier("258EAFA5-E914-47DA-95CA-C5AB0DC85B11");
-		    	std::stringstream concatStream;
-		    	concatStream << socketKey << globallyUniqueIdentifier;
-		    	std::string concatenatedString = concatStream.str();
+		    	std::string concatenatedString = secWebSocketKey + globallyUniqueIdentifier;
 
-	    		unsigned char hash[20];
-				sha1::calc(concatenatedString.c_str(), concatenatedString.size(), hash);
-				std::string secWebSocketAccept = base64_encode(reinterpret_cast<const unsigned char*>(hash), 20);
+	    		unsigned char sha1Hash[20];
+				sha1::calc(concatenatedString.c_str(), concatenatedString.size(), sha1Hash);
+				std::string secWebSocketAccept = base64_encode(reinterpret_cast<const unsigned char*>(sha1Hash), 20);
 				
-				//send acceptance response
-				std::stringstream response;
-				response << "HTTP/1.1 101 Switching Protocols\r\n";
-				response << "Upgrade: websocket\r\n";
-				response << "Connection: Upgrade\r\n";
-				response << "Sec-WebSocket-Accept: " << secWebSocketAccept << "\r\n\r\n";
+				//send acceptance responseStream
+				std::stringstream responseStream;
+				responseStream << "HTTP/1.1 101 Switching Protocols\r\n";
+				responseStream << "Upgrade: websocket\r\n";
+				responseStream << "Connection: Upgrade\r\n";
+				responseStream << "Sec-WebSocket-Accept: " << secWebSocketAccept << "\r\n\r\n";
 
-				std::string responseString = response.str();
-		    	char responseBuffer[responseString.size()]; 
+				std::string responseStreamString = responseStream.str();
+		    	char responseStreamBuffer[responseStreamString.size()];
 		    	
-		    	for (int i = 0; i < responseString.size(); ++i)
+		    	for (int i = 0; i < responseStreamString.size(); ++i)
 		    	{
-		    		responseBuffer[i] = responseString[i];
+		    		responseStreamBuffer[i] = responseStreamString[i];
 		    	}
 
-		    	if (client.Send(responseBuffer, sizeof(responseBuffer)) != sf::Socket::Done)
+		    	if (client.Send(responseStreamBuffer, sizeof(responseStreamBuffer)) != sf::Socket::Done)
 		    	{
-		    		std::cout << "Error: Sending response failed." << std::endl;
+		    		std::cout << "Error: Sending responseStream failed." << std::endl;
 		    	}
 
 		    	//client is now connected
