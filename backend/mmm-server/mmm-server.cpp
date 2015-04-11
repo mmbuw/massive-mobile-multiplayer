@@ -156,15 +156,15 @@ int main()
 		            }
 
 		            //convert decoded long values to characters
-		            char decodedChar[numDataBytes];
+		            std::string message("");
 
 		            for (int i = 0; i < numDataBytes; ++i)
 		            {
-		            	decodedChar[i] = (char) decodedLong[i];
+		            	message += (char) decodedLong[i];
 		            }
 
 		            //print message
-		            std::cout << "[Client " << playerConnection->id_ << "]: " << decodedChar << std::endl;
+		            std::cout << "[Client " << playerConnection->id_ << "]: " << message << std::endl;
 
 		            //react on messages by injecting keystrokes
 		            //playerConnection->injectKeyEvent(BTN_A);
