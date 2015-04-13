@@ -14,7 +14,7 @@ class Game {
 	
 		void renderBackground(sf::RenderWindow* window);
 		void renderPlayers(sf::RenderWindow* window);		
-		void renderBall(sf::RenderWindow* window);
+		void renderBall(sf::RenderWindow* window;);
 		void renderSidelines(sf::RenderWindow* window);		
 
 		void addPlayer();
