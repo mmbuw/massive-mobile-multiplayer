@@ -1,6 +1,7 @@
 <!DOCTYPE HTML>
 <html>
 <head>
+<meta charset="utf-8" />
 <script type="text/javascript">
 
 if ("WebSocket" in window)
@@ -15,8 +16,6 @@ if ("WebSocket" in window)
      {
         // Web Socket is connected, send data using send()
         console.log("WebSocket is connected.");
-        ws.send("Message to send");
-        alert("Message is sent...");
      };
 
      ws.onmessage = function (evt)
@@ -41,14 +40,22 @@ else
 
 function sendStuff()
 {
-  console.log("SendStuff");
+    var message = document.getElementById("message").value;
+    ws.send(message);
+    console.log("Sent message: " + message);
+    document.getElementById("message").value = "";
 }
 
 </script>
 </head>
 <body>
-<div id="sse">
-   <a href="javascript:sendStuff()">Send Data</a>
-</div>
+
+<form action="javascript:sendStuff()">
+Your message:<br>
+<input type="text" name="message" id="message">
+<br><br>
+<input type="submit" value="Submit">
+</form>
+
 </body>
 </html>
