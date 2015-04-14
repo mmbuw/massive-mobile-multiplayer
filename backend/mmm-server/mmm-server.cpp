@@ -177,8 +177,12 @@ int main()
 		            {
 		            	std::stringstream stream(message);
 		            	int x, y;
+				std::cout << "Stream: " << stream.str() << std::endl;
 		            	stream >> x;
 		            	stream >> y;
+
+				std::cout << "X: " << x << std::endl;
+				std::cout << "Y: " << y << std::endl;
 
 		            	if (x <= 1024 && y <= 1024 && x >= 0 && y >= 0)
 		            		playerConnection->injectRelEvent(x, y);

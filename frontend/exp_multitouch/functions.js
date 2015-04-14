@@ -32,19 +32,19 @@ window.addEventListener('load', function(){
  		var centerY = canvas.offsetHeight / 2;
 
  		var startx = 0;
-	    var starty = 0;
-	    var diffx = 0;
-	    var diffy = 0;
+	        var starty = 0;
+	        var diffx = 0;
+	        var diffy = 0;
 
-	    //set circle in center
+	        //set circle in center
  		circle.style.top = centerY - circle.offsetHeight/2;
  		circle.style.left = centerX -circle.offsetWidth/2;
 
  		//start touchinteraction on circle
- 		circle.addEventListener('touchstart', function(e){
+ 	    circle.addEventListener('touchstart', function(e){
 	        var touchobj = e.changedTouches[0];
 	        startx = parseInt(touchobj.clientX);
-	        starty = parseInt(touchobj.clientX);
+	        starty = parseInt(touchobj.clientY);
 	       	e.preventDefault();
 
 	       	socket.send(startx+' '+starty);
@@ -80,6 +80,8 @@ window.addEventListener('load', function(){
 	    	console.log('start: '+centerX+'/'+centerY);
 
 	       	console.log('lineTo: '+currx+'/'+curry);
+
+	        socket.send(currx + ' ' + curry);
 
 
 	    }, false)
