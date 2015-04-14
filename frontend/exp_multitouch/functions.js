@@ -1,6 +1,15 @@
 
 window.addEventListener('load', function(){
+ 		// Websocket
+		var socket = new WebSocket("ws://29.4.93.1:53000");
  
+		// Nach dem öffnen des Sockets den Status anzeigen
+		socket.onopen 	= function() 	{ console.log('Socket Status: '+socket.readyState+' (open)');	}
+ 		// Websocket
+		var socket = new WebSocket("ws://29.4.93.1:53000");
+ 
+		// Nach dem öffnen des Sockets den Status anzeigen
+		socket.onopen 	= function() 	{ console.log('Socket Status: '+socket.readyState+' (open)');	}
  		//button control
 	    var button = document.getElementById('button');
 
@@ -91,24 +100,3 @@ window.addEventListener('load', function(){
 
 }, false)
 
-
-
-
-$(document).ready(function() 
-{
-
-
-
-	
-	function connect()
-	{
-		// Websocket
-		var socket = new WebSocket("ws://29.4.93.1:53000");
- 
-		// Nach dem öffnen des Sockets den Status anzeigen
-		socket.onopen 	= function() 	{ console.log('Socket Status: '+socket.readyState+' (open)');	}
-	}
- 
-	connect();
- 	
-});
