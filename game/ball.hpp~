@@ -5,10 +5,14 @@
 class Ball {
 	public:
 		Ball();
-		void render();
+		void render(sf::RenderWindow* window);
+		sf::Shape getShape();
+		int getX();
+		int getY();
 	
 	private:
 		int xPosition;
 		int yPosition;
+		sf::Shape shape;
 
 };

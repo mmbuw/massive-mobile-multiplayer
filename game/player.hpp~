@@ -27,8 +27,8 @@ class Player {
 		sf::Color borderColor;
 		sf::Color centerColor;
 		sf::Shape shape;
-		int xBallMovement;
-		int yBallMovement;
+		int xBallMovement = 0;
+		int yBallMovement = 0;
 		
 
 };

@@ -1,5 +1,9 @@
 #include "game.hpp"
 
+Game::Game() {
+	ballXMovement = 0;
+	ballYMovement = 0;
+}
 
 void Game::renderBackground(sf::RenderWindow* window) {
 
@@ -9,7 +13,7 @@ void Game::renderBackground(sf::RenderWindow* window) {
 			if (i%2 == 0){
 				currentGreen = sf::Color(50,200,50);						
 			}else{
-				currentGreen = sf::Color(25,255,25);
+				currentGreen = sf::Color(75,220,75);
 			}
 			sf::Shape rect = sf::Shape::Rectangle(pos,0,pos+192,1200,currentGreen);
 			window->Draw(rect);
@@ -17,6 +21,25 @@ void Game::renderBackground(sf::RenderWindow* window) {
 		}
 	
 
+}
+
+void Game::checkIntersect(){
+	for (int i = 0; i < players.size(); ++i){
+		if (players[i].intersectsWithBall(ball)){
+			std::cout<<"Player "<<i<<" intersects with the ball!"<<std::endl;		
+		}else{
+			std::cout<<"Player "<<i<<" does not intersect with the ball!"<<std::endl;	
+		}
+	}
+
+}
+
+void Game::resetBallMovement(){
+	ballXMovement = 0;
+	ballYMovement = 0;
+	for (int i = 0; i < players.size(); i++){
+		players[i].resetBallMovement();	
+	}
 }
 
 void Game::initPlayers() {
@@ -101,3 +124,17 @@ void Game::movePlayer(int playerNumber, std::string direction){
 	}
 
 }
+
+void Game::getBallMovement() {
+	for (int i = 0; i<players.size();++i){
+		if (players[i].currentlyIntersectsBall){
+			ballXMovement+=players[i].getXBallMovement();
+			ballYMovement+=players[i].getYBallMovement();
+		}	
+	}
+}
+
+void Game::moveBall() {
+	ball.move(ballXMovement,ballYMovement);
+}
+ 

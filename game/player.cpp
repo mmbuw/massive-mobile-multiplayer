@@ -5,6 +5,9 @@
 	yPosition = StartY;
 	borderColor = border;
 	centerColor = center;
+	currentlyIntersectsBall=false;
+	xBallMovement=0;
+	yBallMovement=0;
 }
 
  Player::Player() {
@@ -12,29 +15,81 @@
 	yPosition = 0;
 	borderColor = sf::Color(0,0,0);
 	centerColor = sf::Color(255,0,0);
+	currentlyIntersectsBall=false;
+	xBallMovement=0;
+	yBallMovement=0;
 }
 
 void Player::render(sf::RenderWindow* renderWindow) {
 
 		sf::Shape playerdot = sf::Shape::Circle(xPosition,yPosition,45,centerColor,5,borderColor);
+		shape = playerdot;
 		renderWindow->Draw(playerdot);
+}
+
+sf::Shape Player::getShape(){
+	return shape;
+}
+
+bool Player::intersectsWithBall(Ball ball){
+
+		//player radius 50
+		//ball radius 20
+
+	int checkValueLower = 900;
+	int checkValueUpper = 4900;
+
+	int realValue = (xPosition-ball.getX())*(xPosition-ball.getX()) + (yPosition-ball.getY())*(yPosition-ball.getY());
+	if (realValue <= checkValueUpper){
+		//if(realValue >= checkValueLower){
+			currentlyIntersectsBall = true;
+			return true;		
+		//}	
+	}
+	currentlyIntersectsBall = false;
+	return false;
+
 }
 
 void Player::moveUp() {
 	yPosition-=5;
+	if (currentlyIntersectsBall){
+		yBallMovement=-5;
+	}
 
 }
 
 void Player::moveDown() {
 	yPosition+=5;
+	if (currentlyIntersectsBall){
+		yBallMovement=5;
+	}
 }
 
 void Player::moveLeft() {
 	xPosition-=5;
+	if (currentlyIntersectsBall){
+		xBallMovement=-5;
+	}
 }
 
 void Player::moveRight() {
 	xPosition+=5;
+	if (currentlyIntersectsBall){
+		xBallMovement=5;
+	}
 }
 
+void Player::resetBallMovement() {
+	xBallMovement=0;
+	yBallMovement=0;	
+}
+
+int Player::getXBallMovement() {
+	return xBallMovement;
+}
+
+int Player::getYBallMovement() {
+	return yBallMovement;
+}
 

@@ -16,15 +16,24 @@ class Game {
 		void renderPlayers(sf::RenderWindow* window);		
 		void renderBall(sf::RenderWindow* window);
 		void renderSidelines(sf::RenderWindow* window);		
+		void checkIntersect(); 
+		void saveIntersectingPlayers();
 
 		void addPlayer();
 
 		void movePlayer(int playerNumber, std::string direction);
+		void getBallMovement();
+		void resetBallMovement();
+		void moveBall();
+		Game();
 
 
 	private:
 		std::vector<Player> players;
+		std::vector<Player> intersectingPlayers;
 		sf::Image background;
-		Ball ball;	
+		Ball ball;
+		int ballXMovement;
+		int ballYMovement;
 
 };
