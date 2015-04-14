@@ -63,6 +63,8 @@ int main()
 
 		    	std::string request(requestBuffer);
 
+		    	//std::cout << request << std::endl;
+
 		    	//find Sec-WebSocket-Key
 		    	std::size_t stringPosition = request.find(requestSearchString);
 		    	std::size_t endPosition = request.find("\r\n", stringPosition);
@@ -164,11 +166,23 @@ int main()
 		            }
 
 		            //print message
-		            std::cout << "[Client " << playerConnection->id_ << "]: " << message << std::endl;
+		            //std::cout << "[Client " << playerConnection->id_ << "]: " << message << std::endl;
 
 		            //react on messages by injecting keystrokes
-		            //playerConnection->injectKeyEvent(BTN_A);
-		            playerConnection->injectRelEvent(100,100);
+		            if (message == "A")
+		            {
+		            	playerConnection->injectKeyEvent(BTN_A);
+		            }
+		            else
+		            {
+		            	std::stringstream stream(message);
+		            	int x, y;
+		            	stream >> x;
+		            	stream >> y;
+
+		            	if (x <= 1024 && y <= 1024 && x >= 0 && y >= 0)
+		            		playerConnection->injectRelEvent(x, y);
+		            }
 		        }
 		        else
 		        {
