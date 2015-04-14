@@ -30,8 +30,8 @@ void Game::initBall() {
 	ball = Ball();
 }
 
-void Game::renderBall(sf::RenderWindow* window){
-	ball.render(window);
+void Game::renderBall(){
+	ball.render();
 }
 
 void Game::renderSidelines(sf::RenderWindow* window) {
