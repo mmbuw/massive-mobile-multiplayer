@@ -20,7 +20,6 @@ PlayerConnection::PlayerConnection(int id, sf::IPAddress const& ip, sf::SocketTC
 	ioctl(uinputHandle_, UI_SET_RELBIT, REL_X);
 	ioctl(uinputHandle_, UI_SET_RELBIT, REL_Y);
 	ioctl(uinputHandle_, UI_SET_KEYBIT, BTN_A);
-	ioctl(uinputHandle_, UI_SET_KEYBIT, BTN_B);
 
 	//create event device
 	std::stringstream nameStream;
