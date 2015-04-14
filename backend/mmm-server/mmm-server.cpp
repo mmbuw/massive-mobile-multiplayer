@@ -63,7 +63,7 @@ int main()
 
 		    	std::string request(requestBuffer);
 
-		    	std::cout << request << std::endl;
+		    	//std::cout << request << std::endl;
 
 		    	//find Sec-WebSocket-Key
 		    	std::size_t stringPosition = request.find(requestSearchString);
@@ -179,7 +179,9 @@ int main()
 		            	int x, y;
 		            	stream >> x;
 		            	stream >> y;
-		            	playerConnection->injectRelEvent(x, y);
+
+		            	if (x <= 1024 && y <= 1024 && x >= 0 && y >= 0)
+		            		playerConnection->injectRelEvent(x, y);
 		            }
 		        }
 		        else
