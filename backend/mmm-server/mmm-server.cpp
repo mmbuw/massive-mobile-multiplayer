@@ -157,6 +157,20 @@ int main()
 		            		decodedLong[i-indexOfFirstDataByte] = ((std::bitset<8>) receiveBuffer[i] ^= mask_3).to_ulong();
 		            }
 
+		            //detect disconnects
+		            if (numDataBytes == 2 && decodedLong[0] == 3 && decodedLong[1] == 233) // refresh button pressed
+		            {
+		            	//TODO: avoid code redundancy
+		            	std::map<sf::SocketTCP, PlayerConnection*>::iterator mapIteratorToDelete = socketPlayerConnetions.find(socket);
+			            std::cout << "Client " << mapIteratorToDelete->second->id_ << " disconnected." << std::endl;
+
+			            delete mapIteratorToDelete->second;
+			            socketPlayerConnetions.erase(mapIteratorToDelete);
+			            selector.Remove(socket);
+
+			            continue;
+		            }
+
 		            //convert decoded long values to characters
 		            std::string message("");
 
@@ -177,12 +191,12 @@ int main()
 		            {
 		            	std::stringstream stream(message);
 		            	int x, y;
-				std::cout << "Stream: " << stream.str() << std::endl;
+
 		            	stream >> x;
 		            	stream >> y;
 
-				std::cout << "X: " << x << std::endl;
-				std::cout << "Y: " << y << std::endl;
+						//std::cout << "X: " << x << std::endl;
+						//std::cout << "Y: " << y << std::endl;
 
 		            	if (x <= 1024 && y <= 1024 && x >= 0 && y >= 0)
 		            		playerConnection->injectRelEvent(x, y);
