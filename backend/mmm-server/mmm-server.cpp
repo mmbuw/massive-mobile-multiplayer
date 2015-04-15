@@ -108,6 +108,7 @@ int main()
 		    {
 		        char receiveBuffer[50];
 		    	std::size_t receiveSize;
+		    	bool performCleanup(false);
 
 		        if (socket.Receive(receiveBuffer, sizeof(receiveBuffer), receiveSize) == sf::Socket::Done)
 		        {
@@ -157,52 +158,53 @@ int main()
 		            		decodedLong[i-indexOfFirstDataByte] = ((std::bitset<8>) receiveBuffer[i] ^= mask_3).to_ulong();
 		            }
 
-		            //detect disconnects
-		            if (numDataBytes == 2 && decodedLong[0] == 3 && decodedLong[1] == 233) // refresh button pressed
+		            //detect refresh of page
+		            if (numDataBytes == 2 && decodedLong[0] == 3 && decodedLong[1] == 233)
 		            {
-		            	//TODO: avoid code redundancy
-		            	std::map<sf::SocketTCP, PlayerConnection*>::iterator mapIteratorToDelete = socketPlayerConnetions.find(socket);
-			            std::cout << "Client " << mapIteratorToDelete->second->id_ << " disconnected." << std::endl;
-
-			            delete mapIteratorToDelete->second;
-			            socketPlayerConnetions.erase(mapIteratorToDelete);
-			            selector.Remove(socket);
-
-			            continue;
-		            }
-
-		            //convert decoded long values to characters
-		            std::string message("");
-
-		            for (int i = 0; i < numDataBytes; ++i)
-		            {
-		            	message += (char) decodedLong[i];
-		            }
-
-		            //print message
-		            //std::cout << "[Client " << playerConnection->id_ << "]: " << message << std::endl;
-
-		            //react on messages by injecting keystrokes
-		            if (message == "A")
-		            {
-		            	playerConnection->injectKeyEvent(BTN_A);
+		            	performCleanup = true;
 		            }
 		            else
 		            {
-		            	std::stringstream stream(message);
-		            	int x, y;
+			            //convert decoded long values to characters
+			            std::string message("");
 
-		            	stream >> x;
-		            	stream >> y;
+			            for (int i = 0; i < numDataBytes; ++i)
+			            {
+			            	message += (char) decodedLong[i];
+			            }
 
-						//std::cout << "X: " << x << std::endl;
-						//std::cout << "Y: " << y << std::endl;
+			            //print message
+			            //std::cout << "[Client " << playerConnection->id_ << "]: " << message << std::endl;
 
-		            	if (x <= 1024 && y <= 1024 && x >= 0 && y >= 0)
-		            		playerConnection->injectRelEvent(x, y);
-		            }
+			            //react on messages by injecting keystrokes
+			            if (message == "A")
+			            {
+			            	playerConnection->injectKeyEvent(BTN_A);
+			            }
+			            else
+			            {
+			            	std::stringstream stream(message);
+			            	int x, y;
+
+			            	stream >> x;
+			            	stream >> y;
+
+							//std::cout << "X: " << x << std::endl;
+							//std::cout << "Y: " << y << std::endl;
+
+			            	if (x <= 1024 && y <= 1024 && x >= 0 && y >= 0)
+			            		playerConnection->injectRelEvent(x, y);
+			            }
+			        }
+			        
 		        }
 		        else
+		        {
+		        	performCleanup = true;
+		        }
+
+
+		        if (performCleanup)
 		        {
 		            //the connection is lost, perform cleanup
 		            std::map<sf::SocketTCP, PlayerConnection*>::iterator mapIteratorToDelete = socketPlayerConnetions.find(socket);
