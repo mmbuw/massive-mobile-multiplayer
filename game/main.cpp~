@@ -12,6 +12,7 @@ int main()
 	Game game;	
 	game.initPlayers();
 	while (App.IsOpened()) {
+		
 
 		sf::Event Event;
 		App.Clear(sf::Color(255,0,0));
@@ -23,16 +24,16 @@ int main()
 			if (Event.Type == sf::Event::Closed){ App.Close(); }
 
 			
-			if (input.IsKeyDown(sf::Key::Left)){
+			if (input.IsKeyDown(sf::Key::J)){
 				game.movePlayer(0,"LEFT");			
 			}
-			if (input.IsKeyDown(sf::Key::Right)){
+			if (input.IsKeyDown(sf::Key::L)){
 				game.movePlayer(0,"RIGHT");			
 			}
-			if (input.IsKeyDown(sf::Key::Up)){
+			if (input.IsKeyDown(sf::Key::I)){
 				game.movePlayer(0,"UP");			
 			}
-			if (input.IsKeyDown(sf::Key::Down)){
+			if (input.IsKeyDown(sf::Key::K)){
 				game.movePlayer(0,"DOWN");			
 			}
 			

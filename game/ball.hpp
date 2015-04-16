@@ -9,11 +9,12 @@ class Ball {
 		sf::Shape getShape();
 		int getX();
 		int getY();
-		void move(int xMovement, int yMovement);
+		void move(int xMovement, int yMovement);	
 	
 	private:
 		int xPosition;
 		int yPosition;
+		void checkPosition();
 		sf::Shape shape;
 
 };

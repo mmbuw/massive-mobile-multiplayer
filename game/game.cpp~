@@ -25,11 +25,7 @@ void Game::renderBackground(sf::RenderWindow* window) {
 
 void Game::checkIntersect(){
 	for (int i = 0; i < players.size(); ++i){
-		if (players[i].intersectsWithBall(ball)){
-			std::cout<<"Player "<<i<<" intersects with the ball!"<<std::endl;		
-		}else{
-			std::cout<<"Player "<<i<<" does not intersect with the ball!"<<std::endl;	
-		}
+		players[i].intersectsWithBall(ball);
 	}
 
 }
@@ -43,10 +39,12 @@ void Game::resetBallMovement(){
 }
 
 void Game::initPlayers() {
+	Player player2(480,600,sf::Color(0,0,0),sf::Color(0,0,255));	
 	Player player1(1400,600,sf::Color(0,0,0),sf::Color(255,0,255));
-	Player player2(480,600,sf::Color(0,0,0),sf::Color(0,0,255));
+	
+	players.push_back(player2);
 	players.push_back(player1);
-	players.push_back(player2);		
+			
 }
 
 void Game::initBall() {
@@ -135,6 +133,7 @@ void Game::getBallMovement() {
 }
 
 void Game::moveBall() {
+	std::cout<<"Ball movement at "<<ballXMovement<<","ballYMovement;
 	ball.move(ballXMovement,ballYMovement);
 }
  
