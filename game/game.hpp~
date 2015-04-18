@@ -25,6 +25,7 @@ class Game {
 		void getBallMovement();
 		void resetBallMovement();
 		void moveBall();
+		Game();
 
 
 	private:

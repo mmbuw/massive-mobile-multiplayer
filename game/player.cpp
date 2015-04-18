@@ -41,10 +41,10 @@ bool Player::intersectsWithBall(Ball ball){
 
 	int realValue = (xPosition-ball.getX())*(xPosition-ball.getX()) + (yPosition-ball.getY())*(yPosition-ball.getY());
 	if (realValue <= checkValueUpper){
-		//if(realValue >= checkValueLower){
+		
 			currentlyIntersectsBall = true;
 			return true;		
-		//}	
+	
 	}
 	currentlyIntersectsBall = false;
 	return false;
@@ -53,30 +53,49 @@ bool Player::intersectsWithBall(Ball ball){
 
 void Player::moveUp() {
 	yPosition-=5;
+	controlPosition();
 	if (currentlyIntersectsBall){
-		yBallMovement=-5;
+		yBallMovement-=5;
 	}
 
 }
 
 void Player::moveDown() {
 	yPosition+=5;
+	controlPosition();
 	if (currentlyIntersectsBall){
-		yBallMovement=5;
+		yBallMovement+=5;
 	}
 }
 
 void Player::moveLeft() {
 	xPosition-=5;
+	controlPosition();
 	if (currentlyIntersectsBall){
-		xBallMovement=-5;
+		xBallMovement-=5;
 	}
 }
 
 void Player::moveRight() {
 	xPosition+=5;
+	controlPosition();
 	if (currentlyIntersectsBall){
-		xBallMovement=5;
+		xBallMovement+=5;
+	}
+}
+
+void Player::controlPosition(){
+	
+	if (yPosition<0){
+		yPosition=0;	
+	}else if(yPosition>1200){
+		yPosition=1200;	
+	}
+
+	if (xPosition<0){
+		xPosition=0;	
+	}else if (xPosition>1920){
+		xPosition=1920;	
 	}
 }
 

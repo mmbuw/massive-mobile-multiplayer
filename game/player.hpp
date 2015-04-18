@@ -29,6 +29,7 @@ class Player {
 		sf::Shape shape;
 		int xBallMovement;
 		int yBallMovement;
+		void controlPosition();
 		
 
 };

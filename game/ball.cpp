@@ -26,5 +26,19 @@ int Ball::getY(){
 void Ball::move(int xMovement, int yMovement){
 	xPosition+=xMovement;
 	yPosition+=yMovement;
+	checkPosition();
 }
 
+void Ball::checkPosition() {
+	if (xPosition<105){
+		xPosition=105;	
+	}else if (xPosition>1820){
+		xPosition=1820;	
+	}
+
+	if (yPosition<26){
+		yPosition=26;	
+	}else if(yPosition>957){
+		yPosition=957;	
+	}
+}
