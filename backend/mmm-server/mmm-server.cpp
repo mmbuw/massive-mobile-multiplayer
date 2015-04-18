@@ -4,15 +4,16 @@
 #include <iostream>
 #include <map>
 #include <bitset>
-#include <vector>
 
 #include "PlayerConnection.hpp"
 #include "base64.hpp"
 #include "sha1.hpp"
 
+
 int main()
 {
 	bool running(true);
+	int port(53000);
 	int globalConnectionCounter(0);
 	std::map<sf::SocketTCP, PlayerConnection*> socketPlayerConnetions;
 
@@ -20,15 +21,40 @@ int main()
 	sf::SocketTCP listener;
 	listener.Listen(53000);
 
-	sf::SelectorTCP selector;
+	sf::Selector<sf::SocketTCP> selector;
 	selector.Add(listener);
 
 	//information needed for WebSocket handshake (RFC 6455)
 	std::string globallyUniqueIdentifier("258EAFA5-E914-47DA-95CA-C5AB0DC85B11"); //RFC 4122
 	std::string requestSearchString("Sec-WebSocket-Key: ");
 
+	std::cout << std::endl;
+	std::cout << "#####################################" << std::endl;
+	std::cout << "# MMM - Game Controller Server         " << std::endl;
+	std::cout << "# Startup successful (port " << port << ")"<< std::endl;
+	std::cout << "#####################################" << std::endl;
+	std::cout << std::endl;
+
+
 	while(running)
 	{
+		//clean up all timed out connections
+		for (std::map<sf::SocketTCP, PlayerConnection*>::iterator it = socketPlayerConnetions.begin(); it != socketPlayerConnetions.end();)
+		{
+			if ((*it).second->isResponding() == false)
+			{
+	            std::cout << "[Cleanup] " << (*it).second->ip_ << " (Client ID " << (*it).second->id_ << ") is removed in main thread." << std::endl;
+
+		        selector.Remove((*it).first);
+		        delete (*it).second;
+		        it = socketPlayerConnetions.erase(it);
+			}
+			else
+			{
+			    ++it;
+			}
+		}
+
 		//wait until at least one socket has news
 		unsigned int nbSockets = selector.Wait();
 
@@ -49,6 +75,7 @@ int main()
 		        PlayerConnection* playerConnection = new PlayerConnection(globalConnectionCounter, address, client);
 		        socketPlayerConnetions.insert(std::make_pair(client, playerConnection));
 		        selector.Add(client);
+
 		    	
 		    	/* Perform WebSocket handshake (RFC 6455) */
 
@@ -58,7 +85,7 @@ int main()
 		    	
 		    	if (client.Receive(requestBuffer, sizeof(requestBuffer), receivedSize) != sf::Socket::Done)
 		    	{
-		    		std::cout << "Error: Receiving request failed." << std::endl;
+		    		std::cout << "[Error] Receiving request failed." << std::endl;
 		    	}
 
 		    	std::string request(requestBuffer);
@@ -95,11 +122,11 @@ int main()
 
 		    	if (client.Send(responseStreamBuffer, sizeof(responseStreamBuffer)) != sf::Socket::Done)
 		    	{
-		    		std::cout << "Error: Sending responseStream failed." << std::endl;
+		    		std::cout << "[Error] Sending responseStream failed." << std::endl;
 		    	}
 
 		    	//client is now connected
-		    	std::cout << "Client " << globalConnectionCounter << " (" << address << ") connected." << std::endl;
+		    	std::cout << "[Connect] " << address << " (Client ID " << globalConnectionCounter << ")" << std::endl;
 
 		    }
 
@@ -195,6 +222,7 @@ int main()
 			            	if (x <= 1024 && y <= 1024 && x >= 0 && y >= 0)
 			            		playerConnection->injectRelEvent(x, y);
 			            }
+
 			        }
 			        
 		        }
@@ -208,7 +236,7 @@ int main()
 		        {
 		            //the connection is lost, perform cleanup
 		            std::map<sf::SocketTCP, PlayerConnection*>::iterator mapIteratorToDelete = socketPlayerConnetions.find(socket);
-		            std::cout << "Client " << mapIteratorToDelete->second->id_ << " disconnected." << std::endl;
+		            std::cout << "[Disconnect] " << mapIteratorToDelete->second->ip_ << " (Client ID " << mapIteratorToDelete->second->id_ << ")" << std::endl;
 
 		            delete mapIteratorToDelete->second;
 		            socketPlayerConnetions.erase(mapIteratorToDelete);

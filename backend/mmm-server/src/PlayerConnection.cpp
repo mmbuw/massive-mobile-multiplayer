@@ -1,7 +1,8 @@
 #include "PlayerConnection.hpp"
 
 PlayerConnection::PlayerConnection(int id, sf::IPAddress const& ip, sf::SocketTCP const& socket) : 
-	id_(id), ip_(ip), socket_(socket) 
+	id_(id), ip_(ip), socket_(socket), checkAliveRunning_(true), clientResponding_(true),
+	checkAliveThread_(&PlayerConnection::checkPingThreadTask, this)
 {
 	//create handle to /dev/uinput
 	uinputHandle_ = open("/dev/uinput", O_WRONLY | O_NONBLOCK);
@@ -45,7 +46,14 @@ PlayerConnection::PlayerConnection(int id, sf::IPAddress const& ip, sf::SocketTC
 
 PlayerConnection::~PlayerConnection()
 {
-	ioctl(uinputHandle_, UI_DEV_DESTROY);
+	unregisterEventDevice();
+	checkAliveRunning_ = false;
+	checkAliveThread_.join();
+}
+
+bool PlayerConnection::isResponding() const
+{
+	return clientResponding_;
 }
 
 void PlayerConnection::injectKeyEvent(int eventCode) const
@@ -95,4 +103,32 @@ void PlayerConnection::injectRelEvent(int xCoord, int yCoord) const
 	syncEventHandle.value = 1;
 
 	write(uinputHandle_, &syncEventHandle, sizeof(syncEventHandle));
+}
+
+void PlayerConnection::unregisterEventDevice()
+{
+	ioctl(uinputHandle_, UI_DEV_DESTROY);
+}
+
+void PlayerConnection::checkPingThreadTask()
+{
+	while (checkAliveRunning_)
+	{
+		//perform a ping to the client every 5 seconds
+		std::stringstream commandStream;
+		commandStream << "ping -c 1 -W 1 " << ip_ << " > /dev/null";
+		int ret = system(commandStream.str().c_str());
+
+		if (!ret == 0)
+		{
+			//client did not respond, remove event device
+			std::cout << "[Timeout] " << ip_ << " (Client ID " << id_ << ") is not responding, remove event device." << std::endl;
+			clientResponding_ = false;
+			unregisterEventDevice();
+			return;
+		}
+
+		//sleep for 5 seconds
+		usleep(5000000);
+	}
 }
