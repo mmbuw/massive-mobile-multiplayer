@@ -3,6 +3,7 @@
 
 #include <SFML/Network.hpp>
 #include <map>
+#include <vector>
 #include "PlayerConnection.hpp"
 
 class ConnectionDatabase
@@ -14,10 +15,11 @@ class ConnectionDatabase
 		bool remove_element(sf::SocketTCP const& socket);
 		PlayerConnection* get_player_connection(sf::SocketTCP const& socket);
 		PlayerConnection* get_player_connection(sf::IPAddress const& ip);
-		std::map<int, PlayerConnection*>::iterator const get_ip_begin_iterator();
-		std::map<int, PlayerConnection*>::iterator const get_ip_end_iterator();
+		void clean_timeout_connections(sf::Selector<sf::SocketTCP>& selector);
 
 	private:
+		std::map<sf::SocketTCP, PlayerConnection*>::iterator remove_element_it(sf::SocketTCP const& socket);
+		
 		std::map<sf::SocketTCP, PlayerConnection*> socketPlayerConnections_;
 		std::map<int, PlayerConnection*> ipPlayerConnections_;
 };

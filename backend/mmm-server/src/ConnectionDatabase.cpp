@@ -28,6 +28,20 @@ bool ConnectionDatabase::remove_element(sf::SocketTCP const& socket)
 	return false;
 }
 
+std::map<sf::SocketTCP, PlayerConnection*>::iterator ConnectionDatabase::remove_element_it(sf::SocketTCP const& socket)
+{
+	auto it = socketPlayerConnections_.find(socket);
+
+	if (it != socketPlayerConnections_.end())
+	{
+		int ip(it->second->ip_.ToInteger());
+		ipPlayerConnections_.erase(ipPlayerConnections_.find(ip));
+		return socketPlayerConnections_.erase(it);
+	}
+
+	return socketPlayerConnections_.end();
+}
+
 PlayerConnection* ConnectionDatabase::get_player_connection(sf::SocketTCP const& socket)
 {
 	auto it = socketPlayerConnections_.find(socket);
@@ -52,12 +66,22 @@ PlayerConnection* ConnectionDatabase::get_player_connection(sf::IPAddress const&
 	return nullptr;
 }
 
-std::map<int, PlayerConnection*>::iterator const ConnectionDatabase::get_ip_begin_iterator()
+void ConnectionDatabase::clean_timeout_connections(sf::Selector<sf::SocketTCP>& selector)
 {
-	return ipPlayerConnections_.begin();
-}
-
-std::map<int, PlayerConnection*>::iterator const ConnectionDatabase::get_ip_end_iterator()
-{
-	return ipPlayerConnections_.end();
+	for(std::map<sf::SocketTCP, PlayerConnection*>::iterator it = socketPlayerConnections_.begin(); it != socketPlayerConnections_.end();)
+	{
+		if (it->second->checkAlive() == false)
+		{
+			PlayerConnection* playerConnection = it->second;
+			std::cout << "[Timeout] " << playerConnection->ip_ << " (Client ID " << playerConnection->id_ << ")" << std::endl;
+			
+			selector.Remove(it->first);
+			it = remove_element_it(it->first);
+			delete playerConnection;
+		}
+		else
+		{
+			++it;
+		}
+	}
 }

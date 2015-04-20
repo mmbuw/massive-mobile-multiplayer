@@ -39,26 +39,7 @@ int main()
 
 	while(running)
 	{
-		/*
-		//clean up all timed out connections
-		std::map<int, PlayerConnection*>::iterator beginIt = currentConnections.get_ip_begin_iterator();
-		std::map<int, PlayerConnection*>::iterator endIt = currentConnections.get_ip_end_iterator();
-		
-		for (std::map<int, PlayerConnection*>::iterator it = beginIt; it != endIt;)
-		{
-			if ((*it).second->isResponding() == false)
-			{
-	            std::cout << "[Cleanup] " << (*it).second->ip_ << " (Client ID " << (*it).second->id_ << ") is removed in main thread." << std::endl;
-
-		        selector.Remove((*it).first);
-		        delete (*it).second;
-		        it = socketPlayerConnections.erase(it);
-			}
-			else
-			{
-			    ++it;
-			}
-		}*/
+		currentConnections.clean_timeout_connections(selector);
 
 		//wait until at least one socket has news
 		unsigned int nbSockets = selector.Wait();

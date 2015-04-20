@@ -16,7 +16,7 @@
 #include <chrono>
 
 
-#define CONNECTION_TIMEOUT 30 //seconds
+#define CONNECTION_TIMEOUT 10 //seconds
 
 class PlayerConnection
 {
