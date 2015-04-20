@@ -16,7 +16,7 @@
 #include <chrono>
 
 
-#define CONNECTION_TIMEOUT 10 //seconds
+#define CONNECTION_TIMEOUT 30 //seconds
 
 class PlayerConnection
 {
@@ -27,6 +27,7 @@ class PlayerConnection
 		void injectRelEvent(int xCoord, int yCoord) const;
 		void unregisterEventDevice();
 		bool checkAlive() const;
+		void sendViaSocket(std::string const& message);
 
 		int id_;
 		sf::IPAddress ip_;

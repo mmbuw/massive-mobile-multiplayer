@@ -120,3 +120,30 @@ bool PlayerConnection::checkAlive() const
 
 	return true;
 }
+
+void PlayerConnection::sendViaSocket(std::string const& message)
+{
+	//Maximum message length is 125
+	if (message.size() > 125)
+	{
+		std::cout << "[Error] Maximum socket message send size is 125." << std::endl;
+		return;
+	}
+
+	int messageLength(message.size());
+	char bytesFormatted[message.size() + 2];
+
+	bytesFormatted[0] = 129;
+	bytesFormatted[1] = (char) messageLength;
+
+	for (int i = 2; i < messageLength + 2; ++i)
+	{
+		bytesFormatted[i] = message[i-2];
+	}
+
+	if (socket_.Send(bytesFormatted, sizeof(bytesFormatted)) != sf::Socket::Done)
+	{
+		std::cout << "[Error] Sending message to client failed." << std::endl;
+	}
+
+}

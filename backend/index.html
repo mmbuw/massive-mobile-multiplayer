@@ -21,7 +21,7 @@ if ("WebSocket" in window)
      ws.onmessage = function (evt)
      { 
         var received_msg = evt.data;
-        alert("Message is received...");
+        console.log("Message from Server: " + received_msg);
      };
 
      ws.onclose = function()
