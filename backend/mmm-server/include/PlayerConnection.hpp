@@ -13,18 +13,20 @@
 #include <cstdio>
 #include <sstream>
 #include <thread>
-#include <atomic>
+#include <chrono>
+
+
+#define CONNECTION_TIMEOUT 30 //seconds
 
 class PlayerConnection
 {
 	public:
 		PlayerConnection(int id, sf::IPAddress const& ip, sf::SocketTCP const& socket);
 		~PlayerConnection();
-		bool isResponding() const;
 		void injectKeyEvent(int eventCode) const;
 		void injectRelEvent(int xCoord, int yCoord) const;
 		void unregisterEventDevice();
-		void checkPingThreadTask();
+		bool checkAlive() const;
 
 		int id_;
 		sf::IPAddress ip_;
@@ -32,9 +34,7 @@ class PlayerConnection
 		int uinputHandle_;
 		uinput_user_dev eventDevice_;
 
-		std::atomic<bool> checkAliveRunning_;
-		std::atomic<bool> clientResponding_;
-		std::thread checkAliveThread_;
+		mutable std::chrono::time_point<std::chrono::system_clock> lastInputTime_;
 };
 
 

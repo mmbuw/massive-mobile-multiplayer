@@ -41,7 +41,10 @@ int main()
 	{
 		/*
 		//clean up all timed out connections
-		for (std::map<sf::SocketTCP, PlayerConnection*>::iterator it = socketPlayerConnections.begin(); it != socketPlayerConnections.end();)
+		std::map<int, PlayerConnection*>::iterator beginIt = currentConnections.get_ip_begin_iterator();
+		std::map<int, PlayerConnection*>::iterator endIt = currentConnections.get_ip_end_iterator();
+		
+		for (std::map<int, PlayerConnection*>::iterator it = beginIt; it != endIt;)
 		{
 			if ((*it).second->isResponding() == false)
 			{

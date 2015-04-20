@@ -1,6 +1,6 @@
 all:
-	g++ -c mmm-server.cpp src/*.cpp -Iinclude/ -lpthread -std=c++0x 
-	g++ -o mmm-server *.o -lsfml-network -lsfml-system -lpthread -std=c++0x 
+	g++ -c mmm-server.cpp src/*.cpp -Iinclude/ -std=c++0x 
+	g++ -o mmm-server *.o -lsfml-network -lsfml-system -std=c++0x 
 
 clean:
 	rm *.o

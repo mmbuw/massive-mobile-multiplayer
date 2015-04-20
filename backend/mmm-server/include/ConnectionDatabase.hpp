@@ -2,6 +2,7 @@
 #define CONNECTION_DATABASE_HPP
 
 #include <SFML/Network.hpp>
+#include <map>
 #include "PlayerConnection.hpp"
 
 class ConnectionDatabase
@@ -13,10 +14,12 @@ class ConnectionDatabase
 		bool remove_element(sf::SocketTCP const& socket);
 		PlayerConnection* get_player_connection(sf::SocketTCP const& socket);
 		PlayerConnection* get_player_connection(sf::IPAddress const& ip);
+		std::map<int, PlayerConnection*>::iterator const get_ip_begin_iterator();
+		std::map<int, PlayerConnection*>::iterator const get_ip_end_iterator();
 
 	private:
-		std::map<sf::SocketTCP, PlayerConnection*> socketPlayerConnections;
-		std::map<int, PlayerConnection*> ipPlayerConnections;
+		std::map<sf::SocketTCP, PlayerConnection*> socketPlayerConnections_;
+		std::map<int, PlayerConnection*> ipPlayerConnections_;
 };
 
 
