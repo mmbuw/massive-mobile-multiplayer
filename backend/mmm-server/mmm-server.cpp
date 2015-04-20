@@ -6,6 +6,7 @@
 #include <bitset>
 
 #include "PlayerConnection.hpp"
+#include "ConnectionDatabase.hpp"
 #include "base64.hpp"
 #include "sha1.hpp"
 
@@ -15,7 +16,7 @@ int main()
 	bool running(true);
 	int port(53000);
 	int globalConnectionCounter(0);
-	std::map<sf::SocketTCP, PlayerConnection*> socketPlayerConnetions;
+	ConnectionDatabase currentConnections;
 
 	//create a socket listener
 	sf::SocketTCP listener;
@@ -38,8 +39,9 @@ int main()
 
 	while(running)
 	{
+		/*
 		//clean up all timed out connections
-		for (std::map<sf::SocketTCP, PlayerConnection*>::iterator it = socketPlayerConnetions.begin(); it != socketPlayerConnetions.end();)
+		for (std::map<sf::SocketTCP, PlayerConnection*>::iterator it = socketPlayerConnections.begin(); it != socketPlayerConnections.end();)
 		{
 			if ((*it).second->isResponding() == false)
 			{
@@ -47,13 +49,13 @@ int main()
 
 		        selector.Remove((*it).first);
 		        delete (*it).second;
-		        it = socketPlayerConnetions.erase(it);
+		        it = socketPlayerConnections.erase(it);
 			}
 			else
 			{
 			    ++it;
 			}
-		}
+		}*/
 
 		//wait until at least one socket has news
 		unsigned int nbSockets = selector.Wait();
@@ -70,49 +72,61 @@ int main()
 		        sf::SocketTCP client;
 		        listener.Accept(client, &address);
 
-		        //add the new socket to the selector
-		        ++globalConnectionCounter;
-		        PlayerConnection* playerConnection = new PlayerConnection(globalConnectionCounter, address, client);
-		        socketPlayerConnetions.insert(std::make_pair(client, playerConnection));
-		        selector.Add(client);
+		        std::stringstream responseStream;
 
-		    	
-		    	/* Perform WebSocket handshake (RFC 6455) */
+		        //check for multiple connections
+		        if (currentConnections.get_player_connection(address) != nullptr)
+		        {
+					responseStream << "HTTP/1.1 403 Forbidden\r\n\r\n";
+		        }
+		        else
+		        {
+			        //add the new socket to the selector
+			        ++globalConnectionCounter;
+			        PlayerConnection* playerConnection = new PlayerConnection(globalConnectionCounter, address, client);
+			        currentConnections.put_elements(client, playerConnection);
+			        selector.Add(client);
 
-		    	//receive request
-		    	char requestBuffer[10000];
-		    	std::size_t receivedSize;
-		    	
-		    	if (client.Receive(requestBuffer, sizeof(requestBuffer), receivedSize) != sf::Socket::Done)
-		    	{
-		    		std::cout << "[Error] Receiving request failed." << std::endl;
-		    	}
+			    	
+			    	/* Perform WebSocket handshake (RFC 6455) */
 
-		    	std::string request(requestBuffer);
+			    	//receive request
+			    	char requestBuffer[10000];
+			    	std::size_t receivedSize;
+			    	
+			    	if (client.Receive(requestBuffer, sizeof(requestBuffer), receivedSize) != sf::Socket::Done)
+			    	{
+			    		std::cout << "[Error] Receiving request failed." << std::endl;
+			    	}
 
-		    	//std::cout << request << std::endl;
+			    	std::string request(requestBuffer);
 
-		    	//find Sec-WebSocket-Key
-		    	std::size_t stringPosition = request.find(requestSearchString);
-		    	std::size_t endPosition = request.find("\r\n", stringPosition);
-		    	std::string secWebSocketKey = request.substr(stringPosition + requestSearchString.size(), 
-		    		                                         endPosition-stringPosition-requestSearchString.size());
+			    	//std::cout << request << std::endl;
 
-		    	//generate Sec-WebSocket-Accept
-		    	std::string concatenatedString = secWebSocketKey + globallyUniqueIdentifier;
+			    	//find Sec-WebSocket-Key
+			    	std::size_t stringPosition = request.find(requestSearchString);
+			    	std::size_t endPosition = request.find("\r\n", stringPosition);
+			    	std::string secWebSocketKey = request.substr(stringPosition + requestSearchString.size(), 
+			    		                                         endPosition-stringPosition-requestSearchString.size());
 
-	    		unsigned char sha1Hash[20];
-				sha1::calc(concatenatedString.c_str(), concatenatedString.size(), sha1Hash);
-				std::string secWebSocketAccept = base64_encode(reinterpret_cast<const unsigned char*>(sha1Hash), 20);
-				
-				//send acceptance response
-				std::stringstream responseStream;
-				responseStream << "HTTP/1.1 101 Switching Protocols\r\n";
-				responseStream << "Upgrade: websocket\r\n";
-				responseStream << "Connection: Upgrade\r\n";
-				responseStream << "Sec-WebSocket-Accept: " << secWebSocketAccept << "\r\n\r\n";
+			    	//generate Sec-WebSocket-Accept
+			    	std::string concatenatedString = secWebSocketKey + globallyUniqueIdentifier;
 
-				std::string responseStreamString = responseStream.str();
+		    		unsigned char sha1Hash[20];
+					sha1::calc(concatenatedString.c_str(), concatenatedString.size(), sha1Hash);
+					std::string secWebSocketAccept = base64_encode(reinterpret_cast<const unsigned char*>(sha1Hash), 20);
+					
+					//send acceptance response
+					responseStream << "HTTP/1.1 101 Switching Protocols\r\n";
+					responseStream << "Upgrade: websocket\r\n";
+					responseStream << "Connection: Upgrade\r\n";
+					responseStream << "Sec-WebSocket-Accept: " << secWebSocketAccept << "\r\n\r\n";
+
+			    	//client is now connected
+			    	std::cout << "[Connect] " << address << " (Client ID " << globalConnectionCounter << ")" << std::endl;
+			    }
+
+			    std::string responseStreamString = responseStream.str();
 		    	char responseStreamBuffer[responseStreamString.size()];
 		    	
 		    	for (int i = 0; i < responseStreamString.size(); ++i)
@@ -124,9 +138,6 @@ int main()
 		    	{
 		    		std::cout << "[Error] Sending responseStream failed." << std::endl;
 		    	}
-
-		    	//client is now connected
-		    	std::cout << "[Connect] " << address << " (Client ID " << globalConnectionCounter << ")" << std::endl;
 
 		    }
 
@@ -140,7 +151,7 @@ int main()
 		        if (socket.Receive(receiveBuffer, sizeof(receiveBuffer), receiveSize) == sf::Socket::Done)
 		        {
 		        	//get client information using its PlayerConnection instance
-		            PlayerConnection* playerConnection = socketPlayerConnetions.find(socket)->second;
+		            PlayerConnection* playerConnection = currentConnections.get_player_connection(socket);
 
 		            /* Decoding the client message using the WebSocket protocol */
 		            /* (http://stackoverflow.com/questions/8125507/how-can-i-send-and-receive-websocket-messages-on-the-server-side) */
@@ -235,11 +246,11 @@ int main()
 		        if (performCleanup)
 		        {
 		            //the connection is lost, perform cleanup
-		            std::map<sf::SocketTCP, PlayerConnection*>::iterator mapIteratorToDelete = socketPlayerConnetions.find(socket);
-		            std::cout << "[Disconnect] " << mapIteratorToDelete->second->ip_ << " (Client ID " << mapIteratorToDelete->second->id_ << ")" << std::endl;
+		            PlayerConnection* playerConnection = currentConnections.get_player_connection(socket);
+		            std::cout << "[Disconnect] " << playerConnection->ip_ << " (Client ID " << playerConnection->id_ << ")" << std::endl;
 
-		            delete mapIteratorToDelete->second;
-		            socketPlayerConnetions.erase(mapIteratorToDelete);
+		            currentConnections.remove_element(socket);
+		            delete playerConnection;
 		            selector.Remove(socket);
 		        }
 		    }
