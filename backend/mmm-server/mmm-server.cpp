@@ -2,7 +2,6 @@
 #include <SFML/Network.hpp>
 
 #include <iostream>
-#include <map>
 #include <bitset>
 
 #include "PlayerConnection.hpp"
@@ -39,12 +38,14 @@ int main()
 
 	while(running)
 	{
+		//clean up timed out connections at the beginning of every application loop
+		//as the call to selector.Wait() is blocking, this may not be called instantly
 		currentConnections.clean_timeout_connections(selector);
 
 		//wait until at least one socket has news
 		unsigned int nbSockets = selector.Wait();
 
-		//iterate over all sockets to process
+		//iterate over all sockets with news
 		for (unsigned int i = 0; i < nbSockets; ++i)
 		{
 			sf::SocketTCP socket = selector.GetSocketReady(i);
@@ -58,7 +59,7 @@ int main()
 
 		        std::stringstream responseStream;
 
-		        //check for multiple connections
+		        //do not allow another connection when one is already running
 		        if (currentConnections.get_player_connection(address) != nullptr)
 		        {
 					responseStream << "HTTP/1.1 403 Forbidden\r\n\r\n";
@@ -128,6 +129,7 @@ int main()
 		    //else it is a client socket, so we read the message which was sent
 		    else
 		    {
+		    	//50 is an arbitrarily set maximum message size we can receive
 		        char receiveBuffer[50];
 		    	std::size_t receiveSize;
 		    	bool performCleanup(false);
@@ -211,9 +213,6 @@ int main()
 			            	stream >> x;
 			            	stream >> y;
 
-							//std::cout << "X: " << x << std::endl;
-							//std::cout << "Y: " << y << std::endl;
-
 			            	if (x <= 1024 && y <= 1024 && x >= 0 && y >= 0)
 			            		playerConnection->injectRelEvent(x, y);
 			            }
@@ -221,6 +220,7 @@ int main()
 			        }
 			        
 		        }
+		        // else the receiving failed because the client is absent
 		        else
 		        {
 		        	performCleanup = true;

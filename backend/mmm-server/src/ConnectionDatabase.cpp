@@ -15,7 +15,7 @@ bool ConnectionDatabase::is_present(sf::IPAddress const& ip) const
 
 bool ConnectionDatabase::remove_element(sf::SocketTCP const& socket)
 {
-	auto it = socketPlayerConnections_.find(socket);
+	std::map<sf::SocketTCP, PlayerConnection*>::iterator it = socketPlayerConnections_.find(socket);
 
 	if (it != socketPlayerConnections_.end())
 	{
@@ -30,7 +30,7 @@ bool ConnectionDatabase::remove_element(sf::SocketTCP const& socket)
 
 std::map<sf::SocketTCP, PlayerConnection*>::iterator ConnectionDatabase::remove_element_it(sf::SocketTCP const& socket)
 {
-	auto it = socketPlayerConnections_.find(socket);
+	std::map<sf::SocketTCP, PlayerConnection*>::iterator it = socketPlayerConnections_.find(socket);
 
 	if (it != socketPlayerConnections_.end())
 	{
@@ -44,7 +44,7 @@ std::map<sf::SocketTCP, PlayerConnection*>::iterator ConnectionDatabase::remove_
 
 PlayerConnection* ConnectionDatabase::get_player_connection(sf::SocketTCP const& socket)
 {
-	auto it = socketPlayerConnections_.find(socket);
+	std::map<sf::SocketTCP, PlayerConnection*>::iterator it = socketPlayerConnections_.find(socket);
 
 	if (it != socketPlayerConnections_.end())
 	{
@@ -56,7 +56,7 @@ PlayerConnection* ConnectionDatabase::get_player_connection(sf::SocketTCP const&
 
 PlayerConnection* ConnectionDatabase::get_player_connection(sf::IPAddress const& ip)
 {
-	auto it = ipPlayerConnections_.find(ip.ToInteger());
+	std::map<int, PlayerConnection*>::iterator it = ipPlayerConnections_.find(ip.ToInteger());
 
 	if (it != ipPlayerConnections_.end())
 	{

@@ -123,7 +123,10 @@ bool PlayerConnection::checkAlive() const
 
 void PlayerConnection::sendViaSocket(std::string const& message)
 {
-	//Maximum message length is 125
+	/* "Encoding" the message using the WebSocket protocol */
+    /* (http://stackoverflow.com/questions/8125507/how-can-i-send-and-receive-websocket-messages-on-the-server-side) */
+
+	//Maximum message length is 125 (enough for our implementation)
 	if (message.size() > 125)
 	{
 		std::cout << "[Error] Maximum socket message send size is 125." << std::endl;

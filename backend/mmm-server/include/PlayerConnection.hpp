@@ -15,7 +15,6 @@
 #include <thread>
 #include <chrono>
 
-
 #define CONNECTION_TIMEOUT 30 //seconds
 
 class PlayerConnection
