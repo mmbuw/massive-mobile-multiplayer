@@ -6,6 +6,7 @@
 #include <bitset>
 
 #include "PlayerConnection.hpp"
+#include "ConnectionDatabase.hpp"
 #include "base64.hpp"
 #include "sha1.hpp"
 
@@ -15,8 +16,7 @@ int main()
 	bool running(true);
 	int port(53000);
 	int globalConnectionCounter(0);
-	std::map<sf::SocketTCP, PlayerConnection*> socketPlayerConnections;
-	std::map<int, PlayerConnection*> ipPlayerConnections;
+	ConnectionDatabase currentConnections;
 
 	//create a socket listener
 	sf::SocketTCP listener;
@@ -39,6 +39,7 @@ int main()
 
 	while(running)
 	{
+		/*
 		//clean up all timed out connections
 		for (std::map<sf::SocketTCP, PlayerConnection*>::iterator it = socketPlayerConnections.begin(); it != socketPlayerConnections.end();)
 		{
@@ -54,7 +55,7 @@ int main()
 			{
 			    ++it;
 			}
-		}
+		}*/
 
 		//wait until at least one socket has news
 		unsigned int nbSockets = selector.Wait();
@@ -74,7 +75,7 @@ int main()
 		        std::stringstream responseStream;
 
 		        //check for multiple connections
-		        if (ipPlayerConnections.find(address.ToInteger()) != ipPlayerConnections.end())
+		        if (currentConnections.get_player_connection(address) != nullptr)
 		        {
 					responseStream << "HTTP/1.1 403 Forbidden\r\n\r\n";
 		        }
@@ -83,8 +84,7 @@ int main()
 			        //add the new socket to the selector
 			        ++globalConnectionCounter;
 			        PlayerConnection* playerConnection = new PlayerConnection(globalConnectionCounter, address, client);
-			        socketPlayerConnections.insert(std::make_pair(client, playerConnection));
-			        ipPlayerConnections.insert(std::make_pair(address.ToInteger(), playerConnection));
+			        currentConnections.put_elements(client, playerConnection);
 			        selector.Add(client);
 
 			    	
@@ -151,7 +151,7 @@ int main()
 		        if (socket.Receive(receiveBuffer, sizeof(receiveBuffer), receiveSize) == sf::Socket::Done)
 		        {
 		        	//get client information using its PlayerConnection instance
-		            PlayerConnection* playerConnection = socketPlayerConnections.find(socket)->second;
+		            PlayerConnection* playerConnection = currentConnections.get_player_connection(socket);
 
 		            /* Decoding the client message using the WebSocket protocol */
 		            /* (http://stackoverflow.com/questions/8125507/how-can-i-send-and-receive-websocket-messages-on-the-server-side) */
@@ -246,13 +246,11 @@ int main()
 		        if (performCleanup)
 		        {
 		            //the connection is lost, perform cleanup
-		            std::map<sf::SocketTCP, PlayerConnection*>::iterator socketIteratorToDelete = socketPlayerConnections.find(socket);
-		            std::cout << "[Disconnect] " << socketIteratorToDelete->second->ip_ << " (Client ID " << socketIteratorToDelete->second->id_ << ")" << std::endl;
-					std::map<int, PlayerConnection*>::iterator ipIteratorToDelete = ipPlayerConnections.find(socketIteratorToDelete->second->ip_.ToInteger());
+		            PlayerConnection* playerConnection = currentConnections.get_player_connection(socket);
+		            std::cout << "[Disconnect] " << playerConnection->ip_ << " (Client ID " << playerConnection->id_ << ")" << std::endl;
 
-		            delete socketIteratorToDelete->second;
-		            socketPlayerConnections.erase(socketIteratorToDelete);
-		            ipPlayerConnections.erase(ipIteratorToDelete);
+		            currentConnections.remove_element(socket);
+		            delete playerConnection;
 		            selector.Remove(socket);
 		        }
 		    }
