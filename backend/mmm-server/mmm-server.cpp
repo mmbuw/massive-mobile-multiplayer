@@ -40,7 +40,7 @@ int main()
 	{
 		//clean up timed out connections at the beginning of every application loop
 		//as the call to selector.Wait() is blocking, this may not be called instantly
-		currentConnections.clean_timeout_connections(selector);
+		currentConnections.cleanTimeoutConnections(selector);
 
 		//wait until at least one socket has news
 		unsigned int nbSockets = selector.Wait();
@@ -60,7 +60,7 @@ int main()
 		        std::stringstream responseStream;
 
 		        //do not allow another connection when one is already running
-		        if (currentConnections.get_player_connection(address) != nullptr)
+		        if (currentConnections.getPlayerConnection(address) != nullptr)
 		        {
 					responseStream << "HTTP/1.1 403 Forbidden\r\n\r\n";
 		        }
@@ -69,7 +69,7 @@ int main()
 			        //add the new socket to the selector
 			        ++globalConnectionCounter;
 			        PlayerConnection* playerConnection = new PlayerConnection(globalConnectionCounter, address, client);
-			        currentConnections.put_elements(client, playerConnection);
+			        currentConnections.putElements(client, playerConnection);
 			        selector.Add(client);
 
 			    	
@@ -137,7 +137,7 @@ int main()
 		        if (socket.Receive(receiveBuffer, sizeof(receiveBuffer), receiveSize) == sf::Socket::Done)
 		        {
 		        	//get client information using its PlayerConnection instance
-		            PlayerConnection* playerConnection = currentConnections.get_player_connection(socket);
+		            PlayerConnection* playerConnection = currentConnections.getPlayerConnection(socket);
 
 		            /* Decoding the client message using the WebSocket protocol */
 		            /* (http://stackoverflow.com/questions/8125507/how-can-i-send-and-receive-websocket-messages-on-the-server-side) */
@@ -230,10 +230,10 @@ int main()
 		        if (performCleanup)
 		        {
 		            //the connection is lost, perform cleanup
-		            PlayerConnection* playerConnection = currentConnections.get_player_connection(socket);
+		            PlayerConnection* playerConnection = currentConnections.getPlayerConnection(socket);
 		            std::cout << "[Disconnect] " << playerConnection->ip_ << " (Client ID " << playerConnection->id_ << ")" << std::endl;
 
-		            currentConnections.remove_element(socket);
+		            currentConnections.removeElement(socket);
 		            delete playerConnection;
 		            selector.Remove(socket);
 		        }

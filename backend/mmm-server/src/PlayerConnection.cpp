@@ -26,6 +26,7 @@ PlayerConnection::PlayerConnection(int id, sf::IPAddress const& ip, sf::SocketTC
 	nameStream << "MMM-Controller-" << id;
 
 	memset(&eventDevice_, 0, sizeof(eventDevice_));
+
 	snprintf(eventDevice_.name, UINPUT_MAX_NAME_SIZE, nameStream.str().c_str());
 
 	eventDevice_.absmin[REL_X] = 0;
