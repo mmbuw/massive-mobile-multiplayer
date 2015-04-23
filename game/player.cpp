@@ -39,7 +39,7 @@ bool Player::intersectsWithBall(Ball ball){
 	int checkValueLower = 900;
 	int checkValueUpper = 4900;
 
-	int realValue = (xPosition-ball.getX())*(xPosition-ball.getX()) + (yPosition-ball.getY())*(yPosition-ball.getY());
+	int realValue = (xPosition-ball.getPosX())*(xPosition-ball.getPosX()) + (yPosition-ball.getPosY())*(yPosition-ball.getPosY());
 	if (realValue <= checkValueUpper){
 		
 			currentlyIntersectsBall = true;

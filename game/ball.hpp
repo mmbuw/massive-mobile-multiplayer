@@ -2,19 +2,16 @@
 #include <SFML/System.hpp>
 #include <SFML/Graphics.hpp>
 
-class Ball {
+#include "PhysicalObject.hpp"
+
+class Ball : public PhysicalObject {
 	public:
 		Ball();
-		void render(sf::RenderWindow* window);
-		sf::Shape getShape();
-		int getX();
-		int getY();
-		void move(int xMovement, int yMovement);	
+		/* virtual */ ~Ball();
+		
+		/* virtual */ void render(sf::RenderWindow* window) const;
 	
 	private:
-		int xPosition;
-		int yPosition;
 		void checkPosition();
-		sf::Shape shape;
 
 };

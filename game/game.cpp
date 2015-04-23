@@ -149,6 +149,21 @@ void Game::getBallMovement() {
 }
 
 void Game::moveBall() {
-	ball.move(ballXMovement,ballYMovement);
+	//ball.move(ballXMovement,ballYMovement);
 }
  
+void Game::updatePhysicalObjects()
+{
+	// update ball
+	ball.frameUpdate();
+
+
+
+	// update players
+	// ...
+}
+
+void Game::shootBall()
+{
+	ball.setVelocity(10.0, 10.0);
+}

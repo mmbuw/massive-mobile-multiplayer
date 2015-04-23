@@ -20,6 +20,9 @@ class Game {
 		void checkIntersect(); 
 		void saveIntersectingPlayers();
 
+		void updatePhysicalObjects();
+		void shootBall();
+
 		void addPlayer();
 
 		void movePlayer(int playerNumber, std::string direction);

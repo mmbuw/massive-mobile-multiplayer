@@ -11,6 +11,7 @@ int main()
 	const sf::Input& input = App.GetInput();
 	Game game;	
 	game.initPlayers();
+
 	while (App.IsOpened()) {
 		
 
@@ -19,7 +20,8 @@ int main()
 		
 		game.resetBallMovement();
 
-		while (App.GetEvent(Event)) {
+		while (App.GetEvent(Event)) 
+		{
 			
 			if (Event.Type == sf::Event::Closed){ App.Close(); }
 
@@ -49,11 +51,17 @@ int main()
 			if (input.IsKeyDown(sf::Key::D)){
 				game.movePlayer(1,"RIGHT");			
 			}
+
+			if (input.IsKeyDown(sf::Key::Space)){
+				game.shootBall();	
+			}
 		}
 		
 		game.renderBackground(&App);
 		game.renderSidelines(&App);
 		game.renderGoals(&App);
+
+		game.updatePhysicalObjects();
 		
 		
 		game.renderPlayers(&App);
