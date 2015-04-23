@@ -51,7 +51,9 @@ Ball::Ball() : PhysicalObject(0.6, 0, 0), radius_(30.0), inLeftGoal_(false), inR
 				velY_ *= borderAbsorptionCoefficient;
 			}
 
-			inLeftGoal_ = true;
+			//we want the ball's center to be over the goal line
+			if (posX_ < leftBorderLine)
+				inLeftGoal_ = true;
 
 		}
 		else
@@ -75,7 +77,8 @@ Ball::Ball() : PhysicalObject(0.6, 0, 0), radius_(30.0), inLeftGoal_(false), inR
 				velY_ *= borderAbsorptionCoefficient;
 			}
 
-			inRightGoal_ = true;
+			if (posX_ > rightBorderLine)
+				inRightGoal_ = true;
 		}
 		else
 		{
@@ -108,7 +111,22 @@ Ball::Ball() : PhysicalObject(0.6, 0, 0), radius_(30.0), inLeftGoal_(false), inR
 
 }
 
+void Ball::resetToCenter()
+{
+	setPosition(960, 600);
+}
+
 float Ball::getRadius() const
 {
 	return radius_;
+}
+
+bool Ball::isInLeftGoal() const
+{
+	return inLeftGoal_;
+}
+
+bool Ball::isInRightGoal() const
+{
+	return inRightGoal_;
 }

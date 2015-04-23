@@ -21,12 +21,12 @@ int main()
 	bool sPressed(false);
 	bool dPressed(false);
 
-	while (App.IsOpened()) {
-		
-
+	while (App.IsOpened()) 
+	{
 		sf::Event Event;
 		App.Clear(sf::Color(255,0,0));
 
+		// handle events
 		while (App.GetEvent(Event)) 
 		{
 			if (Event.Type == sf::Event::Closed)
@@ -109,7 +109,7 @@ int main()
 
 		}
 
-		//handle key events
+		//handle key events according to flags set above
 		if (jPressed)
 		{
 			game.movePlayer(0,"LEFT");
@@ -150,16 +150,17 @@ int main()
 			game.movePlayer(1,"RIGHT");
 		}
 		
+		// application logic
+		game.updatePhysicalObjects();
+		game.checkIntersect();
+		game.checkForGoal();
+		
+
+		// render output
 		game.renderBackground(&App);
 		game.renderGoals(&App);
 		game.renderSidelines(&App);
-		
-
-		game.updatePhysicalObjects();
-		
-		
 		game.renderPlayers(&App);
-		game.checkIntersect();
 		game.renderBall(&App);	
 		
 		App.Display();

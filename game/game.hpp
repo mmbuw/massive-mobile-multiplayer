@@ -28,9 +28,9 @@ class Game
 		void saveIntersectingPlayers();
 
 		void updatePhysicalObjects();
+		void checkForGoal();
 
 		void addPlayer();
-
 		void movePlayer(int playerNumber, std::string direction);
 
 
@@ -39,6 +39,13 @@ class Game
 		std::vector<Player> intersectingPlayers;
 		sf::Image background;
 		Ball ball;
+
+		bool ballWasInLeftGoal_;
+		bool ballWasInRightGoal_;
+		int framesToResetBall_;
+
+		int pointsLeftTeam_;
+		int pointsRightTeam_;
 };
 
 #endif //GAME_HPP

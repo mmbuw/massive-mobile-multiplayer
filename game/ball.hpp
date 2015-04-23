@@ -14,6 +14,11 @@ class Ball : public PhysicalObject
 
 		/* virtual */ void clampPosition();
 		float getRadius() const;
+
+		void resetToCenter();
+
+		bool isInLeftGoal() const;
+		bool isInRightGoal() const;
 	
 	private:
 		void checkPosition();

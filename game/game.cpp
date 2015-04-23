@@ -1,6 +1,6 @@
 #include "game.hpp"
 
-Game::Game() 
+Game::Game() : ballWasInLeftGoal_(false), ballWasInRightGoal_(false), framesToResetBall_(-1), pointsLeftTeam_(0), pointsRightTeam_(0)
 {}
 
 void Game::renderBackground(sf::RenderWindow* window) {
@@ -52,6 +52,54 @@ void Game::checkIntersect()
 		}
 	}
 	*/
+}
+
+void Game::checkForGoal()
+{
+	if (ball.isInLeftGoal() && ballWasInLeftGoal_ == false)
+	{
+		++pointsRightTeam_;
+		ballWasInLeftGoal_ = true;
+		framesToResetBall_ = 100;
+
+		std::cout << std::endl;
+		std::cout << "The left team scored a goal!" << std::endl;
+		std::cout << "Current standings: Left " << pointsLeftTeam_ << " : " << pointsRightTeam_ << " Right" << std::endl;
+		std::cout << std::endl;
+	}
+	else if (ball.isInRightGoal() && ballWasInRightGoal_ == false)
+	{
+		++pointsLeftTeam_;
+		ballWasInRightGoal_ = true;
+		framesToResetBall_ = 100;
+
+		std::cout << std::endl;
+		std::cout << "The left team scored a goal!" << std::endl;
+		std::cout << "Current standings: Left " << pointsLeftTeam_ << " : " << pointsRightTeam_ << " Right" << std::endl;
+		std::cout << std::endl;
+	}
+	else if (ball.isInLeftGoal() == false && ballWasInLeftGoal_ == true)
+	{
+		ballWasInLeftGoal_ = false;
+	}
+	else if (ball.isInRightGoal() == false && ballWasInRightGoal_ == true)
+	{
+		ballWasInRightGoal_ = false;
+	}
+
+	// count frames until ball is reset (after winning animation)
+	if (framesToResetBall_ > -1)
+	{
+		if (framesToResetBall_ == 0)
+		{
+			ball.resetToCenter();
+			framesToResetBall_ = -1;
+		}
+		else
+		{
+			--framesToResetBall_;
+		}
+	}
 }
 
 
