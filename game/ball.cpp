@@ -114,6 +114,7 @@ Ball::Ball() : PhysicalObject(0.6, 0, 0), radius_(30.0), inLeftGoal_(false), inR
 void Ball::resetToCenter()
 {
 	setPosition(960, 600);
+	setVelocity(0, 0);
 }
 
 float Ball::getRadius() const

@@ -21,6 +21,10 @@ class PhysicalObject
 		sf::Shape const getShape() const;
 		int getPosX() const;
 		int getPosY() const;
+		long double getVelX() const;
+		long double getVelY() const;
+		float getMass() const;
+
 		void setPosition(int x, int y);
 
 		void setVelocity(long double x, long double y);

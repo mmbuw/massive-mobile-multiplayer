@@ -57,6 +57,21 @@ int PhysicalObject::getPosY() const
 	return posY_;
 }
 
+long double PhysicalObject::getVelX() const
+{
+	return velX_;
+}
+
+long double PhysicalObject::getVelY() const
+{
+	return velY_;
+}
+
+float PhysicalObject::getMass() const
+{
+	return mass_;
+}
+
 void PhysicalObject::setPosition(int x, int y)
 {
 	posX_ = x;

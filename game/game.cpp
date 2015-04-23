@@ -31,10 +31,29 @@ void Game::checkIntersect()
 		// an intersection was found
 		if (hitPoint.x < 5000 || hitPoint.y < 5000)
 		{
+			//physics try
+			/*float ballMass = ball.getMass();
+			float playerMass = players[i].getMass();
+
+			sf::Vector2f ballVel(ball.getVelX(), ball.getVelY());
+			sf::Vector2f playerVel(players[i].getVelX(), players[i].getVelY());
+
+			sf::Vector2f ballVelAfterCollision( (ballMass * ballVel.x + playerMass * (2 * playerVel.x - ballVel.x)) / (ballMass + playerMass),
+												(ballMass * ballVel.y + playerMass * (2 * playerVel.y - ballVel.y)) / (ballMass + playerMass));
+
+			sf::Vector2f playerVelAfterCollision( (playerMass * playerVel.x + ballMass * (2 * ballVel.x - playerVel.x)) / (ballMass + playerMass),
+			                                      (playerMass * playerVel.y + ballMass * (2 * ballVel.y - playerVel.y)) / (ballMass + playerMass));
+			
+			ball.setVelocity(ballVelAfterCollision.x, ballVelAfterCollision.y);
+			players[i].setVelocity(playerVelAfterCollision.x, playerVelAfterCollision.y);*/
+
+
+
 			long double hitFactor(0.3 * currentSpeed / MAX_SPEED);
 
 			long double newBallX( hitFactor * (hitPoint.x - players[i].getPosX()) );
 			long double newBallY( hitFactor * (hitPoint.y - players[i].getPosY()) );
+
 			
 			ball.setVelocity(newBallX, newBallY);
 		}
