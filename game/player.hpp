@@ -20,6 +20,8 @@ class Player : public PhysicalObject
 		bool intersectsWithBall(Ball ball);
 		bool currentlyIntersectsBall;
 
+		/* virtual */ void clampPosition();
+
 		bool intersectsWithPlayer(Player otherGuy);
 		
 	private:

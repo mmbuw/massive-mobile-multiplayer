@@ -13,12 +13,15 @@ class PhysicalObject
 		
 		void frameFrictionUpdate();
 		void frameUpdate();
+		virtual void clampPosition() = 0;
 
 		sf::Shape const getShape() const;
 		int getPosX() const;
 		int getPosY() const;
+		void setPosition(int x, int y);
 
 		void setVelocity(float x, float y);
+		void addVelocityOffset(float x, float y);
 
 		void render(sf::RenderWindow* window) const;
 

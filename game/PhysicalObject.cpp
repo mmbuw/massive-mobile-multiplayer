@@ -15,7 +15,7 @@ void PhysicalObject::render(sf::RenderWindow* window) const
 
 void PhysicalObject::frameFrictionUpdate()
 {
-	float frictionDecrement(1.0);
+	float frictionDecrement(0.5);
 
 	if (velX_ > 0.0)
 	{
@@ -47,19 +47,13 @@ void PhysicalObject::frameFrictionUpdate()
 			velY_ += frictionDecrement;
 	}
 
-	//velX_ = std::max(0.0, velX_-1.0);
-	//velY_ = std::max(0.0, velY_-1.0);
+	clampPosition();
 }
 
 void PhysicalObject::frameUpdate()
 {
 	frameFrictionUpdate();
-
-	posX_ += velX_;
-	posY_ += velY_;
-	shape_.SetPosition(posX_, posY_);
-	//shape_.SetX(200);
-	//shape_.SetPosition(200, 200);
+	setPosition(posX_ + velX_, posY_ + velY_);
 }
 
 sf::Shape const PhysicalObject::getShape() const
@@ -77,8 +71,42 @@ int PhysicalObject::getPosY() const
 	return posY_;
 }
 
+void PhysicalObject::setPosition(int x, int y)
+{
+	posX_ = x;
+	posY_ = y;
+	shape_.SetPosition(posX_, posY_);
+}
+
 void PhysicalObject::setVelocity(float x, float y)
 {
 	velX_ = x;
 	velY_ = y;
+}
+
+void PhysicalObject::addVelocityOffset(float x, float y)
+{
+	float maxVelocity(9.0);
+
+	velX_ += x;
+	velY_ += y;
+
+	if (velX_ > maxVelocity)
+	{
+		velX_ = maxVelocity;
+	}
+	else if (velX_ < -maxVelocity)
+	{
+		velX_ = -maxVelocity;
+	}
+
+	if (velY_ > maxVelocity)
+	{
+		velY_ = maxVelocity;
+	}
+	else if (velY_ < -maxVelocity)
+	{
+		velY_ = -maxVelocity;
+	}
+
 }

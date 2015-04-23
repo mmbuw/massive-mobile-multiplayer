@@ -8,6 +8,8 @@ class Ball : public PhysicalObject {
 	public:
 		Ball();
 		/* virtual */ ~Ball();
+
+		/* virtual */ void clampPosition();
 	
 	private:
 		void checkPosition();

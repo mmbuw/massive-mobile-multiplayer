@@ -14,24 +14,23 @@ Ball::Ball() : PhysicalObject(0.6, 0, 0)
 	// do nothing
 }
 
-/*
-void Ball::checkPosition() 
+/* virtual */ void Ball::clampPosition()
 {
-	if (xPosition<105)
+	if (posX_ < 105)
 	{
-		xPosition=105;	
+		setPosition(105, posY_);
 	}
-	else if (xPosition>1820)
+	else if (posX_ > 1820)
 	{
-		xPosition=1820;	
+		setPosition(1820, posY_);
 	}
 
-	if (yPosition<26)
+	if (posY_ < 26)
 	{
-		yPosition=26;	
+		setPosition(posX_, 26);
 	}
-	else if(yPosition>957)
+	else if(posY_ > 1150)
 	{
-		yPosition=957;	
+		setPosition(posX_, 1150);
 	}
-}*/
+}

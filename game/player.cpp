@@ -48,36 +48,41 @@ bool Player::intersectsWithPlayer(Player otherGuy)
 
 void Player::moveUp() 
 {
-	setVelocity(0.0, -10.0);
+	addVelocityOffset(0.0, -1.0);
 }
 
 void Player::moveDown() 
 {
-	setVelocity(0.0, 10.0);
+	addVelocityOffset(0.0, 1.0);
 }
 
 void Player::moveLeft() 
 {
-	setVelocity(-10.0, 0.0);
+	addVelocityOffset(-1.0, 0.0);
 }
 
 void Player::moveRight() 
 {
-	setVelocity(10.0, 0.0);
+	addVelocityOffset(1.0, 0.0);
 }
 
-/*
-void Player::controlPosition(){
+void Player::clampPosition()
+{
+	if (posX_ < 0)
+	{
+		setPosition(0, posY_);
+	}
+	else if (posX_ > 1920)
+	{
+		setPosition(1920, posY_);
+	}
 	
-	if (yPosition<0){
-		yPosition=0;	
-	}else if(yPosition>1200){
-		yPosition=1200;	
+	if (posY_ < 0)
+	{
+		setPosition(posX_, 0);
 	}
-
-	if (xPosition<0){
-		xPosition=0;	
-	}else if (xPosition>1920){
-		xPosition=1920;	
+	else if (posY_ > 1200)
+	{
+		setPosition(posX_, 1200);
 	}
-}*/
+}
