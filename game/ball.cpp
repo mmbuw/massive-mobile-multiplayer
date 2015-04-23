@@ -19,19 +19,49 @@ Ball::Ball() : PhysicalObject(0.6, 0, 0)
 {
 	float borderAbsorptionCoefficient(0.7);
 
+	//goal 450 to 750
+
 	if (posX_ < 105) // left border
 	{
-		setPosition(105, posY_);
-		velX_ = -velX_;
-		velX_ *= borderAbsorptionCoefficient;
-		velY_ *= borderAbsorptionCoefficient;
+		// left goal
+		if (posY_ > 450 && posY_ < 750)
+		{
+			if (posX_ < 35)
+			{
+				setPosition(35, posY_);
+				velX_ = -velX_;
+				velX_ *= borderAbsorptionCoefficient;
+				velY_ *= borderAbsorptionCoefficient;
+			}
+		}
+		else
+		{
+			setPosition(105, posY_);
+			velX_ = -velX_;
+			velX_ *= borderAbsorptionCoefficient;
+			velY_ *= borderAbsorptionCoefficient;
+		}
 	}
 	else if (posX_ > 1820) // right border
 	{
-		setPosition(1820, posY_);
-		velX_ = -velX_;
-		velX_ *= borderAbsorptionCoefficient;
-		velY_ *= borderAbsorptionCoefficient;
+		// right goal
+		if (posY_ > 450 && posY_ < 750)
+		{
+			if (posX_ > 1825)
+			{
+				setPosition(1825, posY_);
+				velX_ = -velX_;
+				velX_ *= borderAbsorptionCoefficient;
+				velY_ *= borderAbsorptionCoefficient;
+			}
+		}
+		else
+		{
+			setPosition(1820, posY_);
+			velX_ = -velX_;
+			velX_ *= borderAbsorptionCoefficient;
+			velY_ *= borderAbsorptionCoefficient;
+		}
 	}
 
 	if (posY_ < 26) // top border
