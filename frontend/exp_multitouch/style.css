@@ -52,6 +52,7 @@ table {
 */
 
 body {
+	font-family: 'Droid Sans', Helvetica;
 	width: 100%;
 }
 
@@ -89,4 +90,19 @@ body {
 	border-radius: 50%;
 	padding: 20%;
 
+}
+
+
+/*******************
+ Land, Leave Pages
+*/
+
+.form-page {
+	width: 300px;
+	margin: 0px auto 0px auto;
+
+}
+
+#input-mame {
+	width: 100%;
 }
