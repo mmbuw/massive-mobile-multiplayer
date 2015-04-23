@@ -10,8 +10,10 @@ class Ball : public PhysicalObject {
 		/* virtual */ ~Ball();
 
 		/* virtual */ void clampPosition();
+		float getRadius() const;
 	
 	private:
 		void checkPosition();
+		float radius_;
 
 };

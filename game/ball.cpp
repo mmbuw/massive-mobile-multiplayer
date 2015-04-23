@@ -2,7 +2,8 @@
 
 Ball::Ball() : PhysicalObject(0.6, 0, 0)
 {
-	shape_ = sf::Shape::Circle(posX_, posY_, 20, sf::Color(255,255,255), -3, sf::Color(0,0,0));
+	radius_ = 20.0;
+	shape_ = sf::Shape::Circle(posX_, posY_, radius_, sf::Color(255,255,255), -3, sf::Color(0,0,0));
 
 	posX_ = 960;
 	posY_ = 600;
@@ -47,4 +48,9 @@ Ball::Ball() : PhysicalObject(0.6, 0, 0)
 		velX_ *= borderAbsorptionCoefficient;
 		velY_ *= borderAbsorptionCoefficient;
 	}
+}
+
+float Ball::getRadius() const
+{
+	return radius_;
 }

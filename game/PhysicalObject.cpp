@@ -86,27 +86,22 @@ void PhysicalObject::setVelocity(float x, float y)
 
 void PhysicalObject::addVelocityOffset(float x, float y)
 {
-	float maxVelocity(9.0);
-
 	velX_ += x;
 	velY_ += y;
 
-	if (velX_ > maxVelocity)
+	float newSpeed = computeCurrentSpeed();
+
+	if (newSpeed > MAX_SPEED)
 	{
-		velX_ = maxVelocity;
-	}
-	else if (velX_ < -maxVelocity)
-	{
-		velX_ = -maxVelocity;
+		velX_ = velX_ / newSpeed;
+		velY_ = velY_ / newSpeed;
+		velX_ *= MAX_SPEED;
+		velY_ *= MAX_SPEED;
 	}
 
-	if (velY_ > maxVelocity)
-	{
-		velY_ = maxVelocity;
-	}
-	else if (velY_ < -maxVelocity)
-	{
-		velY_ = -maxVelocity;
-	}
+}
 
+float PhysicalObject::computeCurrentSpeed() const
+{
+	return std::sqrt(velX_*velX_ + velY_*velY_);
 }

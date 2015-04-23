@@ -2,8 +2,10 @@
 #include <SFML/System.hpp>
 #include <SFML/Graphics.hpp>
 #include <iostream>
+
 #include "player.hpp"
 #include "ball.hpp"
+#include "PhysicalObject.hpp"
 
 
 class Game {

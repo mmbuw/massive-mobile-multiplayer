@@ -4,6 +4,9 @@
 #include <SFML/System.hpp>
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#include <cmath>
+
+#define MAX_SPEED 10.0
 
 class PhysicalObject
 {	
@@ -22,6 +25,8 @@ class PhysicalObject
 
 		void setVelocity(float x, float y);
 		void addVelocityOffset(float x, float y);
+
+		float computeCurrentSpeed() const;
 
 		void render(sf::RenderWindow* window) const;
 

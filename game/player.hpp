@@ -17,16 +17,18 @@ class Player : public PhysicalObject
 		void moveLeft();
 		void moveRight();
 
-		bool intersectsWithBall(Ball ball);
+		sf::Vector2f const intersectsWithBall(Ball const& ball) const;
 		bool currentlyIntersectsBall;
 
 		/* virtual */ void clampPosition();
+		float getRadius() const;
 
 		bool intersectsWithPlayer(Player otherGuy);
 		
 	private:
 		sf::Color borderColor;
 		sf::Color centerColor;
+		float radius_;
 
 		void controlPosition();
 		

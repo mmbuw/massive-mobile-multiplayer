@@ -3,7 +3,9 @@
 Player::Player(int startX, int startY, sf::Color border, sf::Color center) :
 	PhysicalObject(50.0, 0, 0)
 {
-	shape_ = sf::Shape::Circle(posX_, posY_, 45, center, 5, border);
+	radius_ = 50.0;
+
+	shape_ = sf::Shape::Circle(posX_, posY_, radius_, center, -5, border);
 	
 	posX_ = startX;
 	posY_ = startY;
@@ -11,39 +13,37 @@ Player::Player(int startX, int startY, sf::Color border, sf::Color center) :
 }
 
 
-bool Player::intersectsWithBall(Ball ball)
+sf::Vector2f const Player::intersectsWithBall(Ball const& ball) const
 {
-	/*
+	int checkValueLower = (radius_ - ball.getRadius()) * (radius_ - ball.getRadius());
+	int checkValueUpper = (radius_ + ball.getRadius()) * (radius_ + ball.getRadius());
 
-		//player radius 50
-		//ball radius 20
+	int realValue = (posX_ - ball.getPosX()) * (posX_ - ball.getPosX()) + 
+	                (posY_ - ball.getPosY()) * (posY_ - ball.getPosY());
 
-	int checkValueLower = 900;
-	int checkValueUpper = 4900;
-
-	int realValue = (xPosition-ball.getPosX())*(xPosition-ball.getPosX()) + (yPosition-ball.getPosY())*(yPosition-ball.getPosY());
-	if (realValue <= checkValueUpper){
-		
-			currentlyIntersectsBall = true;
-			return true;		
-	
+	if (realValue <= checkValueUpper)
+	{
+		sf::Vector2f centerConnection(ball.getPosX()-posX_, ball.getPosY()-posY_);
+		float factor( radius_ / (radius_ + ball.getRadius()) );
+		sf::Vector2f hitPoint(posX_ + factor*centerConnection.x, posY_ + factor*centerConnection.y);
+		//std::cout << "Hit point: " << hitPoint.x << " ; " << hitPoint.y << std::endl;
+		return hitPoint;
 	}
-	currentlyIntersectsBall = false;
-	return false;*/
 
+	return sf::Vector2f(5000, 5000);
 }
 
 bool Player::intersectsWithPlayer(Player otherGuy)
 {
-	/*
-	int checkValueLower = 0;
-	int checkValueUpper = 10000;
+	/*	
+	int checkValueLower = 0; // (own radius - other radius)^2 
+	int checkValueUpper = 10000; // (own radius + other radius)^2 
 	int realValue = (xPosition-otherGuy.getXPosition())*(xPosition-otherGuy.getXPosition()) + (yPosition-otherGuy.getYPosition())*(yPosition-otherGuy.getYPosition());
 	if (realValue <= checkValueUpper){
 		return true;
 	}
-	return false;*/
-	
+	return false;
+	*/
 }
 
 void Player::moveUp() 
@@ -76,7 +76,7 @@ void Player::clampPosition()
 	{
 		setPosition(1920, posY_);
 	}
-	
+
 	if (posY_ < 0)
 	{
 		setPosition(posX_, 0);
@@ -85,4 +85,9 @@ void Player::clampPosition()
 	{
 		setPosition(posX_, 1200);
 	}
+}
+
+float Player::getRadius() const
+{
+	return radius_;
 }

@@ -25,6 +25,23 @@ void Game::renderBackground(sf::RenderWindow* window) {
 
 void Game::checkIntersect()
 {
+	for (int i = 0; i < players.size(); ++i)
+	{
+		sf::Vector2f hitPoint = players[i].intersectsWithBall(ball);
+		float currentSpeed = players[i].computeCurrentSpeed();
+
+		// an intersection was found
+		if (hitPoint.x < 5000 || hitPoint.y < 5000)
+		{
+			float hitFactor(currentSpeed / MAX_SPEED);
+
+			float newBallX( hitFactor * (hitPoint.x - players[i].getPosX()) );
+			float newBallY( hitFactor * (hitPoint.y - players[i].getPosY()) );
+			
+			ball.addVelocityOffset(newBallX, newBallY);
+		}
+	}
+
 	/*
 	for (int i = 0; i < players.size(); ++i){
 		players[i].intersectsWithBall(ball);
