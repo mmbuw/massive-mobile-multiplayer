@@ -12,6 +12,16 @@ int main()
 	Game game;	
 	game.initPlayers();
 
+	bool spacePressed(false);
+	bool jPressed(false);
+	bool lPressed(false);
+	bool iPressed(false);
+	bool kPressed(false);
+	bool wPressed(false);
+	bool aPressed(false);
+	bool sPressed(false);
+	bool dPressed(false);
+
 	while (App.IsOpened()) {
 		
 
@@ -22,39 +32,135 @@ int main()
 
 		while (App.GetEvent(Event)) 
 		{
-			
-			if (Event.Type == sf::Event::Closed){ App.Close(); }
-
-			
-			if (input.IsKeyDown(sf::Key::J)){
-				game.movePlayer(0,"LEFT");			
-			}
-			if (input.IsKeyDown(sf::Key::L)){
-				game.movePlayer(0,"RIGHT");			
-			}
-			if (input.IsKeyDown(sf::Key::I)){
-				game.movePlayer(0,"UP");			
-			}
-			if (input.IsKeyDown(sf::Key::K)){
-				game.movePlayer(0,"DOWN");			
-			}
-			
-			if (input.IsKeyDown(sf::Key::W)){
-				game.movePlayer(1,"UP");			
-			}
-			if (input.IsKeyDown(sf::Key::A)){
-				game.movePlayer(1,"LEFT");			
-			}
-			if (input.IsKeyDown(sf::Key::S)){
-				game.movePlayer(1,"DOWN");			
-			}
-			if (input.IsKeyDown(sf::Key::D)){
-				game.movePlayer(1,"RIGHT");			
+			if (Event.Type == sf::Event::Closed)
+			{ 
+				App.Close(); 
 			}
 
-			if (input.IsKeyDown(sf::Key::Space)){
-				game.shootBall();	
+			
+			if (input.IsKeyDown(sf::Key::J) && jPressed == false)
+			{
+				jPressed = true;
 			}
+			else if (input.IsKeyDown(sf::Key::J) == false && jPressed == true)
+			{
+				jPressed = false;
+			}
+
+			if (input.IsKeyDown(sf::Key::L) && lPressed == false)
+			{
+				lPressed = true;		
+			}
+			else if (input.IsKeyDown(sf::Key::L) == false && lPressed == true)
+			{
+				lPressed = false;
+			}
+
+			if (input.IsKeyDown(sf::Key::I) && iPressed == false)
+			{
+				iPressed = true;
+			}
+			else if (input.IsKeyDown(sf::Key::I) == false && iPressed == true)
+			{
+				iPressed = false;
+			}
+
+			if (input.IsKeyDown(sf::Key::K) && kPressed == false)
+			{
+				kPressed = true;		
+			}
+			else if (input.IsKeyDown(sf::Key::K) == false && kPressed == true)
+			{
+				kPressed = false;
+			}
+			
+			if (input.IsKeyDown(sf::Key::W) && wPressed == false)
+			{
+				wPressed = true;	
+			}
+			else if (input.IsKeyDown(sf::Key::W) == false && wPressed == true)
+			{
+				wPressed = false;
+			}
+
+			if (input.IsKeyDown(sf::Key::A) && aPressed == false)
+			{
+				aPressed = true;		
+			}
+			else if (input.IsKeyDown(sf::Key::A) == false && aPressed == true)
+			{
+				aPressed = false;
+			}
+
+			if (input.IsKeyDown(sf::Key::S) && sPressed == false)
+			{
+				sPressed = true;
+			}
+			else if (input.IsKeyDown(sf::Key::S) == false && sPressed == true)
+			{
+				sPressed = false;
+			}
+
+			if (input.IsKeyDown(sf::Key::D) && dPressed == false)
+			{
+				dPressed = true;
+			}
+			else if (input.IsKeyDown(sf::Key::D) == false && dPressed == true)
+			{
+				dPressed = false;
+			}
+
+			if (input.IsKeyDown(sf::Key::Space) && spacePressed == false)
+			{
+				spacePressed = true;
+			}
+		}
+
+		//handle key events
+		if (jPressed)
+		{
+			game.movePlayer(0,"LEFT");
+		}
+
+		if (lPressed)
+		{
+			game.movePlayer(0,"RIGHT");
+		}
+
+		if (iPressed)
+		{
+			game.movePlayer(0,"UP");
+		}
+
+		if (kPressed)
+		{
+			game.movePlayer(0,"DOWN");
+		}
+
+		if (wPressed)
+		{
+			game.movePlayer(1,"UP");
+		}
+
+		if (aPressed)
+		{
+			game.movePlayer(1,"LEFT");
+		}
+
+		if (sPressed)
+		{
+			game.movePlayer(1,"DOWN");
+		}
+
+		if (dPressed)
+		{
+			game.movePlayer(1,"RIGHT");
+		}
+
+		if (spacePressed)
+		{
+			game.shootBall();
+			spacePressed = false;
 		}
 		
 		game.renderBackground(&App);
