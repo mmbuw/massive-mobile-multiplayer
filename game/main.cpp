@@ -12,7 +12,6 @@ int main()
 	Game game;	
 	game.initPlayers();
 
-	bool spacePressed(false);
 	bool jPressed(false);
 	bool lPressed(false);
 	bool iPressed(false);
@@ -108,10 +107,6 @@ int main()
 				dPressed = false;
 			}
 
-			if (input.IsKeyDown(sf::Key::Space) && spacePressed == false)
-			{
-				spacePressed = true;
-			}
 		}
 
 		//handle key events
@@ -153,12 +148,6 @@ int main()
 		if (dPressed)
 		{
 			game.movePlayer(1,"RIGHT");
-		}
-
-		if (spacePressed)
-		{
-			game.shootBall();
-			spacePressed = false;
 		}
 		
 		game.renderBackground(&App);

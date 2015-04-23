@@ -48,22 +48,22 @@ bool Player::intersectsWithPlayer(Player otherGuy)
 
 void Player::moveUp() 
 {
-	addVelocityOffset(0.0, -1.0);
+	addVelocityOffset(0.0, -0.5);
 }
 
 void Player::moveDown() 
 {
-	addVelocityOffset(0.0, 1.0);
+	addVelocityOffset(0.0, 0.5);
 }
 
 void Player::moveLeft() 
 {
-	addVelocityOffset(-1.0, 0.0);
+	addVelocityOffset(-0.5, 0.0);
 }
 
 void Player::moveRight() 
 {
-	addVelocityOffset(1.0, 0.0);
+	addVelocityOffset(0.5, 0.0);
 }
 
 void Player::clampPosition()

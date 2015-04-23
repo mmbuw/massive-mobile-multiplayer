@@ -28,17 +28,17 @@ void Game::checkIntersect()
 	for (int i = 0; i < players.size(); ++i)
 	{
 		sf::Vector2f hitPoint = players[i].intersectsWithBall(ball);
-		float currentSpeed = players[i].computeCurrentSpeed();
+		double currentSpeed = players[i].computeCurrentSpeed();
 
 		// an intersection was found
 		if (hitPoint.x < 5000 || hitPoint.y < 5000)
 		{
-			float hitFactor(currentSpeed / MAX_SPEED);
+			long double hitFactor(0.3 * currentSpeed / MAX_SPEED);
 
-			float newBallX( hitFactor * (hitPoint.x - players[i].getPosX()) );
-			float newBallY( hitFactor * (hitPoint.y - players[i].getPosY()) );
+			long double newBallX( hitFactor * (hitPoint.x - players[i].getPosX()) );
+			long double newBallY( hitFactor * (hitPoint.y - players[i].getPosY()) );
 			
-			ball.addVelocityOffset(newBallX, newBallY);
+			ball.setVelocity(newBallX, newBallY);
 		}
 	}
 
@@ -164,9 +164,4 @@ void Game::updatePhysicalObjects()
 	{
 		players[i].frameUpdate();	
 	}
-}
-
-void Game::shootBall()
-{
-	ball.setVelocity(10.0, 10.0);
 }

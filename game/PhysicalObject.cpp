@@ -1,7 +1,7 @@
 #include "PhysicalObject.hpp"
 
 PhysicalObject::PhysicalObject(float mass, int posX, int posY) : 
-	mass_(mass), posX_(posX), posY_(posY), velX_(0.0), velY_(0.0), accX_(0.0), accY_(0.0) {}
+	mass_(mass), posX_(posX), posY_(posY), velX_(0.0), velY_(0.0) {}
 
 /* virtual */ PhysicalObject::~PhysicalObject()
 {
@@ -15,36 +15,22 @@ void PhysicalObject::render(sf::RenderWindow* window) const
 
 void PhysicalObject::frameFrictionUpdate()
 {
-	float frictionDecrement(0.5);
+	long double frictionDecrement(0.25);
 
-	if (velX_ > 0.0)
-	{
-		if (velX_ - frictionDecrement < 0.0)
-			velX_ = 0.0;
-		else
-			velX_ -= frictionDecrement;
-	}
-	else if (velX_ < 0.0)
-	{
-		if (velX_ + frictionDecrement > 0.0)
-			velX_ = 0.0;
-		else
-			velX_ += frictionDecrement;
-	}
+	long double currentSpeed = computeCurrentSpeed();
 
-	if (velY_ > 0.0)
+	if (currentSpeed > 0.0)
 	{
-		if (velY_ - frictionDecrement < 0.0)
-			velY_ = 0.0;
+		long double targetSpeed;
+		if (currentSpeed - frictionDecrement > 0.0)
+			targetSpeed = currentSpeed-frictionDecrement;
 		else
-			velY_ -= frictionDecrement;
-	}
-	else if (velY_ < 0.0)
-	{
-		if (velY_ + frictionDecrement > 0.0)
-			velY_ = 0.0;
-		else
-			velY_ += frictionDecrement;
+			targetSpeed = 0.0;
+
+		velX_ = velX_ / currentSpeed;
+		velY_ = velY_ / currentSpeed;
+		velX_ *= targetSpeed;
+		velY_ *= targetSpeed;
 	}
 
 	clampPosition();
@@ -78,18 +64,18 @@ void PhysicalObject::setPosition(int x, int y)
 	shape_.SetPosition(posX_, posY_);
 }
 
-void PhysicalObject::setVelocity(float x, float y)
+void PhysicalObject::setVelocity(long double x, long double y)
 {
 	velX_ = x;
 	velY_ = y;
 }
 
-void PhysicalObject::addVelocityOffset(float x, float y)
+void PhysicalObject::addVelocityOffset(long double x, long double y)
 {
 	velX_ += x;
 	velY_ += y;
 
-	float newSpeed = computeCurrentSpeed();
+	long double newSpeed = computeCurrentSpeed();
 
 	if (newSpeed > MAX_SPEED)
 	{
@@ -101,7 +87,7 @@ void PhysicalObject::addVelocityOffset(float x, float y)
 
 }
 
-float PhysicalObject::computeCurrentSpeed() const
+long double PhysicalObject::computeCurrentSpeed() const
 {
 	return std::sqrt(velX_*velX_ + velY_*velY_);
 }

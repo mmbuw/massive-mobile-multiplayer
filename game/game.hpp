@@ -23,7 +23,6 @@ class Game {
 		void saveIntersectingPlayers();
 
 		void updatePhysicalObjects();
-		void shootBall();
 
 		void addPlayer();
 

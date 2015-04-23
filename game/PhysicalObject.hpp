@@ -23,10 +23,10 @@ class PhysicalObject
 		int getPosY() const;
 		void setPosition(int x, int y);
 
-		void setVelocity(float x, float y);
-		void addVelocityOffset(float x, float y);
+		void setVelocity(long double x, long double y);
+		void addVelocityOffset(long double x, long double y);
 
-		float computeCurrentSpeed() const;
+		long double computeCurrentSpeed() const;
 
 		void render(sf::RenderWindow* window) const;
 
@@ -36,13 +36,10 @@ class PhysicalObject
 		int posX_;	 // pixel
 		int posY_;	 // pixel
 
-		float velX_; // pixel per frame
-		float velY_; // pixel per frame
+		long double velX_; // pixel per frame
+		long double velY_; // pixel per frame
 
 		float mass_; //kg
-
-		float accX_;
-		float accY_;
 };
 
 #endif //PHYSICAL_OBJECT_HPP
