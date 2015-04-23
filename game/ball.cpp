@@ -2,7 +2,7 @@
 
 Ball::Ball() : PhysicalObject(0.6, 0, 0)
 {
-	radius_ = 20.0;
+	radius_ = 30.0;
 	shape_ = sf::Shape::Circle(posX_, posY_, radius_, sf::Color(255,255,255), -3, sf::Color(0,0,0));
 
 	posX_ = 960;
