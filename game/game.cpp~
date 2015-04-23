@@ -23,32 +23,45 @@ void Game::renderBackground(sf::RenderWindow* window) {
 
 }
 
-void Game::checkIntersect(){
+void Game::checkIntersect()
+{
+	for (int i = 0; i < players.size(); ++i)
+	{
+		sf::Vector2f hitPoint = players[i].intersectsWithBall(ball);
+		double currentSpeed = players[i].computeCurrentSpeed();
+
+		// an intersection was found
+		if (hitPoint.x < 5000 || hitPoint.y < 5000)
+		{
+			long double hitFactor(0.3 * currentSpeed / MAX_SPEED);
+
+			long double newBallX( hitFactor * (hitPoint.x - players[i].getPosX()) );
+			long double newBallY( hitFactor * (hitPoint.y - players[i].getPosY()) );
+			
+			ball.setVelocity(newBallX, newBallY);
+		}
+	}
+
+	/*
 	for (int i = 0; i < players.size(); ++i){
 		players[i].intersectsWithBall(ball);
 		for (int j = 0; j < players.size(); ++j){
 			if (i != j){
 				if (players[i].intersectsWithPlayer(players[j])){
-					std::cout<<"Player "<<i<<" and player "<<j<<" intersect!";
+					std::cout<<"Player "<<i<<" and player "<<j<<" intersect!"<<std::endl;
 				}			
 			}		
 		}
 	}
-
+	*/
 }
 
-void Game::resetBallMovement(){
-	ballXMovement = 0;
-	ballYMovement = 0;
-	for (int i = 0; i < players.size(); i++){
-		players[i].resetBallMovement();	
-	}
-}
 
-void Game::initPlayers() {
+void Game::initPlayers() 
+{
 	Player player2(480,600,sf::Color(0,0,0),sf::Color(0,0,255));	
-	Player player1(1400,600,sf::Color(0,0,0),sf::Color(255,0,255));
-	
+	Player player1(1400,600,sf::Color(0,0,0),sf::Color(255,0,0));
+
 	players.push_back(player2);
 	players.push_back(player1);
 			
@@ -98,7 +111,6 @@ void Game::renderSidelines(sf::RenderWindow* window) {
 	centerLine.AddPoint(962,26,sf::Color(255,255,255),sf::Color(255,255,255));
 	window->Draw(centerLine);
 	
-
 	sf::Shape kickoffCircle = sf::Shape::Circle(960,600,185,sf::Color(0,0,0,0),5.f,sf::Color(255,255,255));
 	window->Draw(kickoffCircle);
 
@@ -107,19 +119,18 @@ void Game::renderSidelines(sf::RenderWindow* window) {
 }
 
 void Game::renderGoals(sf::RenderWindow* window){
-	sf::Shape goalLeft = sf::Shape::Rectangle(45,500,100,700,sf::Color(0,0,0,0),5,sf::Color(255,255,255));
-	sf::Shape goalRight = sf::Shape::Rectangle(1820,500,1875,700,sf::Color(0,0,0,0),5,sf::Color(255,255,255));
+	sf::Shape goalLeft = sf::Shape::Rectangle(35,450,100,750,sf::Color(0,0,0,0),5,sf::Color(255,255,255));
+	sf::Shape goalRight = sf::Shape::Rectangle(1820,450,1885,750,sf::Color(0,0,0,0),5,sf::Color(255,255,255));
 	window->Draw(goalLeft);
 	window->Draw(goalRight);
-	
-
 }
 
-void Game::renderPlayers(sf::RenderWindow* window) {
-	for (int i = 0; i < players.size(); i++){
+void Game::renderPlayers(sf::RenderWindow* window) 
+{
+	for (int i = 0; i < players.size(); i++)
+	{
 		players[i].render(window);	
 	}
-
 }
 
 void Game::movePlayer(int playerNumber, std::string direction){
@@ -139,16 +150,15 @@ void Game::movePlayer(int playerNumber, std::string direction){
 
 }
 
-void Game::getBallMovement() {
-	for (int i = 0; i<players.size();++i){
-		if (players[i].currentlyIntersectsBall){
-			ballXMovement+=players[i].getXBallMovement();
-			ballYMovement+=players[i].getYBallMovement();
-		}	
+ 
+void Game::updatePhysicalObjects()
+{
+	// update ball
+	ball.frameUpdate();
+
+	// update players
+	for (int i = 0; i < players.size(); i++)
+	{
+		players[i].frameUpdate();	
 	}
 }
-
-void Game::moveBall() {
-	ball.move(ballXMovement,ballYMovement);
-}
- 
