@@ -8,10 +8,47 @@ PhysicalObject::PhysicalObject(float mass, int posX, int posY) :
 	// do nothing
 }
 
+void PhysicalObject::render(sf::RenderWindow* window) const 
+{
+	window->Draw(shape_);
+}
+
 void PhysicalObject::frameFrictionUpdate()
 {
-	velX_ = std::max(0.0, velX_-1.0);
-	velY_ = std::max(0.0, velY_-1.0);
+	float frictionDecrement(1.0);
+
+	if (velX_ > 0.0)
+	{
+		if (velX_ - frictionDecrement < 0.0)
+			velX_ = 0.0;
+		else
+			velX_ -= frictionDecrement;
+	}
+	else if (velX_ < 0.0)
+	{
+		if (velX_ + frictionDecrement > 0.0)
+			velX_ = 0.0;
+		else
+			velX_ += frictionDecrement;
+	}
+
+	if (velY_ > 0.0)
+	{
+		if (velY_ - frictionDecrement < 0.0)
+			velY_ = 0.0;
+		else
+			velY_ -= frictionDecrement;
+	}
+	else if (velY_ < 0.0)
+	{
+		if (velY_ + frictionDecrement > 0.0)
+			velY_ = 0.0;
+		else
+			velY_ += frictionDecrement;
+	}
+
+	//velX_ = std::max(0.0, velX_-1.0);
+	//velY_ = std::max(0.0, velY_-1.0);
 }
 
 void PhysicalObject::frameUpdate()

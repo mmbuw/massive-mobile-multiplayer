@@ -14,11 +14,6 @@ Ball::Ball() : PhysicalObject(0.6, 0, 0)
 	// do nothing
 }
 
-/* virtual */ void Ball::render(sf::RenderWindow* window) const
-{
-	window->Draw(shape_);
-}
-
 /*
 void Ball::checkPosition() 
 {

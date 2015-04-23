@@ -23,7 +23,9 @@ void Game::renderBackground(sf::RenderWindow* window) {
 
 }
 
-void Game::checkIntersect(){
+void Game::checkIntersect()
+{
+	/*
 	for (int i = 0; i < players.size(); ++i){
 		players[i].intersectsWithBall(ball);
 		for (int j = 0; j < players.size(); ++j){
@@ -34,21 +36,15 @@ void Game::checkIntersect(){
 			}		
 		}
 	}
-
+	*/
 }
 
-void Game::resetBallMovement(){
-	ballXMovement = 0;
-	ballYMovement = 0;
-	for (int i = 0; i < players.size(); i++){
-		players[i].resetBallMovement();	
-	}
-}
 
-void Game::initPlayers() {
+void Game::initPlayers() 
+{
 	Player player2(480,600,sf::Color(0,0,0),sf::Color(0,0,255));	
 	Player player1(1400,600,sf::Color(0,0,0),sf::Color(255,0,255));
-	
+
 	players.push_back(player2);
 	players.push_back(player1);
 			
@@ -115,11 +111,12 @@ void Game::renderGoals(sf::RenderWindow* window){
 
 }
 
-void Game::renderPlayers(sf::RenderWindow* window) {
-	for (int i = 0; i < players.size(); i++){
+void Game::renderPlayers(sf::RenderWindow* window) 
+{
+	for (int i = 0; i < players.size(); i++)
+	{
 		players[i].render(window);	
 	}
-
 }
 
 void Game::movePlayer(int playerNumber, std::string direction){
@@ -139,28 +136,17 @@ void Game::movePlayer(int playerNumber, std::string direction){
 
 }
 
-void Game::getBallMovement() {
-	for (int i = 0; i<players.size();++i){
-		if (players[i].currentlyIntersectsBall){
-			ballXMovement+=players[i].getXBallMovement();
-			ballYMovement+=players[i].getYBallMovement();
-		}	
-	}
-}
-
-void Game::moveBall() {
-	//ball.move(ballXMovement,ballYMovement);
-}
  
 void Game::updatePhysicalObjects()
 {
 	// update ball
 	ball.frameUpdate();
 
-
-
 	// update players
-	// ...
+	for (int i = 0; i < players.size(); i++)
+	{
+		players[i].frameUpdate();	
+	}
 }
 
 void Game::shootBall()

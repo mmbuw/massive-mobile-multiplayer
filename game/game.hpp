@@ -26,9 +26,6 @@ class Game {
 		void addPlayer();
 
 		void movePlayer(int playerNumber, std::string direction);
-		void getBallMovement();
-		void resetBallMovement();
-		void moveBall();
 		Game();
 
 

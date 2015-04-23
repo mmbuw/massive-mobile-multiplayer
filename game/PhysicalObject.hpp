@@ -20,7 +20,7 @@ class PhysicalObject
 
 		void setVelocity(float x, float y);
 
-		virtual void render(sf::RenderWindow* window) const = 0;
+		void render(sf::RenderWindow* window) const;
 
 	protected:
 		sf::Shape shape_;

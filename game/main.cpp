@@ -27,8 +27,6 @@ int main()
 
 		sf::Event Event;
 		App.Clear(sf::Color(255,0,0));
-		
-		game.resetBallMovement();
 
 		while (App.GetEvent(Event)) 
 		{
@@ -171,9 +169,7 @@ int main()
 		
 		
 		game.renderPlayers(&App);
-		game.getBallMovement();
 		game.checkIntersect();
-		game.moveBall();
 		game.renderBall(&App);	
 		
 		App.Display();
