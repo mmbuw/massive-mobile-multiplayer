@@ -1,4 +1,5 @@
-#pragma once
+#ifndef PLAYER_HPP
+#define PLAYER_HPP
 
 #include <SFML/System.hpp>
 #include <SFML/Graphics.hpp>
@@ -34,3 +35,5 @@ class Player : public PhysicalObject
 		
 
 };
+
+#endif //PLAYER_HPP

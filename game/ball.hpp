@@ -1,10 +1,13 @@
-#pragma once
+#ifndef BALL_HPP
+#define BALL_HPP
+
 #include <SFML/System.hpp>
 #include <SFML/Graphics.hpp>
 
 #include "PhysicalObject.hpp"
 
-class Ball : public PhysicalObject {
+class Ball : public PhysicalObject 
+{
 	public:
 		Ball();
 		/* virtual */ ~Ball();
@@ -16,4 +19,8 @@ class Ball : public PhysicalObject {
 		void checkPosition();
 		float radius_;
 
+		bool inLeftGoal_;
+		bool inRightGoal_;
 };
+
+#endif //BALL_HPP

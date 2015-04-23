@@ -1,8 +1,8 @@
 #include "ball.hpp"
 
-Ball::Ball() : PhysicalObject(0.6, 0, 0)
+Ball::Ball() : PhysicalObject(0.6, 0, 0), radius_(30.0), inLeftGoal_(false), inRightGoal_(false)
 {
-	radius_ = 30.0;
+	//initialize the shape with 0 position first in order to set center properly
 	shape_ = sf::Shape::Circle(posX_, posY_, radius_, sf::Color(255,255,255), -3, sf::Color(0,0,0));
 
 	posX_ = 960;
@@ -19,91 +19,93 @@ Ball::Ball() : PhysicalObject(0.6, 0, 0)
 {
 	float borderAbsorptionCoefficient(0.7);
 
-	bool inLeftGoal(false);
-	bool inRightGoal(false);
+	int leftBorderLine(105);
+	int rightBorderLine(1820);
+	int topBorderLine(26);
+	int bottomBorderLine(1150);
 
-	if (posX_ < 105) // left border
+	int goalStartHeight(450);
+	int goalEndHeight(750);
+
+	int leftGoalEndLine(35);
+	int rightGoalEndLine(1885);
+
+	// if
+	if (inLeftGoal_ || inRightGoal_)
+	{
+		topBorderLine = goalStartHeight;
+		bottomBorderLine = goalEndHeight;
+	}
+
+
+	if (posX_ < leftBorderLine + radius_) // left border
 	{
 		// left goal
-		if (posY_ > 450 && posY_ < 750)
+		if (posY_ > goalStartHeight && posY_ < goalEndHeight)
 		{
-			if (posX_ < 35)
+			if (posX_ < leftGoalEndLine + radius_)
 			{
-				setPosition(35, posY_);
+				setPosition(leftGoalEndLine + radius_, posY_);
 				velX_ = -velX_;
 				velX_ *= borderAbsorptionCoefficient;
 				velY_ *= borderAbsorptionCoefficient;
 			}
 
+			inLeftGoal_ = true;
+
 		}
 		else
 		{
-			std::cout << "GO TO OUTSIDE" << std::endl;
-			setPosition(105, posY_);
+			setPosition(leftBorderLine + radius_, posY_);
 			velX_ = -velX_;
 			velX_ *= borderAbsorptionCoefficient;
 			velY_ *= borderAbsorptionCoefficient;
 		}
 	}
-	else if (posX_ > 1820) // right border
+	else if (posX_ > rightBorderLine - radius_) // right border
 	{
 		// right goal
-		if (posY_ > 450 && posY_ < 750)
+		if (posY_ > goalStartHeight && posY_ < goalEndHeight)
 		{
-			if (posX_ > 1885)
+			if (posX_ > rightGoalEndLine - radius_)
 			{
-				setPosition(1885, posY_);
+				setPosition(rightGoalEndLine - radius_, posY_);
 				velX_ = -velX_;
 				velX_ *= borderAbsorptionCoefficient;
 				velY_ *= borderAbsorptionCoefficient;
 			}
+
+			inRightGoal_ = true;
 		}
 		else
 		{
-			setPosition(1820, posY_);
+			setPosition(rightBorderLine - radius_, posY_);
 			velX_ = -velX_;
 			velX_ *= borderAbsorptionCoefficient;
 			velY_ *= borderAbsorptionCoefficient;
 		}
 	}
-
-	if (posX_ < 105)
+	else
 	{
-		inLeftGoal = true;
-		std::cout << "IN LEFT GOAL" << std::endl;
+		inLeftGoal_ = false;
+		inRightGoal_ = false;
 	}
 
-	if (inLeftGoal && posY_ > 750)
+	if (posY_ < topBorderLine + radius_) // top border
 	{
-		std::cout << "ADJUST LARGER" << std::endl;
-		setPosition(posX_, 750);
+		setPosition(posX_, topBorderLine + radius_);
 		velY_ = -velY_;
 		velX_ *= borderAbsorptionCoefficient;
 		velY_ *= borderAbsorptionCoefficient;
 	}
-	else if (inLeftGoal && posY_ < 450)
+	else if(posY_ > bottomBorderLine - radius_) //bottom border
 	{
-		std::cout << "ADJUST SMALLER" << std::endl;
-		setPosition(posX_, 450);
+		setPosition(posX_, bottomBorderLine - radius_);
 		velY_ = -velY_;
 		velX_ *= borderAbsorptionCoefficient;
 		velY_ *= borderAbsorptionCoefficient;
 	}
 
-	if (posY_ < 26) // top border
-	{
-		setPosition(posX_, 26);
-		velY_ = -velY_;
-		velX_ *= borderAbsorptionCoefficient;
-		velY_ *= borderAbsorptionCoefficient;
-	}
-	else if(posY_ > 1150) //bottom border
-	{
-		setPosition(posX_, 1150);
-		velY_ = -velY_;
-		velX_ *= borderAbsorptionCoefficient;
-		velY_ *= borderAbsorptionCoefficient;
-	}
 }
 
 float Ball::getRadius() const

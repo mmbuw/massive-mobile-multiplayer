@@ -1,4 +1,6 @@
-#pragma once
+#ifndef GAME_HPP
+#define GAME_HPP
+
 #include <SFML/System.hpp>
 #include <SFML/Graphics.hpp>
 #include <iostream>
@@ -8,9 +10,12 @@
 #include "PhysicalObject.hpp"
 
 
-class Game {
+class Game 
+{
 	
-	public: 
+	public:
+		Game();
+
 		void initPlayers();
 		void initBall();
 	
@@ -27,7 +32,6 @@ class Game {
 		void addPlayer();
 
 		void movePlayer(int playerNumber, std::string direction);
-		Game();
 
 
 	private:
@@ -35,7 +39,6 @@ class Game {
 		std::vector<Player> intersectingPlayers;
 		sf::Image background;
 		Ball ball;
-		int ballXMovement;
-		int ballYMovement;
-
 };
+
+#endif //GAME_HPP

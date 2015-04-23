@@ -1,9 +1,7 @@
 #include "game.hpp"
 
-Game::Game() {
-	ballXMovement = 0;
-	ballYMovement = 0;
-}
+Game::Game() 
+{}
 
 void Game::renderBackground(sf::RenderWindow* window) {
 
@@ -67,7 +65,8 @@ void Game::initPlayers()
 			
 }
 
-void Game::initBall() {
+void Game::initBall() 
+{
 	ball = Ball();
 }
 
