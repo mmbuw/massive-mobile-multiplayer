@@ -14,6 +14,7 @@ class Ball : public PhysicalObject
 
 		/* virtual */ void clampPosition();
 		float getRadius() const;
+		void setColor(sf::Color color);
 
 		void resetToCenter();
 

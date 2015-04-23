@@ -115,6 +115,12 @@ void Ball::resetToCenter()
 {
 	setPosition(960, 600);
 	setVelocity(0, 0);
+	setColor(sf::Color(255,255,255));
+}
+
+void Ball::setColor(sf::Color color)
+{
+	shape_.SetColor(color);
 }
 
 float Ball::getRadius() const

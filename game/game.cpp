@@ -80,6 +80,7 @@ void Game::checkForGoal()
 		++pointsRightTeam_;
 		ballWasInLeftGoal_ = true;
 		framesToResetBall_ = 100;
+		ball.setColor(sf::Color(0,0,0));
 
 		std::cout << std::endl;
 		std::cout << "The left team scored a goal!" << std::endl;
@@ -91,6 +92,7 @@ void Game::checkForGoal()
 		++pointsLeftTeam_;
 		ballWasInRightGoal_ = true;
 		framesToResetBall_ = 100;
+		ball.setColor(sf::Color(0,0,0));
 
 		std::cout << std::endl;
 		std::cout << "The left team scored a goal!" << std::endl;
