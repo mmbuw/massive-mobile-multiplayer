@@ -1,12 +1,12 @@
 
 window.addEventListener('load', function(){
-
+		//initialize timer
+		var timer = setTimeout(endGame, 30000);
 		// Websocket
 		var socket = new WebSocket("ws://29.4.93.1:53000");
  
 		// Nach dem öffnen des Sockets den Status anzeigen
-		socket.onopen 	= function() 	{ console.log('Socket Status: '+socket.readyState+' (open)');	}
-
+		socket.onopen = function() 	{ console.log('Socket Status: '+socket.readyState+' (open)');	}
 
  		//##################################################################################
  		//button control
@@ -17,6 +17,9 @@ window.addEventListener('load', function(){
 
 	        button.style.backgroundColor = '#000000';
 	       	e.preventDefault();
+
+	       	clearTimeout(timer);
+	       	timer = setTimeout(endGame, 30000);
 
 	       	//sent to server
 	       	socket.send('A');
@@ -35,7 +38,7 @@ window.addEventListener('load', function(){
 
 		//##################################################################################
 	    //steuernippel
-	    var wrapper = document.getElementById('canvas-wrap')
+	    var wrapper = document.getElementById('canvas-wrap');
  		var canvas = document.getElementById('sadstick');
  		var circle = document.getElementById('circle');
 
@@ -106,6 +109,8 @@ window.addEventListener('load', function(){
  			circle.style.left = centerX - circle.offsetWidth/2 + diffx;
 
 	       	e.preventDefault();
+	       	clearTimeout(timer);
+	       	timer = setTimeout(endGame, 30000);
 
 	       	//sent to server
 	       	socket.send(currx + ' ' + curry);
@@ -133,5 +138,16 @@ window.addEventListener('load', function(){
 	    //##################################################################################
 	    //timeout check
 
+
+	    //create timestamp into session variable
+	    //calculate curr difference
+	    //forward or reset timestamp
+
+
 }, false)
 
+
+function endGame(){
+	//forward to controller
+	window.location.href = './leaving.html';
+}
