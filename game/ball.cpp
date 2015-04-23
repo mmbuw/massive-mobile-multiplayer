@@ -19,7 +19,8 @@ Ball::Ball() : PhysicalObject(0.6, 0, 0)
 {
 	float borderAbsorptionCoefficient(0.7);
 
-	//goal 450 to 750
+	bool inLeftGoal(false);
+	bool inRightGoal(false);
 
 	if (posX_ < 105) // left border
 	{
@@ -33,9 +34,11 @@ Ball::Ball() : PhysicalObject(0.6, 0, 0)
 				velX_ *= borderAbsorptionCoefficient;
 				velY_ *= borderAbsorptionCoefficient;
 			}
+
 		}
 		else
 		{
+			std::cout << "GO TO OUTSIDE" << std::endl;
 			setPosition(105, posY_);
 			velX_ = -velX_;
 			velX_ *= borderAbsorptionCoefficient;
@@ -47,9 +50,9 @@ Ball::Ball() : PhysicalObject(0.6, 0, 0)
 		// right goal
 		if (posY_ > 450 && posY_ < 750)
 		{
-			if (posX_ > 1825)
+			if (posX_ > 1885)
 			{
-				setPosition(1825, posY_);
+				setPosition(1885, posY_);
 				velX_ = -velX_;
 				velX_ *= borderAbsorptionCoefficient;
 				velY_ *= borderAbsorptionCoefficient;
@@ -62,6 +65,29 @@ Ball::Ball() : PhysicalObject(0.6, 0, 0)
 			velX_ *= borderAbsorptionCoefficient;
 			velY_ *= borderAbsorptionCoefficient;
 		}
+	}
+
+	if (posX_ < 105)
+	{
+		inLeftGoal = true;
+		std::cout << "IN LEFT GOAL" << std::endl;
+	}
+
+	if (inLeftGoal && posY_ > 750)
+	{
+		std::cout << "ADJUST LARGER" << std::endl;
+		setPosition(posX_, 750);
+		velY_ = -velY_;
+		velX_ *= borderAbsorptionCoefficient;
+		velY_ *= borderAbsorptionCoefficient;
+	}
+	else if (inLeftGoal && posY_ < 450)
+	{
+		std::cout << "ADJUST SMALLER" << std::endl;
+		setPosition(posX_, 450);
+		velY_ = -velY_;
+		velX_ *= borderAbsorptionCoefficient;
+		velY_ *= borderAbsorptionCoefficient;
 	}
 
 	if (posY_ < 26) // top border
