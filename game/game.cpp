@@ -60,7 +60,7 @@ void Game::checkIntersect()
 void Game::initPlayers() 
 {
 	Player player2(480,600,sf::Color(0,0,0),sf::Color(0,0,255));	
-	Player player1(1400,600,sf::Color(0,0,0),sf::Color(255,0,255));
+	Player player1(1400,600,sf::Color(0,0,0),sf::Color(255,0,0));
 
 	players.push_back(player2);
 	players.push_back(player1);
@@ -111,7 +111,6 @@ void Game::renderSidelines(sf::RenderWindow* window) {
 	centerLine.AddPoint(962,26,sf::Color(255,255,255),sf::Color(255,255,255));
 	window->Draw(centerLine);
 	
-
 	sf::Shape kickoffCircle = sf::Shape::Circle(960,600,185,sf::Color(0,0,0,0),5.f,sf::Color(255,255,255));
 	window->Draw(kickoffCircle);
 
@@ -120,12 +119,10 @@ void Game::renderSidelines(sf::RenderWindow* window) {
 }
 
 void Game::renderGoals(sf::RenderWindow* window){
-	sf::Shape goalLeft = sf::Shape::Rectangle(45,500,100,700,sf::Color(0,0,0,0),5,sf::Color(255,255,255));
-	sf::Shape goalRight = sf::Shape::Rectangle(1820,500,1875,700,sf::Color(0,0,0,0),5,sf::Color(255,255,255));
+	sf::Shape goalLeft = sf::Shape::Rectangle(35,450,100,750,sf::Color(0,0,0,0),5,sf::Color(255,255,255));
+	sf::Shape goalRight = sf::Shape::Rectangle(1820,450,1885,750,sf::Color(0,0,0,0),5,sf::Color(255,255,255));
 	window->Draw(goalLeft);
 	window->Draw(goalRight);
-	
-
 }
 
 void Game::renderPlayers(sf::RenderWindow* window) 
