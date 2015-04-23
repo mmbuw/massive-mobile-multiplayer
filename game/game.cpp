@@ -118,8 +118,8 @@ void Game::renderSidelines(sf::RenderWindow* window) {
 }
 
 void Game::renderGoals(sf::RenderWindow* window){
-	sf::Shape goalLeft = sf::Shape::Rectangle(35,450,100,750,sf::Color(0,0,0,0),5,sf::Color(255,255,255));
-	sf::Shape goalRight = sf::Shape::Rectangle(1820,450,1885,750,sf::Color(0,0,0,0),5,sf::Color(255,255,255));
+	sf::Shape goalLeft = sf::Shape::Rectangle(35,450,100,750,sf::Color(0,0,0,0),5,sf::Color(0,0,0));
+	sf::Shape goalRight = sf::Shape::Rectangle(1820,450,1885,750,sf::Color(0,0,0,0),5,sf::Color(0,0,0));
 	window->Draw(goalLeft);
 	window->Draw(goalRight);
 }
