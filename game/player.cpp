@@ -51,6 +51,27 @@ bool Player::intersectsWithBall(Ball ball){
 
 }
 
+bool Player::intersectsWithPlayer(Player otherGuy){
+	int checkValueLower = 0;
+	int checkValueUpper = 10000;
+	int realValue = (xPosition-otherGuy.getXPosition())*(xPosition-otherGuy.getXPosition()) + (yPosition-otherGuy.getYPosition())*(yPosition-otherGuy.getYPosition());
+	if (realValue <= checkValueUpper){
+		return true;
+	}
+	return false;
+	
+	
+
+}
+
+int Player::getYPosition(){
+	return yPosition;
+}
+
+int Player::getXPosition(){
+	return xPosition;
+}
+
 void Player::moveUp() {
 	yPosition-=5;
 	controlPosition();

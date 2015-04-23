@@ -26,6 +26,13 @@ void Game::renderBackground(sf::RenderWindow* window) {
 void Game::checkIntersect(){
 	for (int i = 0; i < players.size(); ++i){
 		players[i].intersectsWithBall(ball);
+		for (int j = 0; j < players.size(); ++j){
+			if (i != j){
+				if (players[i].intersectsWithPlayer(players[j])){
+					std::cout<<"Player "<<i<<" and player "<<j<<" intersect!"<<std::endl;
+				}			
+			}		
+		}
 	}
 
 }
@@ -99,6 +106,15 @@ void Game::renderSidelines(sf::RenderWindow* window) {
 	window->Draw(kickoffPoint);
 }
 
+void Game::renderGoals(sf::RenderWindow* window){
+	sf::Shape goalLeft = sf::Shape::Rectangle(45,500,100,700,sf::Color(0,0,0,0),5,sf::Color(255,255,255));
+	sf::Shape goalRight = sf::Shape::Rectangle(1820,500,1875,700,sf::Color(0,0,0,0),5,sf::Color(255,255,255));
+	window->Draw(goalLeft);
+	window->Draw(goalRight);
+	
+
+}
+
 void Game::renderPlayers(sf::RenderWindow* window) {
 	for (int i = 0; i < players.size(); i++){
 		players[i].render(window);	
@@ -133,7 +149,6 @@ void Game::getBallMovement() {
 }
 
 void Game::moveBall() {
-	std::cout<<"Ball movement at "<<ballXMovement<<","<<ballYMovement<<std::endl;
 	ball.move(ballXMovement,ballYMovement);
 }
  

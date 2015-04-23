@@ -20,6 +20,9 @@ class Player {
 		void resetBallMovement();
 		int getXBallMovement();
 		int getYBallMovement();
+		int getXPosition();
+		int getYPosition();
+		bool intersectsWithPlayer(Player otherGuy);
 		
 	private:
 		int xPosition;

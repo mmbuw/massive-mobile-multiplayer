@@ -53,6 +53,7 @@ int main()
 		
 		game.renderBackground(&App);
 		game.renderSidelines(&App);
+		game.renderGoals(&App);
 		
 		
 		game.renderPlayers(&App);

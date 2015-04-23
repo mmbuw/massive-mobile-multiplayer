@@ -20,6 +20,8 @@ class Player {
 		void resetBallMovement();
 		int getXBallMovement();
 		int getYBallMovement();
+		int getXPosition();
+		int getYPosition();
 		
 	private:
 		int xPosition;
