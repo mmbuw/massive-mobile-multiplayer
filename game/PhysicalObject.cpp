@@ -36,7 +36,7 @@ void PhysicalObject::frameFrictionUpdate()
 	clampPosition();
 }
 
-void PhysicalObject::frameUpdate()
+/* virtual */ void PhysicalObject::frameUpdate()
 {
 	frameFrictionUpdate();
 	setPosition(posX_ + velX_, posY_ + velY_);

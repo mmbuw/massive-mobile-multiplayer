@@ -1,11 +1,11 @@
 #include "player.hpp"
 
 Player::Player(int startX, int startY, sf::Color border, sf::Color center) :
-	PhysicalObject(70.0, 0, 0)
+	PhysicalObject(1.2, 0, 0), borderColor_(border), centerColor_(center)
 {
 	radius_ = 50.0;
 
-	shape_ = sf::Shape::Circle(posX_, posY_, radius_, center, -5, border);
+	shape_ = sf::Shape::Circle(posX_, posY_, radius_, centerColor_, -5, borderColor_);
 	
 	posX_ = startX;
 	posY_ = startY;
@@ -43,6 +43,16 @@ bool Player::intersectsWithPlayer(Player const& otherPlayer) const
 	}
 
 	return false;
+}
+
+void Player::shoot()
+{
+	std::cout << "SHOOOT" << std::endl;
+
+	for (int i = 0; i < shape_.GetNbPoints(); ++i)
+	{
+		shape_.SetPointOutlineColor(i, sf::Color(255,255,255));
+	}
 }
 
 void Player::moveUp() 
@@ -89,4 +99,19 @@ void Player::clampPosition()
 float Player::getRadius() const
 {
 	return radius_;
+}
+
+/* virtual */ void Player::frameUpdate()
+{
+	PhysicalObject::frameUpdate();
+
+	if (shape_.GetPointOutlineColor(0) == sf::Color(255,255,255))
+	{
+		//implement shoot block
+		for (int i = 0; i < shape_.GetNbPoints(); ++i)
+		{
+			shape_.SetPointOutlineColor(i, sf::Color(0,0,0));
+		}
+	}
+
 }

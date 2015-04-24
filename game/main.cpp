@@ -21,6 +21,8 @@ int main()
 	bool sPressed(false);
 	bool dPressed(false);
 
+	bool xPressed(false);
+
 	while (App.IsOpened()) 
 	{
 		sf::Event Event;
@@ -107,6 +109,11 @@ int main()
 				dPressed = false;
 			}
 
+			if (input.IsKeyDown(sf::Key::X) && xPressed == false)
+			{
+				xPressed = true;
+			}
+
 		}
 
 		//handle key events according to flags set above
@@ -148,6 +155,12 @@ int main()
 		if (dPressed)
 		{
 			game.movePlayer(1,"RIGHT");
+		}
+
+		if (xPressed)
+		{
+			game.playerShoot(0);
+			xPressed = false;
 		}
 		
 		// application logic

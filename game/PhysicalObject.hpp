@@ -15,7 +15,7 @@ class PhysicalObject
 		virtual ~PhysicalObject();
 		
 		void frameFrictionUpdate();
-		void frameUpdate();
+		virtual void frameUpdate();
 		virtual void clampPosition() = 0;
 
 		sf::Shape const getShape() const;
