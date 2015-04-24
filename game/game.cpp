@@ -25,14 +25,14 @@ void Game::checkIntersect()
 {
 	for (int i = 0; i < players.size(); ++i)
 	{
-		sf::Vector2f hitPoint = players[i].intersectsWithBall(ball);
-		double currentSpeed = players[i].computeCurrentSpeed();
+		// intersect player with ball
+		sf::Vector2f ballHitPoint = players[i].intersectsWithBall(ball);
 
-		// an intersection was found
-		if (hitPoint.x < 5000 || hitPoint.y < 5000)
+		// an intersection with the ball was found
+		if (ballHitPoint.x < 5000 || ballHitPoint.y < 5000)
 		{
 			//physics try
-			/*float ballMass = ball.getMass();
+			float ballMass = ball.getMass();
 			float playerMass = players[i].getMass();
 
 			sf::Vector2f ballVel(ball.getVelX(), ball.getVelY());
@@ -44,33 +44,50 @@ void Game::checkIntersect()
 			sf::Vector2f playerVelAfterCollision( (playerMass * playerVel.x + ballMass * (2 * ballVel.x - playerVel.x)) / (ballMass + playerMass),
 			                                      (playerMass * playerVel.y + ballMass * (2 * ballVel.y - playerVel.y)) / (ballMass + playerMass));
 			
-			ball.setVelocity(ballVelAfterCollision.x, ballVelAfterCollision.y);
-			players[i].setVelocity(playerVelAfterCollision.x, playerVelAfterCollision.y);*/
+			float frictionCoefficient(1.0);
+			ball.setVelocity(frictionCoefficient * ballVelAfterCollision.x, frictionCoefficient * ballVelAfterCollision.y);
+			players[i].setVelocity(frictionCoefficient * playerVelAfterCollision.x, frictionCoefficient * playerVelAfterCollision.y);
+			
 
-
-
+			/* old hit code
 			long double hitFactor(0.3 * currentSpeed / MAX_SPEED);
 
 			long double newBallX( hitFactor * (hitPoint.x - players[i].getPosX()) );
 			long double newBallY( hitFactor * (hitPoint.y - players[i].getPosY()) );
 
-			
 			ball.setVelocity(newBallX, newBallY);
+			*/
 		}
+
+		// intersect with other players
+		for (int j = 0; j < i; ++j)
+		{
+			sf::Vector2f playerHitPoint = players[i].intersectsWithPlayer(players[j]);
+
+			// an intersection with the other player was found
+			if (playerHitPoint.x < 5000 || playerHitPoint.y < 5000)
+			{
+				//physics try
+				float playerIMass = players[i].getMass();
+				float playerJMass = players[j].getMass();
+
+				sf::Vector2f playerIVel(players[i].getVelX(), players[i].getVelY());
+				sf::Vector2f playerJVel(players[j].getVelX(), players[j].getVelY());
+
+				sf::Vector2f playerIVelAfterCollision( (playerIMass * playerIVel.x + playerJMass * (2 * playerJVel.x - playerIVel.x)) / (playerIMass + playerJMass),
+													   (playerIMass * playerIVel.y + playerJMass * (2 * playerJVel.y - playerIVel.y)) / (playerIMass + playerJMass));
+
+				sf::Vector2f playerJVelAfterCollision( (playerJMass * playerJVel.x + playerIMass * (2 * playerIVel.x - playerJVel.x)) / (playerIMass + playerJMass),
+				                                       (playerJMass * playerJVel.y + playerIMass * (2 * playerIVel.y - playerJVel.y)) / (playerIMass + playerJMass));
+				
+				float frictionCoefficient(1.0);
+				players[i].setVelocity(frictionCoefficient * playerIVelAfterCollision.x, frictionCoefficient * playerIVelAfterCollision.y);
+				players[j].setVelocity(frictionCoefficient * playerJVelAfterCollision.x, frictionCoefficient * playerJVelAfterCollision.y);
+			}
+		}
+
 	}
 
-	/*
-	for (int i = 0; i < players.size(); ++i){
-		players[i].intersectsWithBall(ball);
-		for (int j = 0; j < players.size(); ++j){
-			if (i != j){
-				if (players[i].intersectsWithPlayer(players[j])){
-					std::cout<<"Player "<<i<<" and player "<<j<<" intersect!"<<std::endl;
-				}			
-			}		
-		}
-	}
-	*/
 }
 
 void Game::checkForGoal()

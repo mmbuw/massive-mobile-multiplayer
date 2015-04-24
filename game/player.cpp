@@ -1,7 +1,7 @@
 #include "player.hpp"
 
 Player::Player(int startX, int startY, sf::Color border, sf::Color center) :
-	PhysicalObject(50.0, 0, 0)
+	PhysicalObject(70.0, 0, 0)
 {
 	radius_ = 50.0;
 
@@ -33,17 +33,23 @@ sf::Vector2f const Player::intersectsWithBall(Ball const& ball) const
 	return sf::Vector2f(5000, 5000);
 }
 
-bool Player::intersectsWithPlayer(Player otherGuy)
+sf::Vector2f const Player::intersectsWithPlayer(Player const& otherPlayer) const
 {
-	/*	
-	int checkValueLower = 0; // (own radius - other radius)^2 
-	int checkValueUpper = 10000; // (own radius + other radius)^2 
-	int realValue = (xPosition-otherGuy.getXPosition())*(xPosition-otherGuy.getXPosition()) + (yPosition-otherGuy.getYPosition())*(yPosition-otherGuy.getYPosition());
-	if (realValue <= checkValueUpper){
-		return true;
+	int checkValueLower = (radius_ - otherPlayer.getRadius()) * (radius_ - otherPlayer.getRadius());
+	int checkValueUpper = (radius_ + otherPlayer.getRadius()) * (radius_ + otherPlayer.getRadius());
+
+	int realValue = (posX_ - otherPlayer.getPosX()) * (posX_ - otherPlayer.getPosX()) + 
+	                (posY_ - otherPlayer.getPosY()) * (posY_ - otherPlayer.getPosY());
+
+	if (realValue <= checkValueUpper)
+	{
+		sf::Vector2f centerConnection(otherPlayer.getPosX()-posX_, otherPlayer.getPosY()-posY_);
+		sf::Vector2f hitPoint(posX_ + 0.5 * centerConnection.x, posY_ + 0.5 * centerConnection.y);
+		//std::cout << "Hit point: " << hitPoint.x << " ; " << hitPoint.y << std::endl;
+		return hitPoint;
 	}
-	return false;
-	*/
+
+	return sf::Vector2f(5000, 5000);
 }
 
 void Player::moveUp() 
