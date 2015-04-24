@@ -18,8 +18,8 @@ class Player : public PhysicalObject
 		void moveLeft();
 		void moveRight();
 
-		sf::Vector2f const intersectsWithBall(Ball const& ball) const;
-		sf::Vector2f const intersectsWithPlayer(Player const& otherPlayer) const;
+		bool intersectsWithBall(Ball const& ball) const;
+		bool intersectsWithPlayer(Player const& otherPlayer) const;
 		bool currentlyIntersectsBall;
 
 		/* virtual */ void clampPosition();

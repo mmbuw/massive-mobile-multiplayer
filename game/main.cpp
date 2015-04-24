@@ -29,9 +29,9 @@ int main()
 		// handle events
 		while (App.GetEvent(Event)) 
 		{
-			if (Event.Type == sf::Event::Closed)
+			if (Event.Type == sf::Event::Closed || input.IsKeyDown(sf::Key::Escape))
 			{ 
-				App.Close(); 
+				App.Close();
 			}
 
 			
