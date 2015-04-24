@@ -32,7 +32,7 @@ class PhysicalObject
 
 		long double computeCurrentSpeed() const;
 
-		void render(sf::RenderWindow* window) const;
+		virtual void render(sf::RenderWindow* window) const;
 
 	protected:
 		sf::Shape shape_;

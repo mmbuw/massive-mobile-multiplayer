@@ -21,15 +21,24 @@ class Player : public PhysicalObject
 		bool intersectsWithBall(Ball const& ball) const;
 		bool intersectsWithPlayer(Player const& otherPlayer) const;
 		void shoot();
+		bool inShootSequence() const;
+		void resetToStart();
 
 		/* virtual */ void clampPosition();
 		float getRadius() const;
 		/* virtual */ void frameUpdate();
+		/* virtual */ void render(sf::RenderWindow* window) const;
 		
 	private:
 		sf::Color borderColor_;
 		sf::Color centerColor_;
+
 		float radius_;
+		int blockShootFrames_;
+
+		sf::Shape shootCircle_;
+		int startX_;
+		int startY_;
 
 		void controlPosition();
 		

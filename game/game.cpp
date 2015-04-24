@@ -1,6 +1,6 @@
 #include "game.hpp"
 
-Game::Game() : ballWasInLeftGoal_(false), ballWasInRightGoal_(false), framesToResetBall_(-1), pointsLeftTeam_(0), pointsRightTeam_(0)
+Game::Game() : ballWasInLeftGoal_(false), ballWasInRightGoal_(false), framesToReset_(-1), pointsLeftTeam_(0), pointsRightTeam_(0)
 {}
 
 void Game::renderBackground(sf::RenderWindow* window) {
@@ -41,9 +41,9 @@ void Game::checkIntersect()
 			sf::Vector2f playerVelAfterCollision( (playerMass * playerVel.x + ballMass * (2 * ballVel.x - playerVel.x)) / (ballMass + playerMass),
 			                                      (playerMass * playerVel.y + ballMass * (2 * ballVel.y - playerVel.y)) / (ballMass + playerMass));
 			
-			float frictionCoefficient(1.0);
-			ball.setVelocity(frictionCoefficient * ballVelAfterCollision.x, frictionCoefficient * ballVelAfterCollision.y);
-			players[i].setVelocity(frictionCoefficient * playerVelAfterCollision.x, frictionCoefficient * playerVelAfterCollision.y);
+
+			ball.setVelocity(ballVelAfterCollision.x, ballVelAfterCollision.y);
+			players[i].setVelocity(playerVelAfterCollision.x, playerVelAfterCollision.y);
 
 			//pull player and ball apart
 			sf::Vector2f ballCenter(ball.getPosX(), ball.getPosY());
@@ -137,7 +137,7 @@ void Game::checkForGoal()
 	{
 		++pointsRightTeam_;
 		ballWasInLeftGoal_ = true;
-		framesToResetBall_ = 100;
+		framesToReset_ = 100;
 		ball.setColor(sf::Color(0,0,0));
 
 		std::cout << std::endl;
@@ -149,7 +149,7 @@ void Game::checkForGoal()
 	{
 		++pointsLeftTeam_;
 		ballWasInRightGoal_ = true;
-		framesToResetBall_ = 100;
+		framesToReset_ = 100;
 		ball.setColor(sf::Color(0,0,0));
 
 		std::cout << std::endl;
@@ -167,16 +167,22 @@ void Game::checkForGoal()
 	}
 
 	// count frames until ball is reset (after winning animation)
-	if (framesToResetBall_ > -1)
+	if (framesToReset_ > -1)
 	{
-		if (framesToResetBall_ == 0)
+		if (framesToReset_ == 0)
 		{
 			ball.resetToCenter();
-			framesToResetBall_ = -1;
+			
+			for (int i = 0; i < players.size(); ++i)
+			{
+				players[i].resetToStart();
+			}
+
+			framesToReset_ = -1;
 		}
 		else
 		{
-			--framesToResetBall_;
+			--framesToReset_;
 		}
 	}
 }

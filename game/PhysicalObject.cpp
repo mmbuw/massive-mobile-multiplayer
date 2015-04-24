@@ -8,7 +8,7 @@ PhysicalObject::PhysicalObject(float mass, int posX, int posY) :
 	// do nothing
 }
 
-void PhysicalObject::render(sf::RenderWindow* window) const 
+/* virtual */ void PhysicalObject::render(sf::RenderWindow* window) const 
 {
 	window->Draw(shape_);
 }

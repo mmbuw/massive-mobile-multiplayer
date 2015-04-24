@@ -45,7 +45,7 @@ class Game
 
 		bool ballWasInLeftGoal_;
 		bool ballWasInRightGoal_;
-		int framesToResetBall_;
+		int framesToReset_;
 
 		int pointsLeftTeam_;
 		int pointsRightTeam_;
