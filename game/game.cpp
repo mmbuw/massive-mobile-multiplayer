@@ -131,7 +131,7 @@ void Game::checkIntersect()
 
 void Game::checkForGoal()
 {
-	if (ball.isInLeftGoal() && ballWasInLeftGoal_ == false)
+	if (ball.isInLeftGoal() && ballWasInLeftGoal_ == false && framesToReset_ == -1)
 	{
 		++pointsRightTeam_;
 		ballWasInLeftGoal_ = true;
@@ -143,7 +143,7 @@ void Game::checkForGoal()
 		std::cout << "Current standings: Left " << pointsLeftTeam_ << " : " << pointsRightTeam_ << " Right" << std::endl;
 		std::cout << std::endl;
 	}
-	else if (ball.isInRightGoal() && ballWasInRightGoal_ == false)
+	else if (ball.isInRightGoal() && ballWasInRightGoal_ == false && framesToReset_ == -1)
 	{
 		++pointsLeftTeam_;
 		ballWasInRightGoal_ = true;
