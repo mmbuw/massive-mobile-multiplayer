@@ -30,7 +30,8 @@ Ball::Ball() : PhysicalObject(1.0, 0, 0), radius_(30.0), inLeftGoal_(false), inR
 	int leftGoalEndLine(35);
 	int rightGoalEndLine(1885);
 
-	// if
+	// if the ball was in a goal last frame, clamp upper and lower
+	// border to goal lines
 	if (inLeftGoal_ || inRightGoal_)
 	{
 		topBorderLine = goalStartHeight;
@@ -52,7 +53,7 @@ Ball::Ball() : PhysicalObject(1.0, 0, 0), radius_(30.0), inLeftGoal_(false), inR
 			}
 
 			//we want the ball's center to be over the goal line
-			if (posX_ < leftBorderLine)
+			if (posX_ <= leftBorderLine)
 				inLeftGoal_ = true;
 
 		}
@@ -77,7 +78,7 @@ Ball::Ball() : PhysicalObject(1.0, 0, 0), radius_(30.0), inLeftGoal_(false), inR
 				velY_ *= borderAbsorptionCoefficient;
 			}
 
-			if (posX_ > rightBorderLine)
+			if (posX_ >= rightBorderLine)
 				inRightGoal_ = true;
 		}
 		else

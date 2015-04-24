@@ -23,6 +23,7 @@ void Game::renderBackground(sf::RenderWindow* window) {
 
 void Game::checkIntersect()
 {
+	// for each player
 	for (int i = 0; i < players.size(); ++i)
 	{
 		// apply shooting forces
@@ -33,11 +34,10 @@ void Game::checkIntersect()
 			ball.setVelocity(scaleFactor * shootDir.x, scaleFactor * shootDir.y);
 		}
 
-
-		// an intersection with the ball was found
+		// if not shooting, check for an intersection of each player with the ball
 		else if (players[i].intersectsWithBall(ball, false))
 		{
-			//physics try
+			//elastic impact computation
 			float ballMass = ball.getMass();
 			float playerMass = players[i].getMass();
 
@@ -51,11 +51,12 @@ void Game::checkIntersect()
 			                                      (playerMass * playerVel.y + ballMass * (2 * ballVel.y - playerVel.y)) / (ballMass + playerMass));
 			
 
+			//scale reflection with speed of player
 			float ballPlayerReflectionFactor(0.1 * players[i].computeCurrentSpeed());
 			ball.setVelocity(ballPlayerReflectionFactor * ballVelAfterCollision.x, ballPlayerReflectionFactor * ballVelAfterCollision.y);
 			players[i].setVelocity(playerVelAfterCollision.x, playerVelAfterCollision.y);
 
-			//pull player and ball apart
+			//pull player and ball apart such that they can not overlap
 			sf::Vector2f ballCenter(ball.getPosX(), ball.getPosY());
 			sf::Vector2f playerCenter(players[i].getPosX(), players[i].getPosY());
 			float ballRadius(ball.getRadius());
@@ -78,13 +79,13 @@ void Game::checkIntersect()
 			}
 		}
 
-		// intersect with other players
+		// check for intersections with other players
 		for (int j = 0; j < i; ++j)
 		{
 			// an intersection with the other player was found
 			if (players[i].intersectsWithPlayer(players[j]))
 			{
-				//physics try
+				//elastic impact computation
 				float playerIMass = players[i].getMass();
 				float playerJMass = players[j].getMass();
 
@@ -97,11 +98,10 @@ void Game::checkIntersect()
 				sf::Vector2f playerJVelAfterCollision( (playerJMass * playerJVel.x + playerIMass * (2 * playerIVel.x - playerJVel.x)) / (playerIMass + playerJMass),
 				                                       (playerJMass * playerJVel.y + playerIMass * (2 * playerIVel.y - playerJVel.y)) / (playerIMass + playerJMass));
 				
-				float frictionCoefficient(1.0);
-				players[i].setVelocity(frictionCoefficient * playerIVelAfterCollision.x, frictionCoefficient * playerIVelAfterCollision.y);
-				players[j].setVelocity(frictionCoefficient * playerJVelAfterCollision.x, frictionCoefficient * playerJVelAfterCollision.y);
+				players[i].setVelocity(playerIVelAfterCollision.x, playerIVelAfterCollision.y);
+				players[j].setVelocity(playerJVelAfterCollision.x, playerJVelAfterCollision.y);
 
-				//pull player and ball apart
+				//pull player and ball apart such that they can not overlap
 				sf::Vector2f playerICenter(players[i].getPosX(), players[i].getPosY());
 				sf::Vector2f playerJCenter(players[j].getPosX(), players[j].getPosY());
 				float playerIRadius(players[i].getRadius());
@@ -122,12 +122,9 @@ void Game::checkIntersect()
 					players[i].setPosition(newPlayerIPosition.x, newPlayerIPosition.y);
 					players[j].setPosition(newPlayerJPosition.x, newPlayerJPosition.y);
 				}
-
 			}
 		}
-
 	}
-
 }
 
 void Game::checkForGoal()
