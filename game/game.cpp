@@ -35,7 +35,7 @@ void Game::checkIntersect()
 
 
 		// an intersection with the ball was found
-		if (players[i].intersectsWithBall(ball, false))
+		else if (players[i].intersectsWithBall(ball, false))
 		{
 			//physics try
 			float ballMass = ball.getMass();
@@ -51,7 +51,8 @@ void Game::checkIntersect()
 			                                      (playerMass * playerVel.y + ballMass * (2 * ballVel.y - playerVel.y)) / (ballMass + playerMass));
 			
 
-			ball.setVelocity(ballVelAfterCollision.x, ballVelAfterCollision.y);
+			float ballPlayerReflectionFactor(0.1 * players[i].computeCurrentSpeed());
+			ball.setVelocity(ballPlayerReflectionFactor * ballVelAfterCollision.x, ballPlayerReflectionFactor * ballVelAfterCollision.y);
 			players[i].setVelocity(playerVelAfterCollision.x, playerVelAfterCollision.y);
 
 			//pull player and ball apart

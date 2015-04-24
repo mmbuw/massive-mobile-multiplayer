@@ -1,7 +1,7 @@
 #include "player.hpp"
 
 Player::Player(int startX, int startY, sf::Color border, sf::Color center) :
-	PhysicalObject(1.2, 0, 0), borderColor_(border), centerColor_(center), blockShootFrames_(0), startX_(startX), startY_(startY)
+	PhysicalObject(10.2, 0, 0), borderColor_(border), centerColor_(center), blockShootFrames_(0), startX_(startX), startY_(startY)
 {
 	radius_ = 50.0;
 	shootCircleRadius_ = 1.5 * radius_;
