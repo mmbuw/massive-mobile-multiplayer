@@ -56,11 +56,15 @@ void Game::checkIntersect()
 
 			if (diffLength < ballRadius + playerRadius)
 			{
+				float incrementAtEachVectorEnd( (ballRadius+playerRadius-diffLength) / 2.0 );
 				diffVec = diffVec / diffLength;
-				diffVec = diffVec * (ballRadius+playerRadius);
-				sf::Vector2f newBallPosition(playerCenter-diffVec);
+				diffVec = diffVec * (incrementAtEachVectorEnd);
+
+				sf::Vector2f newBallPosition(ballCenter - diffVec);
+				sf::Vector2f newPlayerPosition(playerCenter + diffVec);
 
 				ball.setPosition(newBallPosition.x, newBallPosition.y);
+				players[i].setPosition(newPlayerPosition.x, newPlayerPosition.y);
 			}
 
 			
@@ -109,13 +113,17 @@ void Game::checkIntersect()
 
 				if (diffLength < playerIRadius + playerJRadius)
 				{
+					float incrementAtEachVectorEnd( (playerIRadius+playerJRadius-diffLength) / 2.0 );
 					diffVec = diffVec / diffLength;
-					diffVec = diffVec * (playerIRadius+playerJRadius);
-					sf::Vector2f newPlayerIPosition(playerJCenter-diffVec);
+					diffVec = diffVec * (incrementAtEachVectorEnd);
+
+					sf::Vector2f newPlayerIPosition(playerICenter - diffVec);
+					sf::Vector2f newPlayerJPosition(playerJCenter + diffVec);
 
 					players[i].setPosition(newPlayerIPosition.x, newPlayerIPosition.y);
+					players[j].setPosition(newPlayerJPosition.x, newPlayerJPosition.y);
 				}
-				
+
 			}
 		}
 
