@@ -166,7 +166,7 @@ void Game::checkForGoal()
 		ballWasInRightGoal_ = false;
 	}
 
-	// count frames until ball is reset (after winning animation)
+	// count frames until ball is reset (after scoring animation)
 	if (framesToResetBall_ > -1)
 	{
 		if (framesToResetBall_ == 0)
@@ -266,7 +266,13 @@ void Game::renderScoreLine(sf::RenderWindow* window) {
 	score.SetText("Blue   "+std::to_string(pointsLeftTeam_)+":"+std::to_string(pointsRightTeam_)+"   Red");
 	score.SetSize(80);
 	score.Move(685.f,1200.f);
+
+	sf::Shape blueBox = sf::Shape::Circle(600,1250,35,sf::Color(0,0,255));
+	sf::Shape redBox = sf::Shape::Circle(1360,1250,35,sf::Color(255,0,0));
+
 	window->Draw(scoreLine);
+	window->Draw(blueBox);
+	window->Draw(redBox);
 	window->Draw(score);
 
 }
