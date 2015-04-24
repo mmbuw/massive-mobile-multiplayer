@@ -178,6 +178,7 @@ void Game::checkForGoal()
 		}
 		else
 		{
+			ball.setColor(sf::Color(rand() % 256, rand() % 256, rand() % 256));
 			--framesToReset_;
 		}
 	}
