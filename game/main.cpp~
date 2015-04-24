@@ -7,7 +7,7 @@
 int main()
 {
 	sf::Clock Clock;
-	sf::RenderWindow App(sf::VideoMode(1920,1200,32), "MMMBall");
+	sf::RenderWindow App(sf::VideoMode(1920,1350,32), "MMMBall");
 	const sf::Input& input = App.GetInput();
 	Game game;	
 	game.initPlayers();
@@ -21,12 +21,12 @@ int main()
 	bool sPressed(false);
 	bool dPressed(false);
 
-	while (App.IsOpened()) {
-		
-
+	while (App.IsOpened()) 
+	{
 		sf::Event Event;
 		App.Clear(sf::Color(255,0,0));
 
+		// handle events
 		while (App.GetEvent(Event)) 
 		{
 			if (Event.Type == sf::Event::Closed)
@@ -109,7 +109,7 @@ int main()
 
 		}
 
-		//handle key events
+		//handle key events according to flags set above
 		if (jPressed)
 		{
 			game.movePlayer(0,"LEFT");
@@ -150,15 +150,17 @@ int main()
 			game.movePlayer(1,"RIGHT");
 		}
 		
-		game.renderBackground(&App);
-		game.renderSidelines(&App);
-		game.renderGoals(&App);
-
+		// application logic
 		game.updatePhysicalObjects();
-		
-		
-		game.renderPlayers(&App);
 		game.checkIntersect();
+		game.checkForGoal();
+		
+
+		// render output
+		game.renderBackground(&App);
+		game.renderGoals(&App);
+		game.renderSidelines(&App);
+		game.renderPlayers(&App);
 		game.renderBall(&App);	
 		
 		App.Display();

@@ -218,6 +218,18 @@ void Game::renderPlayers(sf::RenderWindow* window)
 	}
 }
 
+void Game::renderScoreLine(sf::RenderWindow* window) {
+	sf::Shape scoreLine = sf::Shape::Rectangle(0,1200,1920,1350,sf::Color(0,0,0));
+	sf::String score;
+	score.SetFont(sf::Font::GetDefaultFont());
+	score.SetText("Blue   "+std::to_string(pointsLeftTeam_)+":"+std::to_string(pointsRightTeam_)+"   Red");
+	score.SetSize(80);
+	score.Move(685.f,1200.f);
+	window->Draw(scoreLine);
+	window->Draw(score);
+
+}
+
 void Game::movePlayer(int playerNumber, std::string direction){
 
 	if (direction == "UP"){

@@ -4,6 +4,7 @@
 #include <SFML/System.hpp>
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#include <string>
 
 #include "player.hpp"
 #include "ball.hpp"
@@ -23,7 +24,8 @@ class Game
 		void renderPlayers(sf::RenderWindow* window);		
 		void renderBall(sf::RenderWindow* window);
 		void renderSidelines(sf::RenderWindow* window);
-		void renderGoals(sf::RenderWindow* window);		
+		void renderGoals(sf::RenderWindow* window);
+		void renderScoreLine(sf::RenderWindow* window);		
 		void checkIntersect(); 
 		void saveIntersectingPlayers();
 

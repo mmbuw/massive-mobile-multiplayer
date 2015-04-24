@@ -7,7 +7,7 @@
 int main()
 {
 	sf::Clock Clock;
-	sf::RenderWindow App(sf::VideoMode(1920,1200,32), "MMMBall");
+	sf::RenderWindow App(sf::VideoMode(1920,1350,32), "MMMBall");
 	const sf::Input& input = App.GetInput();
 	Game game;	
 	game.initPlayers();
@@ -161,7 +161,8 @@ int main()
 		game.renderGoals(&App);
 		game.renderSidelines(&App);
 		game.renderPlayers(&App);
-		game.renderBall(&App);	
+		game.renderBall(&App);
+		game.renderScoreLine(&App);
 		
 		App.Display();
 	}

@@ -1,14 +1,22 @@
-#pragma once
+#ifndef GAME_HPP
+#define GAME_HPP
+
 #include <SFML/System.hpp>
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#include <string>
+
 #include "player.hpp"
 #include "ball.hpp"
+#include "PhysicalObject.hpp"
 
 
-class Game {
+class Game 
+{
 	
-	public: 
+	public:
+		Game();
+
 		void initPlayers();
 		void initBall();
 	
@@ -16,17 +24,16 @@ class Game {
 		void renderPlayers(sf::RenderWindow* window);		
 		void renderBall(sf::RenderWindow* window);
 		void renderSidelines(sf::RenderWindow* window);
-		void renderGoal(sf::RenderWindow* window);		
+		void renderGoals(sf::RenderWindow* window);
+		void renderScoreLine(sf::RenderWindow* window);		
 		void checkIntersect(); 
 		void saveIntersectingPlayers();
 
-		void addPlayer();
+		void updatePhysicalObjects();
+		void checkForGoal();
 
+		void addPlayer();
 		void movePlayer(int playerNumber, std::string direction);
-		void getBallMovement();
-		void resetBallMovement();
-		void moveBall();
-		Game();
 
 
 	private:
@@ -34,7 +41,13 @@ class Game {
 		std::vector<Player> intersectingPlayers;
 		sf::Image background;
 		Ball ball;
-		int ballXMovement;
-		int ballYMovement;
 
+		bool ballWasInLeftGoal_;
+		bool ballWasInRightGoal_;
+		int framesToResetBall_;
+
+		int pointsLeftTeam_;
+		int pointsRightTeam_;
 };
+
+#endif //GAME_HPP
