@@ -25,11 +25,8 @@ void Game::checkIntersect()
 {
 	for (int i = 0; i < players.size(); ++i)
 	{
-		// intersect player with ball
-		sf::Vector2f ballHitPoint = players[i].intersectsWithBall(ball);
-
 		// an intersection with the ball was found
-		if (ballHitPoint.x < 5000 || ballHitPoint.y < 5000)
+		if (players[i].intersectsWithBall(ball))
 		{
 			//physics try
 			float ballMass = ball.getMass();
@@ -47,6 +44,25 @@ void Game::checkIntersect()
 			float frictionCoefficient(1.0);
 			ball.setVelocity(frictionCoefficient * ballVelAfterCollision.x, frictionCoefficient * ballVelAfterCollision.y);
 			players[i].setVelocity(frictionCoefficient * playerVelAfterCollision.x, frictionCoefficient * playerVelAfterCollision.y);
+
+			//pull player and ball apart
+			sf::Vector2f ballCenter(ball.getPosX(), ball.getPosY());
+			sf::Vector2f playerCenter(players[i].getPosX(), players[i].getPosY());
+			float ballRadius(ball.getRadius());
+			float playerRadius(players[i].getRadius());
+
+			sf::Vector2f diffVec = playerCenter - ballCenter;
+			float diffLength = std::sqrt(diffVec.x*diffVec.x + diffVec.y*diffVec.y);
+
+			if (diffLength < ballRadius + playerRadius)
+			{
+				diffVec = diffVec / diffLength;
+				diffVec = diffVec * (ballRadius+playerRadius);
+				sf::Vector2f newBallPosition(playerCenter-diffVec);
+
+				ball.setPosition(newBallPosition.x, newBallPosition.y);
+			}
+
 			
 
 			/* old hit code
@@ -62,10 +78,8 @@ void Game::checkIntersect()
 		// intersect with other players
 		for (int j = 0; j < i; ++j)
 		{
-			sf::Vector2f playerHitPoint = players[i].intersectsWithPlayer(players[j]);
-
 			// an intersection with the other player was found
-			if (playerHitPoint.x < 5000 || playerHitPoint.y < 5000)
+			if (players[i].intersectsWithPlayer(players[j]))
 			{
 				//physics try
 				float playerIMass = players[i].getMass();
@@ -83,6 +97,25 @@ void Game::checkIntersect()
 				float frictionCoefficient(1.0);
 				players[i].setVelocity(frictionCoefficient * playerIVelAfterCollision.x, frictionCoefficient * playerIVelAfterCollision.y);
 				players[j].setVelocity(frictionCoefficient * playerJVelAfterCollision.x, frictionCoefficient * playerJVelAfterCollision.y);
+
+				//pull player and ball apart
+				sf::Vector2f playerICenter(players[i].getPosX(), players[i].getPosY());
+				sf::Vector2f playerJCenter(players[j].getPosX(), players[j].getPosY());
+				float playerIRadius(players[i].getRadius());
+				float playerJRadius(players[j].getRadius());
+
+				sf::Vector2f diffVec = playerJCenter - playerICenter;
+				float diffLength = std::sqrt(diffVec.x*diffVec.x + diffVec.y*diffVec.y);
+
+				if (diffLength < playerIRadius + playerJRadius)
+				{
+					diffVec = diffVec / diffLength;
+					diffVec = diffVec * (playerIRadius+playerJRadius);
+					sf::Vector2f newPlayerIPosition(playerJCenter-diffVec);
+
+					players[i].setPosition(newPlayerIPosition.x, newPlayerIPosition.y);
+				}
+				
 			}
 		}
 
