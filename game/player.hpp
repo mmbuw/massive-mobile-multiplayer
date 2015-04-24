@@ -20,14 +20,15 @@ class Player : public PhysicalObject
 
 		bool intersectsWithBall(Ball const& ball) const;
 		bool intersectsWithPlayer(Player const& otherPlayer) const;
-		bool currentlyIntersectsBall;
+		void shoot();
 
 		/* virtual */ void clampPosition();
 		float getRadius() const;
+		/* virtual */ void frameUpdate();
 		
 	private:
-		sf::Color borderColor;
-		sf::Color centerColor;
+		sf::Color borderColor_;
+		sf::Color centerColor_;
 		float radius_;
 
 		void controlPosition();

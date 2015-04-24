@@ -31,6 +31,7 @@ class Game
 
 		void updatePhysicalObjects();
 		void checkForGoal();
+		void playerShoot(int playerID);
 
 		void addPlayer();
 		void movePlayer(int playerNumber, std::string direction);

@@ -181,6 +181,11 @@ void Game::checkForGoal()
 	}
 }
 
+void Game::playerShoot(int playerID)
+{
+	players[playerID].shoot();
+}
+
 
 void Game::initPlayers() 
 {
