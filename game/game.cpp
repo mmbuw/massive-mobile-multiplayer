@@ -25,8 +25,17 @@ void Game::checkIntersect()
 {
 	for (int i = 0; i < players.size(); ++i)
 	{
+		// apply shooting forces
+		if (players[i].intersectsWithBall(ball, true) && players[i].inShootSequence())
+		{
+			sf::Vector2f shootDir( ball.getPosX() - players[i].getPosX(), ball.getPosY() - players[i].getPosY() );
+			float scaleFactor(0.2);
+			ball.setVelocity(scaleFactor * shootDir.x, scaleFactor * shootDir.y);
+		}
+
+
 		// an intersection with the ball was found
-		if (players[i].intersectsWithBall(ball))
+		if (players[i].intersectsWithBall(ball, false))
 		{
 			//physics try
 			float ballMass = ball.getMass();
@@ -66,17 +75,6 @@ void Game::checkIntersect()
 				ball.setPosition(newBallPosition.x, newBallPosition.y);
 				players[i].setPosition(newPlayerPosition.x, newPlayerPosition.y);
 			}
-
-			
-
-			/* old hit code
-			long double hitFactor(0.3 * currentSpeed / MAX_SPEED);
-
-			long double newBallX( hitFactor * (hitPoint.x - players[i].getPosX()) );
-			long double newBallY( hitFactor * (hitPoint.y - players[i].getPosY()) );
-
-			ball.setVelocity(newBallX, newBallY);
-			*/
 		}
 
 		// intersect with other players
@@ -167,7 +165,7 @@ void Game::checkForGoal()
 	}
 
 	// count frames until ball is reset (after scoring animation)
-	if (framesToResetBall_ > -1)
+	if (framesToReset_ > -1)
 	{
 		if (framesToReset_ == 0)
 		{

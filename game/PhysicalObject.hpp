@@ -25,7 +25,7 @@ class PhysicalObject
 		long double getVelY() const;
 		float getMass() const;
 
-		void setPosition(int x, int y);
+		virtual void setPosition(int x, int y);
 
 		void setVelocity(long double x, long double y);
 		void addVelocityOffset(long double x, long double y);

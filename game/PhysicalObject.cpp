@@ -72,7 +72,7 @@ float PhysicalObject::getMass() const
 	return mass_;
 }
 
-void PhysicalObject::setPosition(int x, int y)
+/* virtual */ void PhysicalObject::setPosition(int x, int y)
 {
 	posX_ = x;
 	posY_ = y;

@@ -21,7 +21,8 @@ int main()
 	bool sPressed(false);
 	bool dPressed(false);
 
-	bool xPressed(false);
+	bool ePressed(false);
+	bool oPressed(false);
 
 	while (App.IsOpened()) 
 	{
@@ -109,9 +110,14 @@ int main()
 				dPressed = false;
 			}
 
-			if (input.IsKeyDown(sf::Key::X) && xPressed == false)
+			if (input.IsKeyDown(sf::Key::E) && ePressed == false)
 			{
-				xPressed = true;
+				ePressed = true;
+			}
+
+			if (input.IsKeyDown(sf::Key::O) && oPressed == false)
+			{
+				oPressed = true;
 			}
 
 		}
@@ -119,48 +125,54 @@ int main()
 		//handle key events according to flags set above
 		if (jPressed)
 		{
-			game.movePlayer(0,"LEFT");
+			game.movePlayer(1,"LEFT");
 		}
 
 		if (lPressed)
 		{
-			game.movePlayer(0,"RIGHT");
+			game.movePlayer(1,"RIGHT");
 		}
 
 		if (iPressed)
 		{
-			game.movePlayer(0,"UP");
+			game.movePlayer(1,"UP");
 		}
 
 		if (kPressed)
 		{
-			game.movePlayer(0,"DOWN");
+			game.movePlayer(1,"DOWN");
 		}
 
 		if (wPressed)
 		{
-			game.movePlayer(1,"UP");
+			game.movePlayer(0,"UP");
 		}
 
 		if (aPressed)
 		{
-			game.movePlayer(1,"LEFT");
+			game.movePlayer(0,"LEFT");
 		}
 
 		if (sPressed)
 		{
-			game.movePlayer(1,"DOWN");
+			game.movePlayer(0,"DOWN");
 		}
 
 		if (dPressed)
 		{
-			game.movePlayer(1,"RIGHT");
+			game.movePlayer(0,"RIGHT");
 		}
 
-		if (xPressed)
+		if (ePressed)
 		{
 			game.playerShoot(0);
-			xPressed = false;
+			ePressed = false;
+		}
+
+		if (oPressed)
+		{
+			game.playerShoot(1);
+			oPressed = false;
 		}
 		
 		// application logic

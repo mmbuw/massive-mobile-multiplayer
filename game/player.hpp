@@ -18,22 +18,25 @@ class Player : public PhysicalObject
 		void moveLeft();
 		void moveRight();
 
-		bool intersectsWithBall(Ball const& ball) const;
+		bool intersectsWithBall(Ball const& ball, bool useShootCircle) const;
 		bool intersectsWithPlayer(Player const& otherPlayer) const;
+		bool ballInShootRange() const;
 		void shoot();
 		bool inShootSequence() const;
 		void resetToStart();
+		float getRadius() const;
 
 		/* virtual */ void clampPosition();
-		float getRadius() const;
 		/* virtual */ void frameUpdate();
 		/* virtual */ void render(sf::RenderWindow* window) const;
-		
+		/* virtual */ void setPosition(int x, int y);
+
 	private:
 		sf::Color borderColor_;
 		sf::Color centerColor_;
 
 		float radius_;
+		float shootCircleRadius_;
 		int blockShootFrames_;
 
 		sf::Shape shootCircle_;

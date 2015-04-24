@@ -4,9 +4,10 @@ Player::Player(int startX, int startY, sf::Color border, sf::Color center) :
 	PhysicalObject(1.2, 0, 0), borderColor_(border), centerColor_(center), blockShootFrames_(0), startX_(startX), startY_(startY)
 {
 	radius_ = 50.0;
+	shootCircleRadius_ = 1.5 * radius_;
 
 	shape_ = sf::Shape::Circle(posX_, posY_, radius_, centerColor_, -5, borderColor_);
-	shootCircle_ = sf::Shape::Circle(posX_, posY_, 1.3 * radius_, sf::Color(0,0,0,0), -5, sf::Color(0,0,0,128));
+	shootCircle_ = sf::Shape::Circle(posX_, posY_, shootCircleRadius_, sf::Color(0,0,0,0), -5, sf::Color(0,0,0,128));
 	
 	posX_ = startX_;
 	posY_ = startY_;
@@ -20,10 +21,21 @@ Player::Player(int startX, int startY, sf::Color border, sf::Color center) :
 	window->Draw(shootCircle_);
 }
 
-bool Player::intersectsWithBall(Ball const& ball) const
+bool Player::intersectsWithBall(Ball const& ball, bool useShootCircle) const
 {
-	int checkValueLower = (radius_ - ball.getRadius()) * (radius_ - ball.getRadius());
-	int checkValueUpper = (radius_ + ball.getRadius()) * (radius_ + ball.getRadius());
+	float ownRadius;
+
+	if (useShootCircle)
+	{
+		ownRadius = shootCircleRadius_;
+	}
+	else
+	{
+		ownRadius = radius_;
+	}
+
+	int checkValueLower = (ownRadius - ball.getRadius()) * (ownRadius - ball.getRadius());
+	int checkValueUpper = (ownRadius + ball.getRadius()) * (ownRadius + ball.getRadius());
 
 	int realValue = (posX_ - ball.getPosX()) * (posX_ - ball.getPosX()) + 
 	                (posY_ - ball.getPosY()) * (posY_ - ball.getPosY());
@@ -76,6 +88,7 @@ bool Player::inShootSequence() const
 void Player::resetToStart()
 {
 	setPosition(startX_, startY_);
+	setVelocity(0.0, 0.0);
 }
 
 void Player::moveUp() 
@@ -141,4 +154,10 @@ float Player::getRadius() const
 
 	}
 
+}
+
+/* virtual */ void Player::setPosition(int x, int y)
+{
+	PhysicalObject::setPosition(x,y);
+	shootCircle_.SetPosition(x,y);
 }
