@@ -9,8 +9,7 @@ int main()
 	sf::Clock Clock;
 	sf::RenderWindow App(sf::VideoMode(1920,1350,32), "MMMBall");
 	const sf::Input& input = App.GetInput();
-	Game game;	
-	game.initPlayers();
+	Game game;
 
 	bool jPressed(false);
 	bool lPressed(false);
@@ -36,7 +35,6 @@ int main()
 			{ 
 				App.Close();
 			}
-
 			
 			if (input.IsKeyDown(sf::Key::J) && jPressed == false)
 			{
@@ -125,42 +123,42 @@ int main()
 		//handle key events according to flags set above
 		if (jPressed)
 		{
-			game.movePlayer(1,"LEFT");
+			game.movePlayer(1, "LEFT");
 		}
 
 		if (lPressed)
 		{
-			game.movePlayer(1,"RIGHT");
+			game.movePlayer(1, "RIGHT");
 		}
 
 		if (iPressed)
 		{
-			game.movePlayer(1,"UP");
+			game.movePlayer(1, "UP");
 		}
 
 		if (kPressed)
 		{
-			game.movePlayer(1,"DOWN");
+			game.movePlayer(1, "DOWN");
 		}
 
 		if (wPressed)
 		{
-			game.movePlayer(0,"UP");
+			game.movePlayer(0, "UP");
 		}
 
 		if (aPressed)
 		{
-			game.movePlayer(0,"LEFT");
+			game.movePlayer(0, "LEFT");
 		}
 
 		if (sPressed)
 		{
-			game.movePlayer(0,"DOWN");
+			game.movePlayer(0, "DOWN");
 		}
 
 		if (dPressed)
 		{
-			game.movePlayer(0,"RIGHT");
+			game.movePlayer(0, "RIGHT");
 		}
 
 		if (ePressed)
@@ -175,9 +173,10 @@ int main()
 			oPressed = false;
 		}
 		
+		
 		// application logic
 		game.updatePhysicalObjects();
-		game.checkIntersect();
+		game.applyIntersectionPhysics();
 		game.checkForGoal();
 		
 

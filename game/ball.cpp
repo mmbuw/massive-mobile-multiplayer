@@ -10,15 +10,10 @@ Ball::Ball() : PhysicalObject(1.0, 0, 0), radius_(30.0), inLeftGoal_(false), inR
 	shape_.SetPosition(posX_, posY_);
 }
 
-/* virtual */ Ball::~Ball()
-{
-	// do nothing
-}
+/* virtual */ Ball::~Ball() {}
 
 /* virtual */ void Ball::clampPosition()
 {
-	float borderAbsorptionCoefficient(0.7);
-
 	int leftBorderLine(105);
 	int rightBorderLine(1820);
 	int topBorderLine(26);
@@ -38,6 +33,7 @@ Ball::Ball() : PhysicalObject(1.0, 0, 0), radius_(30.0), inLeftGoal_(false), inR
 		bottomBorderLine = goalEndHeight;
 	}
 
+	/* X position clamp */
 
 	if (posX_ < leftBorderLine + radius_) // left border
 	{
@@ -47,9 +43,7 @@ Ball::Ball() : PhysicalObject(1.0, 0, 0), radius_(30.0), inLeftGoal_(false), inR
 			if (posX_ < leftGoalEndLine + radius_)
 			{
 				setPosition(leftGoalEndLine + radius_, posY_);
-				velX_ = -velX_;
-				velX_ *= borderAbsorptionCoefficient;
-				velY_ *= borderAbsorptionCoefficient;
+				changeAbsorptionVelocity(true, false);
 			}
 
 			//we want the ball's center to be over the goal line
@@ -60,9 +54,7 @@ Ball::Ball() : PhysicalObject(1.0, 0, 0), radius_(30.0), inLeftGoal_(false), inR
 		else
 		{
 			setPosition(leftBorderLine + radius_, posY_);
-			velX_ = -velX_;
-			velX_ *= borderAbsorptionCoefficient;
-			velY_ *= borderAbsorptionCoefficient;
+			changeAbsorptionVelocity(true, false);
 		}
 	}
 	else if (posX_ > rightBorderLine - radius_) // right border
@@ -73,9 +65,7 @@ Ball::Ball() : PhysicalObject(1.0, 0, 0), radius_(30.0), inLeftGoal_(false), inR
 			if (posX_ > rightGoalEndLine - radius_)
 			{
 				setPosition(rightGoalEndLine - radius_, posY_);
-				velX_ = -velX_;
-				velX_ *= borderAbsorptionCoefficient;
-				velY_ *= borderAbsorptionCoefficient;
+				changeAbsorptionVelocity(true, false);
 			}
 
 			if (posX_ >= rightBorderLine)
@@ -84,9 +74,7 @@ Ball::Ball() : PhysicalObject(1.0, 0, 0), radius_(30.0), inLeftGoal_(false), inR
 		else
 		{
 			setPosition(rightBorderLine - radius_, posY_);
-			velX_ = -velX_;
-			velX_ *= borderAbsorptionCoefficient;
-			velY_ *= borderAbsorptionCoefficient;
+			changeAbsorptionVelocity(true, false);
 		}
 	}
 	else
@@ -95,21 +83,30 @@ Ball::Ball() : PhysicalObject(1.0, 0, 0), radius_(30.0), inLeftGoal_(false), inR
 		inRightGoal_ = false;
 	}
 
+
+	/* Y position clamp */
+
 	if (posY_ < topBorderLine + radius_) // top border
 	{
 		setPosition(posX_, topBorderLine + radius_);
-		velY_ = -velY_;
-		velX_ *= borderAbsorptionCoefficient;
-		velY_ *= borderAbsorptionCoefficient;
+		changeAbsorptionVelocity(false, true);
 	}
 	else if(posY_ > bottomBorderLine - radius_) //bottom border
 	{
 		setPosition(posX_, bottomBorderLine - radius_);
-		velY_ = -velY_;
-		velX_ *= borderAbsorptionCoefficient;
-		velY_ *= borderAbsorptionCoefficient;
+		changeAbsorptionVelocity(false, true);
 	}
 
+}
+
+float Ball::getRadius() const
+{
+	return radius_;
+}
+
+void Ball::setColor(sf::Color color)
+{
+	shape_.SetColor(color);
 }
 
 void Ball::resetToCenter()
@@ -119,14 +116,18 @@ void Ball::resetToCenter()
 	setColor(sf::Color(255,255,255));
 }
 
-void Ball::setColor(sf::Color color)
+void Ball::changeAbsorptionVelocity(bool swapX, bool swapY)
 {
-	shape_.SetColor(color);
-}
+	float borderAbsorptionCoefficient(0.7);
 
-float Ball::getRadius() const
-{
-	return radius_;
+	if (swapX)
+		velX_ = -velX_;
+
+	if (swapY)
+		velY_ = -velY_;
+
+	velX_ *= borderAbsorptionCoefficient;
+	velY_ *= borderAbsorptionCoefficient;
 }
 
 bool Ball::isInLeftGoal() const

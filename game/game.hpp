@@ -25,23 +25,22 @@ class Game
 		void renderBall(sf::RenderWindow* window);
 		void renderSidelines(sf::RenderWindow* window);
 		void renderGoals(sf::RenderWindow* window);
-		void renderScoreLine(sf::RenderWindow* window);		
-		void checkIntersect(); 
-		void saveIntersectingPlayers();
+		void renderScoreLine(sf::RenderWindow* window);
 
 		void updatePhysicalObjects();
+		void applyIntersectionPhysics(); 
+		void applyShootingForce(Player const& player);
+
 		void checkForGoal();
 		void playerShoot(int playerID);
 
-		void addPlayer();
 		void movePlayer(int playerNumber, std::string direction);
 
 
 	private:
 		std::vector<Player> players;
-		std::vector<Player> intersectingPlayers;
-		sf::Image background;
 		Ball ball;
+		sf::Image background;
 
 		bool ballWasInLeftGoal_;
 		bool ballWasInRightGoal_;

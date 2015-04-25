@@ -14,36 +14,33 @@ class PhysicalObject
 		PhysicalObject(float mass, int posX, int posY);
 		virtual ~PhysicalObject();
 		
-		void frameFrictionUpdate();
+		virtual void render(sf::RenderWindow* window) const;
+		virtual void frameFrictionUpdate();
 		virtual void frameUpdate();
+		virtual void setPosition(int x, int y);
 		virtual void clampPosition() = 0;
 
 		sf::Shape const getShape() const;
 		int getPosX() const;
 		int getPosY() const;
-		long double getVelX() const;
-		long double getVelY() const;
+		double getVelX() const;
+		double getVelY() const;
 		float getMass() const;
+		double computeCurrentSpeed() const;
 
-		virtual void setPosition(int x, int y);
-
-		void setVelocity(long double x, long double y);
-		void addVelocityOffset(long double x, long double y);
-
-		long double computeCurrentSpeed() const;
-
-		virtual void render(sf::RenderWindow* window) const;
+		void setVelocity(double x, double y);
+		void addVelocityOffset(double x, double y);
 
 	protected:
 		sf::Shape shape_;
 
-		int posX_;	 // pixel
-		int posY_;	 // pixel
+		int posX_;
+		int posY_;
 
-		long double velX_; // pixel per frame
-		long double velY_; // pixel per frame
+		double velX_;
+		double velY_;
 
-		float mass_; //kg
+		float mass_;
 };
 
 #endif //PHYSICAL_OBJECT_HPP

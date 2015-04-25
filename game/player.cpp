@@ -21,40 +21,90 @@ Player::Player(int startX, int startY, sf::Color border, sf::Color center) :
 	window->Draw(shootCircle_);
 }
 
-bool Player::intersectsWithBall(Ball const& ball, bool useShootCircle) const
+/* virtual */ void Player::frameUpdate()
+{
+	PhysicalObject::frameUpdate();
+
+	if (inShootSequence())
+	{
+		--blockShootFrames_;
+		if (blockShootFrames_ == 0)
+		{
+			for (int i = 0; i < shape_.GetNbPoints(); ++i)
+			{
+				shape_.SetPointOutlineColor(i, sf::Color(0,0,0));
+			}
+		}
+	}
+}
+
+/* virtual */ void Player::setPosition(int x, int y)
+{
+	PhysicalObject::setPosition(x,y);
+	shootCircle_.SetPosition(x,y);
+}
+
+/* virtual */ void Player::clampPosition()
+{
+	if (posX_ < 0)
+	{
+		setPosition(0, posY_);
+	}
+	else if (posX_ > 1920)
+	{
+		setPosition(1920, posY_);
+	}
+
+	if (posY_ < 0)
+	{
+		setPosition(posX_, 0);
+	}
+	else if (posY_ > 1200)
+	{
+		setPosition(posX_, 1200);
+	}
+}
+
+
+float Player::getRadius() const
+{
+	return radius_;
+}
+
+void Player::moveUp() 
+{
+	addVelocityOffset(0.0, -0.5);
+}
+
+void Player::moveDown() 
+{
+	addVelocityOffset(0.0, 0.5);
+}
+
+void Player::moveLeft() 
+{
+	addVelocityOffset(-0.5, 0.0);
+}
+
+void Player::moveRight() 
+{
+	addVelocityOffset(0.5, 0.0);
+}
+
+bool Player::intersectsCircle(int circlePosX, int circlePosY, float cirlceRadius, bool useShootRange) const
 {
 	float ownRadius;
 
-	if (useShootCircle)
-	{
+	if (useShootRange)
 		ownRadius = shootCircleRadius_;
-	}
 	else
-	{
 		ownRadius = radius_;
-	}
 
-	int checkValueLower = (ownRadius - ball.getRadius()) * (ownRadius - ball.getRadius());
-	int checkValueUpper = (ownRadius + ball.getRadius()) * (ownRadius + ball.getRadius());
+	int checkValueLower = (ownRadius - cirlceRadius) * (ownRadius - cirlceRadius);
+	int checkValueUpper = (ownRadius + cirlceRadius) * (ownRadius + cirlceRadius);
 
-	int realValue = (posX_ - ball.getPosX()) * (posX_ - ball.getPosX()) + 
-	                (posY_ - ball.getPosY()) * (posY_ - ball.getPosY());
-
-	if (realValue <= checkValueUpper)
-	{
-		return true;
-	}
-
-	return false;
-}
-
-bool Player::intersectsWithPlayer(Player const& otherPlayer) const
-{
-	int checkValueLower = (radius_ - otherPlayer.getRadius()) * (radius_ - otherPlayer.getRadius());
-	int checkValueUpper = (radius_ + otherPlayer.getRadius()) * (radius_ + otherPlayer.getRadius());
-
-	int realValue = (posX_ - otherPlayer.getPosX()) * (posX_ - otherPlayer.getPosX()) + 
-	                (posY_ - otherPlayer.getPosY()) * (posY_ - otherPlayer.getPosY());
+	int realValue = (posX_ - circlePosX) * (posX_ - circlePosX) + 
+	                (posY_ - circlePosY) * (posY_ - circlePosY);
 
 	if (realValue <= checkValueUpper)
 	{
@@ -89,75 +139,4 @@ void Player::resetToStart()
 {
 	setPosition(startX_, startY_);
 	setVelocity(0.0, 0.0);
-}
-
-void Player::moveUp() 
-{
-	addVelocityOffset(0.0, -0.5);
-}
-
-void Player::moveDown() 
-{
-	addVelocityOffset(0.0, 0.5);
-}
-
-void Player::moveLeft() 
-{
-	addVelocityOffset(-0.5, 0.0);
-}
-
-void Player::moveRight() 
-{
-	addVelocityOffset(0.5, 0.0);
-}
-
-void Player::clampPosition()
-{
-	if (posX_ < 0)
-	{
-		setPosition(0, posY_);
-	}
-	else if (posX_ > 1920)
-	{
-		setPosition(1920, posY_);
-	}
-
-	if (posY_ < 0)
-	{
-		setPosition(posX_, 0);
-	}
-	else if (posY_ > 1200)
-	{
-		setPosition(posX_, 1200);
-	}
-}
-
-float Player::getRadius() const
-{
-	return radius_;
-}
-
-/* virtual */ void Player::frameUpdate()
-{
-	PhysicalObject::frameUpdate();
-
-	if (inShootSequence())
-	{
-		--blockShootFrames_;
-		if (blockShootFrames_ == 0)
-		{
-			for (int i = 0; i < shape_.GetNbPoints(); ++i)
-			{
-				shape_.SetPointOutlineColor(i, sf::Color(0,0,0));
-			}
-		}
-
-	}
-
-}
-
-/* virtual */ void Player::setPosition(int x, int y)
-{
-	PhysicalObject::setPosition(x,y);
-	shootCircle_.SetPosition(x,y);
 }

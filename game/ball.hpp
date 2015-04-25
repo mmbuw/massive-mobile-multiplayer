@@ -10,19 +10,19 @@ class Ball : public PhysicalObject
 {
 	public:
 		Ball();
-		/* virtual */ ~Ball();
 
+		/* virtual */ ~Ball();
 		/* virtual */ void clampPosition();
+		
 		float getRadius() const;
 		void setColor(sf::Color color);
 
 		void resetToCenter();
-
+		void changeAbsorptionVelocity(bool swapX, bool swapY);
 		bool isInLeftGoal() const;
 		bool isInRightGoal() const;
 	
 	private:
-		void checkPosition();
 		float radius_;
 
 		bool inLeftGoal_;
