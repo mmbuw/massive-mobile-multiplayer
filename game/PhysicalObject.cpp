@@ -1,7 +1,7 @@
 #include "PhysicalObject.hpp"
 
-PhysicalObject::PhysicalObject(float mass, int posX, int posY) : 
-	mass_(mass), posX_(posX), posY_(posY), velX_(0.0), velY_(0.0) {}
+PhysicalObject::PhysicalObject(float mass, int posX, int posY, float radius) : 
+	mass_(mass), posX_(posX), posY_(posY), velX_(0.0), velY_(0.0), radius_(radius) {}
 
 /* virtual */ PhysicalObject::~PhysicalObject() {}
 
@@ -74,6 +74,11 @@ double PhysicalObject::getVelY() const
 float PhysicalObject::getMass() const
 {
 	return mass_;
+}
+
+float PhysicalObject::getRadius() const
+{
+	return radius_;
 }
 
 void PhysicalObject::setVelocity(double x, double y)

@@ -18,8 +18,6 @@ class Player : public PhysicalObject
 		/* virtual */ void setPosition(int x, int y);
 		/* virtual */ void clampPosition();
 
-		float getRadius() const;
-
 		void moveUp();
 		void moveDown();
 		void moveLeft();
@@ -35,7 +33,6 @@ class Player : public PhysicalObject
 		sf::Color borderColor_;
 		sf::Color centerColor_;
 
-		float radius_;
 		float shootCircleRadius_;
 		int blockShootFrames_;
 

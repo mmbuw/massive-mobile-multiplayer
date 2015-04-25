@@ -30,6 +30,7 @@ class Game
 		void updatePhysicalObjects();
 		void applyIntersectionPhysics(); 
 		void applyShootingForce(Player const& player);
+		void applyElasticImpact(PhysicalObject& lhs, PhysicalObject& rhs, float lhsAbsorption, float rhsAbsorption);
 
 		void checkForGoal();
 		void playerShoot(int playerID);

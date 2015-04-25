@@ -1,6 +1,6 @@
 #include "ball.hpp"
 
-Ball::Ball() : PhysicalObject(1.0, 0, 0), radius_(30.0), inLeftGoal_(false), inRightGoal_(false)
+Ball::Ball() : PhysicalObject(1.0, 0, 0, 30.0), inLeftGoal_(false), inRightGoal_(false)
 {
 	//initialize the shape with 0 position first in order to set center properly
 	shape_ = sf::Shape::Circle(posX_, posY_, radius_, sf::Color(255,255,255), -3, sf::Color(0,0,0));
@@ -97,11 +97,6 @@ Ball::Ball() : PhysicalObject(1.0, 0, 0), radius_(30.0), inLeftGoal_(false), inR
 		changeAbsorptionVelocity(false, true);
 	}
 
-}
-
-float Ball::getRadius() const
-{
-	return radius_;
 }
 
 void Ball::setColor(sf::Color color)

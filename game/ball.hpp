@@ -14,7 +14,6 @@ class Ball : public PhysicalObject
 		/* virtual */ ~Ball();
 		/* virtual */ void clampPosition();
 		
-		float getRadius() const;
 		void setColor(sf::Color color);
 
 		void resetToCenter();
@@ -23,8 +22,6 @@ class Ball : public PhysicalObject
 		bool isInRightGoal() const;
 	
 	private:
-		float radius_;
-
 		bool inLeftGoal_;
 		bool inRightGoal_;
 };

@@ -11,7 +11,7 @@
 class PhysicalObject
 {	
 	public:
-		PhysicalObject(float mass, int posX, int posY);
+		PhysicalObject(float mass, int posX, int posY, float radius);
 		virtual ~PhysicalObject();
 		
 		virtual void render(sf::RenderWindow* window) const;
@@ -26,6 +26,7 @@ class PhysicalObject
 		double getVelX() const;
 		double getVelY() const;
 		float getMass() const;
+		float getRadius() const;
 		double computeCurrentSpeed() const;
 
 		void setVelocity(double x, double y);
@@ -41,6 +42,7 @@ class PhysicalObject
 		double velY_;
 
 		float mass_;
+		float radius_;
 };
 
 #endif //PHYSICAL_OBJECT_HPP

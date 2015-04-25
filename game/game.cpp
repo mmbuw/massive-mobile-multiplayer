@@ -140,114 +140,82 @@ void Game::updatePhysicalObjects()
 	}
 }
 
-void Game::applyShootingForce(Player const& player)
-{
-	// apply shooting forces
-	if (player.intersectsCircle(ball.getPosX(), ball.getPosY(), ball.getRadius(), true) && player.inShootSequence())
-	{
-		sf::Vector2f shootDir( ball.getPosX() - player.getPosX(), ball.getPosY() - player.getPosY() );
-		float scaleFactor(0.2);
-		ball.setVelocity(scaleFactor * shootDir.x, scaleFactor * shootDir.y);
-	}
-}
-
 void Game::applyIntersectionPhysics()
 {
 	// for each player
 	for (int i = 0; i < players.size(); ++i)
 	{
-		applyShootingForce(players[i]);
+		//check if shoot animation is needed
+		if (players[i].intersectsCircle(ball.getPosX(), ball.getPosY(), ball.getRadius(), true) && players[i].inShootSequence())
+		{
+			applyShootingForce(players[i]);
+		}
 
-		// if not shooting, check for an intersection of each player with the ball
+		//check if player collides with ball
 		if (players[i].intersectsCircle(ball.getPosX(), ball.getPosY(), ball.getRadius(), false))
 		{
-			//elastic impact computation
-			float ballMass = ball.getMass();
-			float playerMass = players[i].getMass();
-
-			sf::Vector2f ballVel(ball.getVelX(), ball.getVelY());
-			sf::Vector2f playerVel(players[i].getVelX(), players[i].getVelY());
-
-			sf::Vector2f ballVelAfterCollision( (ballMass * ballVel.x + playerMass * (2 * playerVel.x - ballVel.x)) / (ballMass + playerMass),
-												(ballMass * ballVel.y + playerMass * (2 * playerVel.y - ballVel.y)) / (ballMass + playerMass));
-
-			sf::Vector2f playerVelAfterCollision( (playerMass * playerVel.x + ballMass * (2 * ballVel.x - playerVel.x)) / (ballMass + playerMass),
-			                                      (playerMass * playerVel.y + ballMass * (2 * ballVel.y - playerVel.y)) / (ballMass + playerMass));
-			
-
-			//scale reflection with speed of player
-			float ballPlayerReflectionFactor(0.1 * players[i].computeCurrentSpeed());
-			ball.setVelocity(ballPlayerReflectionFactor * ballVelAfterCollision.x, ballPlayerReflectionFactor * ballVelAfterCollision.y);
-			players[i].setVelocity(playerVelAfterCollision.x, playerVelAfterCollision.y);
-
-			//pull player and ball apart such that they can not overlap
-			sf::Vector2f ballCenter(ball.getPosX(), ball.getPosY());
-			sf::Vector2f playerCenter(players[i].getPosX(), players[i].getPosY());
-			float ballRadius(ball.getRadius());
-			float playerRadius(players[i].getRadius());
-
-			sf::Vector2f diffVec = playerCenter - ballCenter;
-			float diffLength = std::sqrt(diffVec.x*diffVec.x + diffVec.y*diffVec.y);
-
-			if (diffLength < ballRadius + playerRadius)
-			{
-				float incrementAtEachVectorEnd( (ballRadius+playerRadius-diffLength) / 2.0 );
-				diffVec = diffVec / diffLength;
-				diffVec = diffVec * (incrementAtEachVectorEnd);
-
-				sf::Vector2f newBallPosition(ballCenter - diffVec);
-				sf::Vector2f newPlayerPosition(playerCenter + diffVec);
-
-				ball.setPosition(newBallPosition.x, newBallPosition.y);
-				players[i].setPosition(newPlayerPosition.x, newPlayerPosition.y);
-			}
+			applyElasticImpact(ball, players[i], 0.1 * players[i].computeCurrentSpeed(), 1.0);
 		}
 
-		// check for intersections with other players
+		// check if player collides with other player
 		for (int j = 0; j < i; ++j)
 		{
-			// an intersection with the other player was found
 			if (players[i].intersectsCircle(players[j].getPosX(), players[j].getPosY(), players[j].getRadius(), false))
 			{
-				//elastic impact computation
-				float playerIMass = players[i].getMass();
-				float playerJMass = players[j].getMass();
-
-				sf::Vector2f playerIVel(players[i].getVelX(), players[i].getVelY());
-				sf::Vector2f playerJVel(players[j].getVelX(), players[j].getVelY());
-
-				sf::Vector2f playerIVelAfterCollision( (playerIMass * playerIVel.x + playerJMass * (2 * playerJVel.x - playerIVel.x)) / (playerIMass + playerJMass),
-													   (playerIMass * playerIVel.y + playerJMass * (2 * playerJVel.y - playerIVel.y)) / (playerIMass + playerJMass));
-
-				sf::Vector2f playerJVelAfterCollision( (playerJMass * playerJVel.x + playerIMass * (2 * playerIVel.x - playerJVel.x)) / (playerIMass + playerJMass),
-				                                       (playerJMass * playerJVel.y + playerIMass * (2 * playerIVel.y - playerJVel.y)) / (playerIMass + playerJMass));
-				
-				players[i].setVelocity(playerIVelAfterCollision.x, playerIVelAfterCollision.y);
-				players[j].setVelocity(playerJVelAfterCollision.x, playerJVelAfterCollision.y);
-
-				//pull player and ball apart such that they can not overlap
-				sf::Vector2f playerICenter(players[i].getPosX(), players[i].getPosY());
-				sf::Vector2f playerJCenter(players[j].getPosX(), players[j].getPosY());
-				float playerIRadius(players[i].getRadius());
-				float playerJRadius(players[j].getRadius());
-
-				sf::Vector2f diffVec = playerJCenter - playerICenter;
-				float diffLength = std::sqrt(diffVec.x*diffVec.x + diffVec.y*diffVec.y);
-
-				if (diffLength < playerIRadius + playerJRadius)
-				{
-					float incrementAtEachVectorEnd( (playerIRadius+playerJRadius-diffLength) / 2.0 );
-					diffVec = diffVec / diffLength;
-					diffVec = diffVec * (incrementAtEachVectorEnd);
-
-					sf::Vector2f newPlayerIPosition(playerICenter - diffVec);
-					sf::Vector2f newPlayerJPosition(playerJCenter + diffVec);
-
-					players[i].setPosition(newPlayerIPosition.x, newPlayerIPosition.y);
-					players[j].setPosition(newPlayerJPosition.x, newPlayerJPosition.y);
-				}
+				applyElasticImpact(players[i], players[j], 1.0, 1.0);
 			}
 		}
+	}
+}
+
+void Game::applyShootingForce(Player const& player)
+{
+	// apply shooting forces
+	sf::Vector2f shootDir( ball.getPosX() - player.getPosX(), ball.getPosY() - player.getPosY() );
+	float scaleFactor(0.2);
+	ball.setVelocity(scaleFactor * shootDir.x, scaleFactor * shootDir.y);
+}
+
+void Game::applyElasticImpact(PhysicalObject& lhs, PhysicalObject& rhs, float lhsAbsorption, float rhsAbsorption)
+{
+	//elastic impact computation
+	float lhsMass = lhs.getMass();
+	float rhsMass = rhs.getMass();
+
+	sf::Vector2f lhsVel(lhs.getVelX(), lhs.getVelY());
+	sf::Vector2f rhsVel(rhs.getVelX(), rhs.getVelY());
+
+	sf::Vector2f lhsVelAfterCollision( (lhsMass * lhsVel.x + rhsMass * (2 * rhsVel.x - lhsVel.x)) / (lhsMass + rhsMass),
+										(lhsMass * lhsVel.y + rhsMass * (2 * rhsVel.y - lhsVel.y)) / (lhsMass + rhsMass));
+
+	sf::Vector2f rhsVelAfterCollision( (rhsMass * rhsVel.x + lhsMass * (2 * lhsVel.x - rhsVel.x)) / (lhsMass + rhsMass),
+	                                      (rhsMass * rhsVel.y + lhsMass * (2 * lhsVel.y - rhsVel.y)) / (lhsMass + rhsMass));
+	
+
+	//scale using absorption coefficients
+	lhs.setVelocity(lhsAbsorption * lhsVelAfterCollision.x, lhsAbsorption * lhsVelAfterCollision.y);
+	rhs.setVelocity(rhsAbsorption * rhsVelAfterCollision.x, rhsAbsorption * rhsVelAfterCollision.y);
+
+	//pull rhs and lhs apart such that they can not overlap
+	sf::Vector2f lhsCenter(lhs.getPosX(), lhs.getPosY());
+	sf::Vector2f rhsCenter(rhs.getPosX(), rhs.getPosY());
+	float lhsRadius(lhs.getRadius());
+	float rhsRadius(rhs.getRadius());
+
+	sf::Vector2f diffVec = rhsCenter - lhsCenter;
+	float diffLength = std::sqrt(diffVec.x*diffVec.x + diffVec.y*diffVec.y);
+
+	if (diffLength < lhsRadius + rhsRadius)
+	{
+		float incrementAtEachVectorEnd( (lhsRadius+rhsRadius-diffLength) / 2.0 );
+		diffVec = diffVec / diffLength;
+		diffVec = diffVec * (incrementAtEachVectorEnd);
+
+		sf::Vector2f newBallPosition(lhsCenter - diffVec);
+		sf::Vector2f newPlayerPosition(rhsCenter + diffVec);
+
+		lhs.setPosition(newBallPosition.x, newBallPosition.y);
+		rhs.setPosition(newPlayerPosition.x, newPlayerPosition.y);
 	}
 }
 
