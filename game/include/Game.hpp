@@ -26,6 +26,7 @@ class Game
 		void renderSidelines(sf::RenderWindow* window);
 		void renderGoals(sf::RenderWindow* window);
 		void renderScoreLine(sf::RenderWindow* window);
+		void renderFpsDisplay(sf::RenderWindow* window, float value);
 
 		void updatePhysicalObjects();
 		void applyIntersectionPhysics(); 

@@ -23,6 +23,9 @@ int main()
 	bool ePressed(false);
 	bool oPressed(false);
 
+	int frameCounterMod(0);
+	float lastFramerate(0.0);
+
 	while (App.IsOpened()) 
 	{
 		sf::Event Event;
@@ -187,7 +190,21 @@ int main()
 		game.renderPlayers(&App);
 		game.renderBall(&App);
 		game.renderScoreLine(&App);
+
+		float framerate = 1.0f/Clock.GetElapsedTime();
+		Clock.Reset();
+		frameCounterMod = (frameCounterMod + 1) % 5;
 		
+		if (frameCounterMod == 0)
+		{
+			game.renderFpsDisplay(&App, framerate);
+			lastFramerate = framerate;
+		}
+		else
+		{
+			game.renderFpsDisplay(&App, lastFramerate);
+		}
+
 		App.Display();
 	}
 

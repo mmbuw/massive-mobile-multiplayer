@@ -128,6 +128,17 @@ void Game::renderScoreLine(sf::RenderWindow* window)
 
 }
 
+void Game::renderFpsDisplay(sf::RenderWindow* window, float value)
+{
+	sf::String fpsString;
+	fpsString.SetFont(sf::Font::GetDefaultFont());
+	fpsString.SetText(std::to_string(value) + " fps");
+	fpsString.SetSize(30);
+	fpsString.Move(1700.0f,1300.0f);
+
+	window->Draw(fpsString);
+}
+
 void Game::updatePhysicalObjects()
 {
 	// update ball
