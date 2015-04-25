@@ -6,8 +6,8 @@
 #include <iostream>
 #include <string>
 
-#include "player.hpp"
-#include "ball.hpp"
+#include "Player.hpp"
+#include "Ball.hpp"
 #include "PhysicalObject.hpp"
 
 

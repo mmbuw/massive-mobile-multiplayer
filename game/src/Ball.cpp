@@ -1,4 +1,4 @@
-#include "ball.hpp"
+#include "Ball.hpp"
 
 Ball::Ball() : PhysicalObject(1.0, 0, 0, 30.0), inLeftGoal_(false), inRightGoal_(false)
 {

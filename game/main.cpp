@@ -1,8 +1,8 @@
 #include <SFML/System.hpp>
 #include <SFML/Graphics.hpp>
 #include <iostream>
-#include "player.hpp"
-#include "game.hpp"
+
+#include "Game.hpp"
 
 int main()
 {

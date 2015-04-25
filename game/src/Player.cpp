@@ -1,4 +1,4 @@
-#include "player.hpp"
+#include "Player.hpp"
 
 Player::Player(int startX, int startY, sf::Color border, sf::Color center) :
 	PhysicalObject(10.2, 0, 0, 50.0), borderColor_(border), centerColor_(center), blockShootFrames_(0), startX_(startX), startY_(startY)

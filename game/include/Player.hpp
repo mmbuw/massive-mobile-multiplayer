@@ -4,7 +4,7 @@
 #include <SFML/System.hpp>
 #include <SFML/Graphics.hpp>
 
-#include "ball.hpp"
+#include "Ball.hpp"
 #include "PhysicalObject.hpp"
 
 class Player : public PhysicalObject
