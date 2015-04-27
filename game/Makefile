@@ -1,6 +1,6 @@
 all: 
-	g++ -std=c++11 -c *.cpp src/*.cpp -Iinclude/
-	g++ -std=c++11 -o main *.o -lsfml-graphics -lsfml-window -lsfml-system
+	g++ -std=c++0x -c *.cpp src/*.cpp -Iinclude/
+	g++ -std=c++0x -o main *.o -lsfml-graphics -lsfml-window -lsfml-system
 	./main
 
 clean:
