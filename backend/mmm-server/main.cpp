@@ -225,16 +225,28 @@ int main()
 		            //std::cout << "[Client " << playerConnection->getID() << "] " << message << std::endl;
 
 		            //react on messages by injecting keystrokes
-		            if (message == "A$")
+		            if (message == "VAL A$")
 		            {
 		            	//std::cout << "Inject key input event for A" << std::endl;
 		            	playerConnection->injectKeyEvent(BTN_A);
 		            }
-		            else if (message[message.size()-1] == '$')
+		            else if (message.find("NAME") == 0)
 		            {
 		            	std::stringstream stream(message);
+		            	std::string nameString, nameToSet;
+
+		            	stream >> nameString;
+		            	stream >> nameToSet;
+
+		            	playerConnection->setName(nameToSet.substr(0, nameToSet.size()-1));
+		            }
+		            else if (message.find("VAL") == 0)
+		            {
+		            	std::stringstream stream(message);
+		            	std::string nameString;
 		            	int x, y;
 
+		            	stream >> nameString;
 		            	stream >> x;
 		            	stream >> y;
 

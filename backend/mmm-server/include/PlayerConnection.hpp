@@ -36,12 +36,15 @@ class PlayerConnection
 		int getID() const;
 		sf::IpAddress const getIP();
 		sf::TcpSocket* getSocket();
+		std::string const getName();
+		void setName(std::string const& name);
 
 		static int instance_count;
 
 
 	private:
 		int id_;
+		std::string name_;
 		sf::TcpSocket* socket_;
 		int uinputHandle_;
 		uinput_user_dev eventDevice_;

@@ -3,7 +3,7 @@
 int PlayerConnection::instance_count = 0;
 
 PlayerConnection::PlayerConnection(sf::TcpSocket* socket) : 
-  socket_(socket) 
+  socket_(socket), name_("Default_Player_Name")
 {
 	++PlayerConnection::instance_count;
 	id_ = PlayerConnection::instance_count;
@@ -170,4 +170,14 @@ sf::IpAddress const PlayerConnection::getIP()
 sf::TcpSocket* PlayerConnection::getSocket()
 {
 	return socket_;
+}
+
+std::string const PlayerConnection::getName()
+{
+	return name_;
+}
+
+void PlayerConnection::setName(std::string const& name)
+{
+	name_ = name;
 }
