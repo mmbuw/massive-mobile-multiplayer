@@ -9,7 +9,7 @@ window.addEventListener('load', function(){
 		socket.onopen = function() 	{ console.log('Socket Status: '+socket.readyState+' (open)');	}
 
 		//send playername !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-		//socket.send('player '+ localStorage.getItem('playername')+'q');
+		socket.send('NAME '+localStorage.getItem('playername')+'$');
 
  		//##################################################################################
  		//button control
@@ -25,7 +25,7 @@ window.addEventListener('load', function(){
 	       	timer = setTimeout(endGame, 30000);
 
 	       	//sentd to server
-	       	socket.send('Aq');
+	       	socket.send('VAL A$');
 
 	       	//console debug
 	       	console.log('pushbutton-start');
@@ -76,7 +76,7 @@ window.addEventListener('load', function(){
 	       	e.preventDefault();
 
 	       	//sent to server
-	       	socket.send(startx+' '+starty+'q');
+	       	socket.send('VAL ' +startx+' '+starty+'$');
 
 	       	//console debug
 	       	console.log('start'+startx+'/'+starty);
@@ -140,10 +140,16 @@ window.addEventListener('load', function(){
 
 }, false)
 
-
+//close connection and forward	
 function endGame(){
 	//close socket
 	socket.close();
 	//forward to controller
 	window.location.href = './leaving.html';
+}
+
+//delete marker in string
+function clearMarker(input){
+	
+	return input.replace('$','');
 }
