@@ -238,6 +238,7 @@ int main()
 		            	stream >> nameString;
 		            	stream >> nameToSet;
 
+		            	std::cout << "[Client " << playerConnection->getID() << "] Assigning name: " << nameToSet.substr(0, nameToSet.size()-1) << std::endl;
 		            	playerConnection->setName(nameToSet.substr(0, nameToSet.size()-1));
 		            }
 		            else if (message.find("VAL") == 0)
