@@ -3,7 +3,7 @@ window.addEventListener('load', function(){
 		//initialize timer
 		var timer = setTimeout(endGame, 30000);
 		// Websocket
-		var socket = new WebSocket("ws://localhost:53000");
+		var socket = new WebSocket("ws://29.4.93.1:53000");
  
 		// Nach dem öffnen des Sockets den Status anzeigen
 		socket.onopen = function() 	
