@@ -138,6 +138,7 @@ int main()
 					socketSelector.remove(*(playerConnection->getSocket()));
 					delete playerConnection;
 					it = currentPlayerConnections.erase(it);
+					continue;
 				}
 				else if (socketSelector.isReady(*(playerConnection->getSocket())))
 				{
@@ -151,6 +152,7 @@ int main()
 						socketSelector.remove(*(playerConnection->getSocket()));
 						delete playerConnection;
 						it = currentPlayerConnections.erase(it);
+						continue;
 					}
 					else if (status == sf::Socket::Error)
 					{
@@ -158,118 +160,119 @@ int main()
 						socketSelector.remove(*(playerConnection->getSocket()));
 						delete playerConnection;
 						it = currentPlayerConnections.erase(it);
+						continue;
 					}
-					else
+
+
+					bool nextMessagePresent(false);
+
+		            int indexOfFirstMask(2);
+	        		int indexOfFirstDataByte(indexOfFirstMask+4);
+	        		int numDataBytes(receiveSize-indexOfFirstDataByte);
+
+					do
 					{
+				    	/* Decoding the client message using the WebSocket protocol */
+			            /* (http://stackoverflow.com/questions/8125507/how-can-i-send-and-receive-websocket-messages-on-the-server-side) */
 
-						bool nextMessagePresent(false);
+			            //the bit masks used for decode WebSocket messages
+			            //unfortunately cannot be stored in a std::vector for some reason
+			            std::bitset<8> mask_0;
+			            std::bitset<8> mask_1;
+			            std::bitset<8> mask_2;
+			            std::bitset<8> mask_3;
 
-			            int indexOfFirstMask(2);
-		        		int indexOfFirstDataByte(indexOfFirstMask+4);
-		        		int numDataBytes(receiveSize-indexOfFirstDataByte);
+			            //get decoding masks
+			            mask_0 = (std::bitset<8>) receiveBuffer[indexOfFirstMask];
+			            mask_1 = (std::bitset<8>) receiveBuffer[indexOfFirstMask+1];
+			            mask_2 = (std::bitset<8>) receiveBuffer[indexOfFirstMask+2];
+			            mask_3 = (std::bitset<8>) receiveBuffer[indexOfFirstMask+3];
 
-						do
-						{
-					    	/* Decoding the client message using the WebSocket protocol */
-				            /* (http://stackoverflow.com/questions/8125507/how-can-i-send-and-receive-websocket-messages-on-the-server-side) */
+			            std::string message("");
 
-				            //the bit masks used for decode WebSocket messages
-				            //unfortunately cannot be stored in a std::vector for some reason
-				            std::bitset<8> mask_0;
-				            std::bitset<8> mask_1;
-				            std::bitset<8> mask_2;
-				            std::bitset<8> mask_3;
+			            //decode data bytes with respective mask
+			            for (int i = indexOfFirstDataByte; i < receiveSize; ++i)
+			            {
+			            	long characterAsLong;
 
-				            //get decoding masks
-				            mask_0 = (std::bitset<8>) receiveBuffer[indexOfFirstMask];
-				            mask_1 = (std::bitset<8>) receiveBuffer[indexOfFirstMask+1];
-				            mask_2 = (std::bitset<8>) receiveBuffer[indexOfFirstMask+2];
-				            mask_3 = (std::bitset<8>) receiveBuffer[indexOfFirstMask+3];
-
-				            std::string message("");
-
-				            //decode data bytes with respective mask
-				            for (int i = indexOfFirstDataByte; i < receiveSize; ++i)
-				            {
-				            	long characterAsLong;
-
-				            	if ( (i-indexOfFirstDataByte) % 4 == 0)
-				            		characterAsLong = ((std::bitset<8>) receiveBuffer[i] ^= mask_0).to_ulong();
-				            	else if ( (i-indexOfFirstDataByte) % 4 == 1)
-				            		characterAsLong = ((std::bitset<8>) receiveBuffer[i] ^= mask_1).to_ulong();
-				            	else if ( (i-indexOfFirstDataByte) % 4 == 2)
-				            		characterAsLong = ((std::bitset<8>) receiveBuffer[i] ^= mask_2).to_ulong();
-				            	else
-				            		characterAsLong = ((std::bitset<8>) receiveBuffer[i] ^= mask_3).to_ulong();
-				            
-				            	//check for end of message sign (sign .)
-				            	if (characterAsLong == (long) '.' && i != receiveSize-1)
-				            	{
-				            		nextMessagePresent = true;
-				            		indexOfFirstMask = i + 3;
-									indexOfFirstDataByte = indexOfFirstMask + 4;
-		        					numDataBytes = receiveSize-indexOfFirstDataByte;
-		        					message += (char) characterAsLong;
-				            		break;
-				            	}
-				            	else
-				            	{
-					            	nextMessagePresent = false;
-					            	message += (char) characterAsLong;
-				            	}
-
-				            }
-
-				            //print message
-				            std::cout << "[Client " << playerConnection->getID() << "] " << message << std::endl;
-
-				            //react on messages by injecting keystrokes
-				            if (message == "VAL A$")
-				            {
-				            	std::cout << "Inject key input event for A" << std::endl;
-				            	playerConnection->injectKeyEvent(BTN_A);
-				            }
-				            else if (message.find("NAME") == 0)
-				            {
-				            	std::stringstream stream(message);
-				            	std::string nameString, nameToSet;
-
-				            	stream >> nameString;
-				            	stream >> nameToSet;
-
-				            	std::cout << "[Client " << playerConnection->getID() << "] Assigning name: " << nameToSet.substr(0, nameToSet.size()-1) << std::endl;
-				            	playerConnection->setName(nameToSet.substr(0, nameToSet.size()-1));
-				            }
-				            else if (message.find("VAL") == 0)
-				            {
-				            	std::stringstream stream(message);
-				            	std::string nameString;
-				            	int x, y;
-
-				            	stream >> nameString;
-				            	stream >> x;
-				            	stream >> y;
-
-				            	if (x <= 1024 && y <= 1024 && x >= 0 && y >= 0)
-				            	{
-				            		playerConnection->injectRelEvent(x, y);
-				            		std::cout << "Inject relative input event" << std::endl;
-				            	}
-				            }
-				            else
-				            {
-				            	std::cout << "[Client " << playerConnection->getID() << "] Omitting invalid message: " << message << std::endl;
+			            	if ( (i-indexOfFirstDataByte) % 4 == 0)
+			            		characterAsLong = ((std::bitset<8>) receiveBuffer[i] ^= mask_0).to_ulong();
+			            	else if ( (i-indexOfFirstDataByte) % 4 == 1)
+			            		characterAsLong = ((std::bitset<8>) receiveBuffer[i] ^= mask_1).to_ulong();
+			            	else if ( (i-indexOfFirstDataByte) % 4 == 2)
+			            		characterAsLong = ((std::bitset<8>) receiveBuffer[i] ^= mask_2).to_ulong();
+			            	else
+			            		characterAsLong = ((std::bitset<8>) receiveBuffer[i] ^= mask_3).to_ulong();
+			            
+			            	//check for end of message sign (sign .)
+			            	if (characterAsLong == (long) '.' && i != receiveSize-1)
+			            	{
+			            		nextMessagePresent = true;
+			            		indexOfFirstMask = i + 3;
+								indexOfFirstDataByte = indexOfFirstMask + 4;
+	        					numDataBytes = receiveSize-indexOfFirstDataByte;
+	        					message += (char) characterAsLong;
+			            		break;
+			            	}
+			            	else
+			            	{
 				            	nextMessagePresent = false;
-				            }
+				            	message += (char) characterAsLong;
+			            	}
 
-					    } while (nextMessagePresent);
+			            }
 
-					} //if (status == ...)
+			            //print message
+			            std::cout << "[Client " << playerConnection->getID() << "] " << message << std::endl;
 
-				} //if (socketSelector.isReady(...))
+			            //react on messages by injecting keystrokes
+			            if (message == "VAL A$")
+			            {
+			            	std::cout << "Inject key input event for A" << std::endl;
+			            	playerConnection->injectKeyEvent(BTN_A);
+			            }
+			            else if (message.find("NAME") == 0)
+			            {
+			            	std::stringstream stream(message);
+			            	std::string nameString, nameToSet;
 
-		        //move to next socket
-				++it;
+			            	stream >> nameString;
+			            	stream >> nameToSet;
+
+			            	std::cout << "[Client " << playerConnection->getID() << "] Assigning name: " << nameToSet.substr(0, nameToSet.size()-1) << std::endl;
+			            	playerConnection->setName(nameToSet.substr(0, nameToSet.size()-1));
+			            }
+			            else if (message.find("VAL") == 0)
+			            {
+			            	std::stringstream stream(message);
+			            	std::string nameString;
+			            	int x, y;
+
+			            	stream >> nameString;
+			            	stream >> x;
+			            	stream >> y;
+
+			            	if (x <= 1024 && y <= 1024 && x >= 0 && y >= 0)
+			            	{
+			            		playerConnection->injectRelEvent(x, y);
+			            		std::cout << "Inject relative input event" << std::endl;
+			            	}
+			            }
+			            else
+			            {
+			            	std::cout << "[Client " << playerConnection->getID() << "] Omitting invalid message: " << message << std::endl;
+			            	nextMessagePresent = false;
+			            }
+
+				    } while (nextMessagePresent);
+
+					++it;
+
+				} //if (socketSelector.isReady(socket)
+				else
+				{
+					++it;
+				}
 
 			} // for each socket in map
 
