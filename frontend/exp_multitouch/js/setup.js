@@ -18,3 +18,8 @@ function checkName(input) {
 
 	return input;
 }
+
+function browserCheck() {
+
+	
+}

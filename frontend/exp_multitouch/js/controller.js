@@ -8,21 +8,24 @@ window.addEventListener('load', function(){
 		// Nach dem öffnen des Sockets den Status anzeigen
 		socket.onopen = function() 	{ console.log('Socket Status: '+socket.readyState+' (open)');	}
 
+		//send playername !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		//socket.send('player '+ localStorage.getItem('playername')+'q');
+
  		//##################################################################################
  		//button control
 	    var button = document.getElementById('button');
-
 	 
 	    button.addEventListener('touchstart', function(e){
 
 	        button.style.backgroundColor = '#000000';
 	       	e.preventDefault();
 
+			//reset timer
 	       	clearTimeout(timer);
 	       	timer = setTimeout(endGame, 30000);
 
-	       	//sent to server
-	       	socket.send('A');
+	       	//sentd to server
+	       	socket.send('Aq');
 
 	       	//console debug
 	       	console.log('pushbutton-start');
@@ -73,7 +76,7 @@ window.addEventListener('load', function(){
 	       	e.preventDefault();
 
 	       	//sent to server
-	       	socket.send(startx+' '+starty);
+	       	socket.send(startx+' '+starty+'q');
 
 	       	//console debug
 	       	console.log('start'+startx+'/'+starty);
@@ -109,6 +112,8 @@ window.addEventListener('load', function(){
  			circle.style.left = centerX - circle.offsetWidth/2 + diffx;
 
 	       	e.preventDefault();
+
+	       	//reset timer
 	       	clearTimeout(timer);
 	       	timer = setTimeout(endGame, 30000);
 
@@ -118,7 +123,6 @@ window.addEventListener('load', function(){
 	       	//console debug
 	    	console.log('start: '+centerX+'/'+centerY);
 	       	console.log('lineTo: '+currx+'/'+curry);
-
 
 	    }, false)
 
@@ -134,20 +138,12 @@ window.addEventListener('load', function(){
 	       	e.preventDefault();
 	    }, false)
 
-
-	    //##################################################################################
-	    //timeout check
-
-
-	    //create timestamp into session variable
-	    //calculate curr difference
-	    //forward or reset timestamp
-
-
 }, false)
 
 
 function endGame(){
+	//close socket
+	socket.close();
 	//forward to controller
 	window.location.href = './leaving.html';
 }
