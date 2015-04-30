@@ -2,8 +2,8 @@
 
 int PlayerConnection::instance_count = 0;
 
-PlayerConnection::PlayerConnection(sf::IpAddress const& ip, sf::TcpSocket* socket) : 
-  ip_(ip), socket_(socket) 
+PlayerConnection::PlayerConnection(sf::TcpSocket* socket) : 
+  socket_(socket) 
 {
 	++PlayerConnection::instance_count;
 	id_ = PlayerConnection::instance_count;
@@ -158,7 +158,7 @@ int PlayerConnection::getID() const
 
 sf::IpAddress const PlayerConnection::getIP()
 {
-	return ip_;
+	return socket_->getRemoteAddress();
 }
 
 sf::TcpSocket* PlayerConnection::getSocket()

@@ -18,7 +18,7 @@
 class PlayerConnection
 {
 	public: 
-		PlayerConnection(sf::IpAddress const& ip, sf::TcpSocket* socket);
+		PlayerConnection(sf::TcpSocket* socket);
 		~PlayerConnection();
 
 		void injectKeyEvent(int eventCode) const;
@@ -36,7 +36,6 @@ class PlayerConnection
 
 	private:
 		int id_;
-		sf::IpAddress ip_;
 		sf::TcpSocket* socket_;
 		int uinputHandle_;
 		uinput_user_dev eventDevice_;
