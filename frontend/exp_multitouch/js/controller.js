@@ -118,7 +118,7 @@ window.addEventListener('load', function(){
 	       	timer = setTimeout(endGame, 30000);
 
 	       	//sent to server
-	       	socket.send(currx + ' ' + curry);
+	       	socket.send('VAL '+currx + ' ' + curry +'$');
 
 	       	//console debug
 	    	console.log('start: '+centerX+'/'+centerY);
