@@ -163,13 +163,13 @@ int main()
 			}
 			else
 			{
-				bool nextMessagePresent(true);
+				bool nextMessagePresent(false);
 
 	            int indexOfFirstMask(2);
         		int indexOfFirstDataByte(indexOfFirstMask+4);
         		int numDataBytes(receiveSize-indexOfFirstDataByte);
 
-				while (nextMessagePresent)
+				do
 				{
 			    	/* Decoding the client message using the WebSocket protocol */
 		            /* (http://stackoverflow.com/questions/8125507/how-can-i-send-and-receive-websocket-messages-on-the-server-side) */
@@ -262,7 +262,7 @@ int main()
 		            	std::cout << "[Client " << playerConnection->getID() << "] Omitting invalid message: " << message << std::endl;
 		            }
 
-			    }
+			    } while (nextMessagePresent);
 
 		        //move to next socket
 				++it;
