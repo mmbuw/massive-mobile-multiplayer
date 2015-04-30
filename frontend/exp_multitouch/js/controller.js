@@ -6,10 +6,11 @@ window.addEventListener('load', function(){
 		var socket = new WebSocket("ws://29.4.93.1:53000");
  
 		// Nach dem öffnen des Sockets den Status anzeigen
-		socket.onopen = function() 	{ console.log('Socket Status: '+socket.readyState+' (open)');	}
-
-		//send playername !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-		socket.send('NAME '+localStorage.getItem('playername')+'$');
+		socket.onopen = function() 	
+		{ 
+			console.log('Socket Status: '+socket.readyState+' (open)');
+			socket.send('NAME '+localStorage.getItem('playername')+'$');	
+		}
 
  		//##################################################################################
  		//button control
