@@ -1,7 +1,7 @@
 all:
-	g++ -c mmm-server.cpp src/*.cpp -Iinclude/ -std=c++0x 
-	g++ -o mmm-server *.o -lsfml-network -lsfml-system -std=c++0x 
+	rm -rf build/
+	mkdir build
+	g++ -std=c++11 *.cpp src/*.cpp -I include/ -o build/mmm-server -lsfml-network -lsfml-system 
 
 clean:
-	rm *.o
-	rm mmm-server
+	rm -rf build/
