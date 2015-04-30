@@ -144,20 +144,20 @@ int main()
 	    	std::size_t receiveSize;
 			sf::Socket::Status status = playerConnection->getSocket()->receive(receiveBuffer, sizeof(receiveBuffer), receiveSize);
 
-			if ( playerConnection->checkAlive() == false )
+			if (playerConnection->checkAlive() == false)
 			{
-				std::cout << "[Server] " << playerConnection->getSocket()->getRemoteAddress() << " (Client " << playerConnection->getID() << ") timed out." << std::endl;
+				std::cout << "[Timeout] " << playerConnection->getSocket()->getRemoteAddress() << " (Client " << playerConnection->getID() << ")" << std::endl;
 				delete playerConnection;
 				it = currentPlayerConnections.erase(it);
 			}
-			else if ( status == sf::Socket::NotReady )
+			else if (status == sf::Socket::NotReady)
 			{
 				++it;
 				continue;
 			}
-			else if ( status == sf::Socket::Disconnected)
+			else if (status == sf::Socket::Disconnected)
 			{
-				std::cout << "[Server] " << playerConnection->getSocket()->getRemoteAddress() << " (Client " << playerConnection->getID() << ") disconnected." << std::endl;
+				std::cout << "[Disconnect] " << playerConnection->getSocket()->getRemoteAddress() << " (Client " << playerConnection->getID() << ")" << std::endl;
 				delete playerConnection;
 				it = currentPlayerConnections.erase(it);
 			}
@@ -222,17 +222,16 @@ int main()
 		            }
 
 		            //print message
-		            std::cout << "[Client " << playerConnection->getID() << "] " << message << std::endl;
+		            //std::cout << "[Client " << playerConnection->getID() << "] " << message << std::endl;
 
 		            //react on messages by injecting keystrokes
-		            if (message == "A.")
+		            if (message == "A$")
 		            {
-		            	std::cout << "Inject Key event for A" << std::endl;
+		            	//std::cout << "Inject key input event for A" << std::endl;
 		            	playerConnection->injectKeyEvent(BTN_A);
 		            }
-		            else if (message[message.size()-1] == '.')
+		            else if (message[message.size()-1] == '$')
 		            {
-		            	std::cout << "Inject Rel event for kram" << std::endl;
 		            	std::stringstream stream(message);
 		            	int x, y;
 
@@ -240,7 +239,14 @@ int main()
 		            	stream >> y;
 
 		            	if (x <= 1024 && y <= 1024 && x >= 0 && y >= 0)
+		            	{
 		            		playerConnection->injectRelEvent(x, y);
+		            		//std::cout << "Inject relative input event" << std::endl;
+		            	}
+		            }
+		            else
+		            {
+		            	std::cout << "[Client " << playerConnection->getID() << "] Omitting invalid message: " << message << std::endl;
 		            }
 
 			    }
