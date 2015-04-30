@@ -8,7 +8,6 @@ int main()
 {
 	sf::Clock Clock;
 	sf::RenderWindow App(sf::VideoMode(1920,1350,32), "MMMBall");
-	const sf::Input& input = App.GetInput();
 	Game game;
 
 	bool jPressed(false);
@@ -26,97 +25,97 @@ int main()
 	int frameCounterMod(0);
 	float lastFramerate(0.0);
 
-	while (App.IsOpened()) 
+	while (App.isOpen()) 
 	{
-		sf::Event Event;
-		App.Clear(sf::Color(255,0,0));
+		sf::Event event;
+		App.clear(sf::Color(255,0,0));
 
 		// handle events
-		while (App.GetEvent(Event)) 
+		while (App.pollEvent(event)) 
 		{
-			if (Event.Type == sf::Event::Closed || input.IsKeyDown(sf::Key::Escape))
+			if (event.type == sf::Event::Closed || sf::Keyboard::isKeyPressed(sf::Keyboard::Escape) )
 			{ 
-				App.Close();
+				App.close();
 			}
 			
-			if (input.IsKeyDown(sf::Key::J) && jPressed == false)
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::J)  && jPressed == false)
 			{
 				jPressed = true;
 			}
-			else if (input.IsKeyDown(sf::Key::J) == false && jPressed == true)
+			else if (sf::Keyboard::isKeyPressed(sf::Keyboard::J) == false && jPressed == true)
 			{
 				jPressed = false;
 			}
 
-			if (input.IsKeyDown(sf::Key::L) && lPressed == false)
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::L)  && lPressed == false)
 			{
 				lPressed = true;		
 			}
-			else if (input.IsKeyDown(sf::Key::L) == false && lPressed == true)
+			else if (sf::Keyboard::isKeyPressed(sf::Keyboard::L)  == false && lPressed == true)
 			{
 				lPressed = false;
 			}
 
-			if (input.IsKeyDown(sf::Key::I) && iPressed == false)
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::I)  && iPressed == false)
 			{
 				iPressed = true;
 			}
-			else if (input.IsKeyDown(sf::Key::I) == false && iPressed == true)
+			else if (sf::Keyboard::isKeyPressed(sf::Keyboard::I)  == false && iPressed == true)
 			{
 				iPressed = false;
 			}
 
-			if (input.IsKeyDown(sf::Key::K) && kPressed == false)
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::K)  && kPressed == false)
 			{
 				kPressed = true;		
 			}
-			else if (input.IsKeyDown(sf::Key::K) == false && kPressed == true)
+			else if (sf::Keyboard::isKeyPressed(sf::Keyboard::K) == false && kPressed == true)
 			{
 				kPressed = false;
 			}
 			
-			if (input.IsKeyDown(sf::Key::W) && wPressed == false)
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)  && wPressed == false)
 			{
 				wPressed = true;	
 			}
-			else if (input.IsKeyDown(sf::Key::W) == false && wPressed == true)
+			else if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)  == false && wPressed == true)
 			{
 				wPressed = false;
 			}
 
-			if (input.IsKeyDown(sf::Key::A) && aPressed == false)
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)  && aPressed == false)
 			{
 				aPressed = true;		
 			}
-			else if (input.IsKeyDown(sf::Key::A) == false && aPressed == true)
+			else if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)  == false && aPressed == true)
 			{
 				aPressed = false;
 			}
 
-			if (input.IsKeyDown(sf::Key::S) && sPressed == false)
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)  && sPressed == false)
 			{
 				sPressed = true;
 			}
-			else if (input.IsKeyDown(sf::Key::S) == false && sPressed == true)
+			else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)  == false && sPressed == true)
 			{
 				sPressed = false;
 			}
 
-			if (input.IsKeyDown(sf::Key::D) && dPressed == false)
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)  && dPressed == false)
 			{
 				dPressed = true;
 			}
-			else if (input.IsKeyDown(sf::Key::D) == false && dPressed == true)
+			else if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)  == false && dPressed == true)
 			{
 				dPressed = false;
 			}
 
-			if (input.IsKeyDown(sf::Key::E) && ePressed == false)
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::E)  && ePressed == false)
 			{
 				ePressed = true;
 			}
 
-			if (input.IsKeyDown(sf::Key::O) && oPressed == false)
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::O) && oPressed == false)
 			{
 				oPressed = true;
 			}
@@ -191,8 +190,8 @@ int main()
 		game.renderBall(&App);
 		game.renderScoreLine(&App);
 
-		float framerate = 1.0f/Clock.GetElapsedTime();
-		Clock.Reset();
+		float framerate = 1.0f/Clock.getElapsedTime().asSeconds();
+		Clock.restart();
 		frameCounterMod = (frameCounterMod + 1) % 5;
 		
 		if (frameCounterMod == 0)
@@ -205,7 +204,7 @@ int main()
 			game.renderFpsDisplay(&App, lastFramerate);
 		}
 
-		App.Display();
+		App.display();
 	}
 
 	return EXIT_SUCCESS;

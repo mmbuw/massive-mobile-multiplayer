@@ -36,7 +36,7 @@ class Player : public PhysicalObject
 		float shootCircleRadius_;
 		int blockShootFrames_;
 
-		sf::Shape shootCircle_;
+		sf::CircleShape shootCircle_;
 		int startX_;
 		int startY_;
 };

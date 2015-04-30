@@ -7,7 +7,7 @@ PhysicalObject::PhysicalObject(float mass, int posX, int posY, float radius) :
 
 /* virtual */ void PhysicalObject::render(sf::RenderWindow* window) const 
 {
-	window->Draw(shape_);
+	window->draw(shape_);
 }
 
 /* virtual */ void PhysicalObject::frameFrictionUpdate()
@@ -43,10 +43,10 @@ PhysicalObject::PhysicalObject(float mass, int posX, int posY, float radius) :
 {
 	posX_ = x;
 	posY_ = y;
-	shape_.SetPosition(posX_, posY_);
+	shape_.setPosition(posX_, posY_);
 }
 
-sf::Shape const PhysicalObject::getShape() const
+sf::CircleShape const PhysicalObject::getShape() const
 {
 	return shape_;
 }

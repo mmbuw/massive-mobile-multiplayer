@@ -39,7 +39,7 @@ void Game::renderBackground(sf::RenderWindow* window)
 		}
 
 		sf::Shape rect = sf::Shape::Rectangle(pos,0,pos+192,1200,currentGreen);
-		window->Draw(rect);
+		window->draw(rect);
 		pos+=192;
 	}
 }
@@ -64,79 +64,105 @@ void Game::renderSidelines(sf::RenderWindow* window)
 	leftGoalLine.AddPoint(100, 1173, sf::Color(255, 255, 255), sf::Color(22, 255, 255));
 	leftGoalLine.AddPoint(105, 1173, sf::Color(255, 255, 255), sf::Color(22, 255, 255));
 	leftGoalLine.AddPoint(105, 26, sf::Color(255, 255, 255), sf::Color(22, 255, 255));
-	window->Draw(leftGoalLine);
+	window->draw(leftGoalLine);
 
 	sf::Shape topSideLine;
 	topSideLine.AddPoint(100, 26,  sf::Color(255, 255, 255),     sf::Color(255, 255, 255));
 	topSideLine.AddPoint(1820, 26,  sf::Color(255, 255, 255),     sf::Color(255, 255, 255));
 	topSideLine.AddPoint(1820, 31,  sf::Color(255, 255, 255),     sf::Color(255, 255, 255));
 	topSideLine.AddPoint(105, 31,   sf::Color(255, 255, 255),   sf::Color(22, 255, 255));	
-	window->Draw(topSideLine);
+	window->draw(topSideLine);
 
 	sf::Shape rightGoalLine;
 	rightGoalLine.AddPoint(1820,26, sf::Color(255,255,255), sf::Color(255,255,255));
 	rightGoalLine.AddPoint(1820,1178, sf::Color(255,255,255), sf::Color(255,255,255));
 	rightGoalLine.AddPoint(1815,1178, sf::Color(255,255,255), sf::Color(255,255,255));
 	rightGoalLine.AddPoint(1815,26, sf::Color(255,255,255), sf::Color(255,255,255));
-	window->Draw(rightGoalLine);
+	window->draw(rightGoalLine);
 
 	sf::Shape bottomSideLine;
 	bottomSideLine.AddPoint(1820,1178,sf::Color(255,255,255),sf::Color(255,255,255));
 	bottomSideLine.AddPoint(100,1178,sf::Color(255,255,255),sf::Color(255,255,255));
 	bottomSideLine.AddPoint(100,1173,sf::Color(255,255,255),sf::Color(255,255,255));
 	bottomSideLine.AddPoint(1820,1173,sf::Color(255,255,255),sf::Color(255,255,255));
-	window->Draw(bottomSideLine);
+	window->draw(bottomSideLine);
 
 	sf::Shape centerLine;
 	centerLine.AddPoint(957,26,sf::Color(255,255,255),sf::Color(255,255,255));
 	centerLine.AddPoint(957,1178,sf::Color(255,255,255),sf::Color(255,255,255));
 	centerLine.AddPoint(962,1178,sf::Color(255,255,255),sf::Color(255,255,255));
 	centerLine.AddPoint(962,26,sf::Color(255,255,255),sf::Color(255,255,255));
-	window->Draw(centerLine);
+	window->draw(centerLine);
 	
 	sf::Shape kickoffCircle = sf::Shape::Circle(960,600,185,sf::Color(0,0,0,0),5.f,sf::Color(255,255,255));
-	window->Draw(kickoffCircle);
+	window->draw(kickoffCircle);
 
 	sf::Shape kickoffPoint = sf::Shape::Circle(960,600,10,sf::Color(255,255,255));
-	window->Draw(kickoffPoint);
+	window->draw(kickoffPoint);
 }
 
 void Game::renderGoals(sf::RenderWindow* window)
 {
-	sf::Shape goalLeft = sf::Shape::Rectangle(35,450,100,750,sf::Color(0,0,0,0),5,sf::Color(0,0,0));
-	sf::Shape goalRight = sf::Shape::Rectangle(1820,450,1885,750,sf::Color(0,0,0,0),5,sf::Color(0,0,0));
-	window->Draw(goalLeft);
-	window->Draw(goalRight);
+	//sf::RectangleShape goalLeft = sf::RectangleShape(35,450,100,750,sf::Color(0,0,0,0),5,sf::Color(0,0,0));
+	sf::RectangleShape goalLeft = sf::RectangleShape(65,300);
+	goalLeft.setPosition(35,450);
+	goalLeft.setFillColor(sf::Color(0,0,0,0));
+	goalLeft.setOutlineThickness(5);
+	goalLeft.setOutlineColor(sf::Color(255,255,255));
+	//sf::RectangleShape goalRight = sf::RectangleShape(1820,450,1885,750,sf::Color(0,0,0,0),5,sf::Color(0,0,0));
+	sf::RectangleShape goalRight = sf::RectangleShape(65,300);
+	goalRight.setPosition(1820,450);
+	goalRight.setFillColor(sf::Color(0,0,0,0));
+	goalRight.setOutlineThickness(5);
+	goalRight.setOutlineColor(af::Color(255,255,255));
+
+	window->draw(goalLeft);
+	window->draw(goalRight);
 }
 
 void Game::renderScoreLine(sf::RenderWindow* window) 
 {
-	sf::Shape scoreLine = sf::Shape::Rectangle(0,1200,1920,1350,sf::Color(0,0,0));
-	sf::String score;
-	score.SetFont(sf::Font::GetDefaultFont());
-	score.SetText("Blue   "+std::to_string(pointsLeftTeam_)+":"+std::to_string(pointsRightTeam_)+"   Red");
-	score.SetSize(80);
-	score.Move(685.f,1200.f);
+	//sf::RectangleShape scoreLine = sf::RectangleShape(0,1200,1920,1350,sf::Color(0,0,0));
+	sf::RectangleShape scoreLine = sf::RectangleShape(sf::Vector2f(1920,150));
+	scoreLine.setPosition(0,1200);
+	sf::Text score;
+	sf::Text fpsString;
+	sf::Font font;
+	if (!font.loadFromFile("font.ttf")){
+		std::cout<<"The sadness will last forever."<<std::endl;
+	}
+	score.setFont(font);
+	score.setString("Blue   "+std::to_string(pointsLeftTeam_)+":"+std::to_string(pointsRightTeam_)+"   Red");
+	score.setCharacterSize(80);
+	score.move(685.f,1200.f);
 
-	sf::Shape blueBox = sf::Shape::Circle(600,1250,35,sf::Color(0,0,255));
-	sf::Shape redBox = sf::Shape::Circle(1360,1250,35,sf::Color(255,0,0));
+	sf::CircleShape blueBox = sf::CircleShape(35);
+	blueBox.setPosition(600,1250);
+	blueBox.setFillColor(sf::Color(0,0,255));
+	sf::CircleShape redBox = sf::CircleShape(35);
+	redBox.setPosition(1300,1250);
+	redBox.setFillColor(sf::Color(255,0,0));
 
-	window->Draw(scoreLine);
-	window->Draw(blueBox);
-	window->Draw(redBox);
-	window->Draw(score);
+	window->draw(scoreLine);
+	window->draw(blueBox);
+	window->draw(redBox);
+	window->draw(score);
 
 }
 
 void Game::renderFpsDisplay(sf::RenderWindow* window, float value)
 {
-	sf::String fpsString;
-	fpsString.SetFont(sf::Font::GetDefaultFont());
-	fpsString.SetText(std::to_string(value) + " fps");
-	fpsString.SetSize(30);
-	fpsString.Move(1700.0f,1300.0f);
+	sf::Text fpsString;
+	sf::Font font;
+	if (!font.loadFromFile("font.ttf")){
+		std::cout<<"The sadness will last forever."<<std::endl;
+	}
+	fpsString.setFont(font);
+	fpsString.setString(std::to_string(value) + " fps");
+	fpsString.setCharacterSize(30);
+	fpsString.move(1700.0f,1300.0f);
 
-	window->Draw(fpsString);
+	window->draw(fpsString);
 }
 
 void Game::updatePhysicalObjects()

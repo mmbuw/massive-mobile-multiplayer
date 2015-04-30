@@ -42,7 +42,6 @@ class Game
 	private:
 		std::vector<Player> players;
 		Ball ball;
-		sf::Image background;
 
 		bool ballWasInLeftGoal_;
 		bool ballWasInRightGoal_;

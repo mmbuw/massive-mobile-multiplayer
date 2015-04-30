@@ -20,7 +20,7 @@ class PhysicalObject
 		virtual void setPosition(int x, int y);
 		virtual void clampPosition() = 0;
 
-		sf::Shape const getShape() const;
+		sf::CircleShape const getShape() const;
 		int getPosX() const;
 		int getPosY() const;
 		double getVelX() const;
@@ -33,7 +33,7 @@ class PhysicalObject
 		void addVelocityOffset(double x, double y);
 
 	protected:
-		sf::Shape shape_;
+		sf::CircleShape shape_;
 
 		int posX_;
 		int posY_;
