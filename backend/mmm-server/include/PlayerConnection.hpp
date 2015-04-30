@@ -14,6 +14,12 @@
 #include <iostream>
 #include <cstring>
 #include <sstream>
+#include <chrono>
+
+#define CONNECTION_TIMEOUT_SECONDS 30
+
+typedef std::chrono::high_resolution_clock Clock;
+typedef std::chrono::seconds seconds;
 
 class PlayerConnection
 {
@@ -39,6 +45,9 @@ class PlayerConnection
 		sf::TcpSocket* socket_;
 		int uinputHandle_;
 		uinput_user_dev eventDevice_;
+
+		mutable Clock::time_point lastInputTime_;
+
 };
 
 #endif //PLAYER_CONNECTION_HPP

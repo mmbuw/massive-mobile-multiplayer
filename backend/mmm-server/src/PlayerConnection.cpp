@@ -47,6 +47,8 @@ PlayerConnection::PlayerConnection(sf::TcpSocket* socket) :
 
 	write(uinputHandle_, &eventDevice_, sizeof(eventDevice_));
 	ioctl(uinputHandle_, UI_DEV_CREATE);
+
+	lastInputTime_ = Clock::now();
 }
 
 PlayerConnection::~PlayerConnection()
@@ -77,6 +79,8 @@ void PlayerConnection::injectKeyEvent(int eventCode) const
 	eventHandle.value = 1;
 
 	write(uinputHandle_, &eventHandle, sizeof(eventHandle));
+
+	lastInputTime_ = Clock::now();
 }
 
 void PlayerConnection::injectRelEvent(int xCoord, int yCoord) const
@@ -102,6 +106,8 @@ void PlayerConnection::injectRelEvent(int xCoord, int yCoord) const
 	syncEventHandle.value = 1;
 
 	write(uinputHandle_, &syncEventHandle, sizeof(syncEventHandle));
+
+	lastInputTime_ = Clock::now();
 }
 
 void PlayerConnection::unregisterEventDevice()
@@ -111,15 +117,15 @@ void PlayerConnection::unregisterEventDevice()
 
 bool PlayerConnection::checkAlive() const
 {
-	/*std::chrono::time_point<std::chrono::system_clock> nowTime = std::chrono::system_clock::now();
-	std::chrono::milliseconds ms = std::chrono::duration_cast<std::chrono::milliseconds>(nowTime - lastInputTime_);
+	Clock::time_point nowTime = Clock::now();
+	int elapsedSeconds = (std::chrono::duration_cast<seconds>(nowTime - lastInputTime_)).count();
 
-	if (ms.count() > CONNECTION_TIMEOUT * 1000)
+	if (elapsedSeconds > CONNECTION_TIMEOUT_SECONDS)
 	{
 		return false;
 	}
 
-	return true;*/
+	return true;
 }
 
 void PlayerConnection::sendViaSocket(std::string const& message)

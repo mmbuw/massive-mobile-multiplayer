@@ -144,12 +144,18 @@ int main()
 	    	std::size_t receiveSize;
 			sf::Socket::Status status = playerConnection->getSocket()->receive(receiveBuffer, sizeof(receiveBuffer), receiveSize);
 
-			if ( status == sf::Socket::NotReady )
+			if ( playerConnection->checkAlive() == false )
+			{
+				std::cout << "[Server] " << playerConnection->getSocket()->getRemoteAddress() << " (Client " << playerConnection->getID() << ") timed out." << std::endl;
+				delete playerConnection;
+				it = currentPlayerConnections.erase(it);
+			}
+			else if ( status == sf::Socket::NotReady )
 			{
 				++it;
 				continue;
 			}
-			else if ( status == sf::Socket::Disconnected )
+			else if ( status == sf::Socket::Disconnected)
 			{
 				std::cout << "[Server] " << playerConnection->getSocket()->getRemoteAddress() << " (Client " << playerConnection->getID() << ") disconnected." << std::endl;
 				delete playerConnection;
