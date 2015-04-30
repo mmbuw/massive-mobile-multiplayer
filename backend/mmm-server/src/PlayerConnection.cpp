@@ -1,14 +1,19 @@
 #include "PlayerConnection.hpp"
 
-PlayerConnection::PlayerConnection(int id, sf::IPAddress const& ip, sf::SocketTCP const& socket) : 
-	id_(id), ip_(ip), socket_(socket)
+int PlayerConnection::instance_count = 0;
+
+PlayerConnection::PlayerConnection(sf::TcpSocket* socket) : 
+  socket_(socket), name_("Default_Player_Name")
 {
-	//create handle to /dev/uinput
+	++PlayerConnection::instance_count;
+	id_ = PlayerConnection::instance_count;
+
+	/* set up input device handling */
 	uinputHandle_ = open("/dev/uinput", O_WRONLY | O_NONBLOCK);
 
 	if (uinputHandle_ < 0)
 	{
-		std::cout << "Error: creating uinput handle failed." << std::endl;
+		std::cout << "[Server] Error while creating uinput device." << std::endl;
 	}
 
 	//define allowed event types
@@ -22,19 +27,19 @@ PlayerConnection::PlayerConnection(int id, sf::IPAddress const& ip, sf::SocketTC
 	ioctl(uinputHandle_, UI_SET_KEYBIT, BTN_A);
 
 	//create event device
-	std::stringstream nameStream;
-	nameStream << "MMM-Controller-" << id;
+	std::stringstream namingStream;
+	namingStream << "MMM Controller " << id_;
+	std::string deviceName = namingStream.str();
 
 	memset(&eventDevice_, 0, sizeof(eventDevice_));
-
-	snprintf(eventDevice_.name, UINPUT_MAX_NAME_SIZE, nameStream.str().c_str());
+	snprintf(eventDevice_.name, UINPUT_MAX_NAME_SIZE, deviceName.c_str());
 
 	eventDevice_.absmin[REL_X] = 0;
 	eventDevice_.absmax[REL_X] = 1023;
 	eventDevice_.absmin[REL_Y] = 0;
 	eventDevice_.absmax[REL_Y] = 1023;
 
-	/* set event device properties */
+	/* set event device properly */
 	//eventDevice_.id.bustype = BUS_USB;
 	//eventDevice_.id.vendor = 0x1234;
 	//eventDevice_.id.product = 0xfedc;
@@ -43,11 +48,12 @@ PlayerConnection::PlayerConnection(int id, sf::IPAddress const& ip, sf::SocketTC
 	write(uinputHandle_, &eventDevice_, sizeof(eventDevice_));
 	ioctl(uinputHandle_, UI_DEV_CREATE);
 
-	lastInputTime_ = std::chrono::system_clock::now();
+	lastInputTime_ = Clock::now();
 }
 
 PlayerConnection::~PlayerConnection()
 {
+	delete socket_;
 	unregisterEventDevice();
 }
 
@@ -74,7 +80,7 @@ void PlayerConnection::injectKeyEvent(int eventCode) const
 
 	write(uinputHandle_, &eventHandle, sizeof(eventHandle));
 
-	lastInputTime_ = std::chrono::system_clock::now();
+	lastInputTime_ = Clock::now();
 }
 
 void PlayerConnection::injectRelEvent(int xCoord, int yCoord) const
@@ -101,7 +107,7 @@ void PlayerConnection::injectRelEvent(int xCoord, int yCoord) const
 
 	write(uinputHandle_, &syncEventHandle, sizeof(syncEventHandle));
 
-	lastInputTime_ = std::chrono::system_clock::now();
+	lastInputTime_ = Clock::now();
 }
 
 void PlayerConnection::unregisterEventDevice()
@@ -111,10 +117,10 @@ void PlayerConnection::unregisterEventDevice()
 
 bool PlayerConnection::checkAlive() const
 {
-	std::chrono::time_point<std::chrono::system_clock> nowTime = std::chrono::system_clock::now();
-	std::chrono::milliseconds ms = std::chrono::duration_cast<std::chrono::milliseconds>(nowTime - lastInputTime_);
+	Clock::time_point nowTime = Clock::now();
+	int elapsedSeconds = (std::chrono::duration_cast<seconds>(nowTime - lastInputTime_)).count();
 
-	if (ms.count() > CONNECTION_TIMEOUT * 1000)
+	if (elapsedSeconds > CONNECTION_TIMEOUT_SECONDS)
 	{
 		return false;
 	}
@@ -145,9 +151,33 @@ void PlayerConnection::sendViaSocket(std::string const& message)
 		bytesFormatted[i] = message[i-2];
 	}
 
-	if (socket_.Send(bytesFormatted, sizeof(bytesFormatted)) != sf::Socket::Done)
+	if (socket_->send(bytesFormatted, sizeof(bytesFormatted)) != sf::Socket::Done)
 	{
 		std::cout << "[Error] Sending message to client failed." << std::endl;
 	}
+}
 
+int PlayerConnection::getID() const
+{
+	return id_;
+}
+
+sf::IpAddress const PlayerConnection::getIP()
+{
+	return socket_->getRemoteAddress();
+}
+
+sf::TcpSocket* PlayerConnection::getSocket()
+{
+	return socket_;
+}
+
+std::string const PlayerConnection::getName()
+{
+	return name_;
+}
+
+void PlayerConnection::setName(std::string const& name)
+{
+	name_ = name;
 }

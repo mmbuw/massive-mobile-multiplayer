@@ -6,23 +6,27 @@ window.addEventListener('load', function(){
 		var socket = new WebSocket("ws://29.4.93.1:53000");
  
 		// Nach dem öffnen des Sockets den Status anzeigen
-		socket.onopen = function() 	{ console.log('Socket Status: '+socket.readyState+' (open)');	}
+		socket.onopen = function() 	
+		{ 
+			console.log('Socket Status: '+socket.readyState+' (open)');
+			socket.send('NAME '+localStorage.getItem('playername')+'$');	
+		}
 
  		//##################################################################################
  		//button control
 	    var button = document.getElementById('button');
-
 	 
 	    button.addEventListener('touchstart', function(e){
 
 	        button.style.backgroundColor = '#000000';
 	       	e.preventDefault();
 
+			//reset timer
 	       	clearTimeout(timer);
 	       	timer = setTimeout(endGame, 30000);
 
-	       	//sent to server
-	       	socket.send('A');
+	       	//sentd to server
+	       	socket.send('VAL A$');
 
 	       	//console debug
 	       	console.log('pushbutton-start');
@@ -73,7 +77,7 @@ window.addEventListener('load', function(){
 	       	e.preventDefault();
 
 	       	//sent to server
-	       	socket.send(startx+' '+starty);
+	       	socket.send('VAL ' +startx+' '+starty+'$');
 
 	       	//console debug
 	       	console.log('start'+startx+'/'+starty);
@@ -109,16 +113,18 @@ window.addEventListener('load', function(){
  			circle.style.left = centerX - circle.offsetWidth/2 + diffx;
 
 	       	e.preventDefault();
+
+	       	//reset timer
 	       	clearTimeout(timer);
 	       	timer = setTimeout(endGame, 30000);
 
 	       	//sent to server
-	       	socket.send(currx + ' ' + curry);
+	       	socket.send('VAL '+currx + ' ' + curry +'$');
+	       	sleepFor(10);
 
 	       	//console debug
 	    	console.log('start: '+centerX+'/'+centerY);
 	       	console.log('lineTo: '+currx+'/'+curry);
-
 
 	    }, false)
 
@@ -134,20 +140,23 @@ window.addEventListener('load', function(){
 	       	e.preventDefault();
 	    }, false)
 
-
-	    //##################################################################################
-	    //timeout check
-
-
-	    //create timestamp into session variable
-	    //calculate curr difference
-	    //forward or reset timestamp
-
-
 }, false)
 
-
+//close connection and forward	
 function endGame(){
+	//close socket
+	socket.close();
 	//forward to controller
 	window.location.href = './leaving.html';
+}
+
+function sleepFor( sleepDuration ){
+    var now = new Date().getTime();
+    while(new Date().getTime() < now + sleepDuration){ /* do nothing */ } 
+}
+
+//delete marker in string
+function clearMarker(input){
+	
+	return input.replace('$','');
 }
