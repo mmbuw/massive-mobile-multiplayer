@@ -223,12 +223,12 @@ int main()
 			            }
 
 			            //print message
-			            std::cout << "[Client " << playerConnection->getID() << "] " << message << std::endl;
+			            //std::cout << "[Client " << playerConnection->getID() << "] " << message << std::endl;
 
 			            //react on messages by injecting keystrokes
 			            if (message == "VAL A$")
 			            {
-			            	std::cout << "Inject key input event for A" << std::endl;
+			            	//std::cout << "Inject key input event for A" << std::endl;
 			            	playerConnection->injectKeyEvent(BTN_A);
 			            }
 			            else if (message.find("NAME") == 0)
@@ -255,12 +255,12 @@ int main()
 			            	if (x <= 1024 && y <= 1024 && x >= 0 && y >= 0)
 			            	{
 			            		playerConnection->injectRelEvent(x, y);
-			            		std::cout << "Inject relative input event" << std::endl;
+			            		//std::cout << "Inject relative input event" << std::endl;
 			            	}
 			            }
 			            else
 			            {
-			            	std::cout << "[Client " << playerConnection->getID() << "] Omitting invalid message: " << message << std::endl;
+			            	//std::cout << "[Client " << playerConnection->getID() << "] Omitting invalid message: " << message << std::endl;
 			            	nextMessagePresent = false;
 			            }
 
