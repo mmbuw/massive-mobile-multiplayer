@@ -2,7 +2,10 @@
 
 InputHandler::InputHandler()
 {
-
+    if (getuid() != 0)
+    {
+        std::cout << "Error: you must be root in order to access the input devices." << std::endl;
+    }
 }
 
 void InputHandler::updateDeviceList()
@@ -99,5 +102,13 @@ std::map<int, InputDevice*>::iterator InputHandler::removeDevice(int deviceID)
     {
         delete iteratorToDelete->second;
         return currentInputDevices_.erase(iteratorToDelete);
+    }
+}
+
+void InputHandler::processDeviceInputs()
+{
+    for (std::map<int, InputDevice*>::iterator it = currentInputDevices_.begin(); it != currentInputDevices_.end(); ++it)
+    {
+        it->second->readValuesAndReact();
     }
 }

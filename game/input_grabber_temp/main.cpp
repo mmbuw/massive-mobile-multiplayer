@@ -8,6 +8,7 @@ int main()
     while (true)
     {
         inputHandler.updateDeviceList();
+        inputHandler.processDeviceInputs();
     }
 
     return 0;

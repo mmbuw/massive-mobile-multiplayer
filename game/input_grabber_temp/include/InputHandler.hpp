@@ -23,6 +23,7 @@ class InputHandler
 		InputHandler();
 
 		void updateDeviceList();
+		void processDeviceInputs();
 		void addToDevicesIfNeeded(int deviceID, std::string const& eventString);
 		std::map<int, InputDevice*>::iterator removeDevice(int deviceID);
 
