@@ -16,7 +16,7 @@
 #include <sstream>
 #include <chrono>
 
-#define CONNECTION_TIMEOUT_SECONDS 10000
+#define CONNECTION_TIMEOUT_SECONDS 500
 
 typedef std::chrono::high_resolution_clock Clock;
 typedef std::chrono::seconds seconds;
@@ -29,6 +29,7 @@ class PlayerConnection
 
 		void injectKeyEvent(int eventCode) const;
 		void injectRelEvent(int xCoord, int yCoord) const;
+		void createEventDevice();
 		void unregisterEventDevice();
 		bool checkAlive() const;
 		void sendViaSocket(std::string const& message);

@@ -1,6 +1,7 @@
 #include "InputDevice.hpp"
 
-InputDevice::InputDevice(int id, std::string const& fileAddress) : id_(id), fileAddress_(fileAddress) 
+InputDevice::InputDevice(int id, std::string const& name, std::string const& fileAddress) : 
+	id_(id), name_(name), fileAddress_(fileAddress) 
 {
 	deviceFileHandle_ = open(fileAddress_.c_str(), O_RDWR | O_NONBLOCK);
 
@@ -33,14 +34,14 @@ void InputDevice::readValuesAndReact()
 	// interpret and react to input events (ToDo: forward events to player)
 	if (ev.type == EV_KEY && ev.value >= 0 && ev.value <= 2 && (int) ev.code == 304)
 	{
-		std::cout << "[Device " << id_ << "] KEY EVENT: " << evval[ev.value] << " BTN_A" << std::endl;
+		std::cout << "[" << name_ << "] Key event: " << evval[ev.value] << " BTN_A" << std::endl;
 	}
 	else if (ev.type == EV_REL && ev.value >= 0 && ev.value <= 1024)
 	{
 		if ((int) ev.code == 0)
-			std::cout << "[Device " << id_ << "] REL EVENT X: " << ev.value << std::endl;
+			std::cout << "[" << name_ << "] Rel event X: " << ev.value << std::endl;
 		else if ((int) ev.code == 1)
-			std::cout << "[Device " << id_ << "] REL EVENT Y: " << ev.value << std::endl;
+			std::cout << "[" << name_ << "] Rel event Y: " << ev.value << std::endl;
 	}
 }
 

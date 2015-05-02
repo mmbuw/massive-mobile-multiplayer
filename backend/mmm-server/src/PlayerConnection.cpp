@@ -3,10 +3,20 @@
 int PlayerConnection::instance_count = 0;
 
 PlayerConnection::PlayerConnection(sf::TcpSocket* socket) : 
-  socket_(socket), name_("Default_Player_Name")
+  socket_(socket), name_(""), uinputHandle_(-1)
 {
 	++PlayerConnection::instance_count;
 	id_ = PlayerConnection::instance_count;
+	lastInputTime_ = Clock::now();
+}
+
+void PlayerConnection::createEventDevice()
+{
+	if (name_ == "")
+	{
+		std::cout << "Error: you must have set a name first before creating the event device." << std::endl;
+		return;
+	}
 
 	/* set up input device handling */
 	uinputHandle_ = open("/dev/uinput", O_WRONLY | O_NONBLOCK);
@@ -28,7 +38,7 @@ PlayerConnection::PlayerConnection(sf::TcpSocket* socket) :
 
 	//create event device
 	std::stringstream namingStream;
-	namingStream << "MMM Controller " << id_;
+	namingStream << "MMM Controller " << id_ << " (" << name_ << ")" << std::endl;
 	std::string deviceName = namingStream.str();
 
 	memset(&eventDevice_, 0, sizeof(eventDevice_));
@@ -59,60 +69,67 @@ PlayerConnection::~PlayerConnection()
 
 void PlayerConnection::injectKeyEvent(int eventCode) const
 {
-	struct input_event eventHandle;
-	memset(&eventHandle, 0, sizeof(eventHandle));
+	if (uinputHandle_ != -1)
+	{
+		struct input_event eventHandle;
+		memset(&eventHandle, 0, sizeof(eventHandle));
 
-	eventHandle.type = EV_KEY;
-	eventHandle.code = eventCode;
-	eventHandle.value = 1;
+		eventHandle.type = EV_KEY;
+		eventHandle.code = eventCode;
+		eventHandle.value = 1;
 
-	write(uinputHandle_, &eventHandle, sizeof(eventHandle));
+		write(uinputHandle_, &eventHandle, sizeof(eventHandle));
 
-	eventHandle.type = EV_KEY;
-	eventHandle.code = eventCode;
-	eventHandle.value = 0;
+		eventHandle.type = EV_KEY;
+		eventHandle.code = eventCode;
+		eventHandle.value = 0;
 
-	write(uinputHandle_, &eventHandle, sizeof(eventHandle));
+		write(uinputHandle_, &eventHandle, sizeof(eventHandle));
 
-	eventHandle.type = EV_SYN;
-	eventHandle.code = SYN_REPORT;
-	eventHandle.value = 1;
+		eventHandle.type = EV_SYN;
+		eventHandle.code = SYN_REPORT;
+		eventHandle.value = 1;
 
-	write(uinputHandle_, &eventHandle, sizeof(eventHandle));
+		write(uinputHandle_, &eventHandle, sizeof(eventHandle));
 
-	lastInputTime_ = Clock::now();
+		lastInputTime_ = Clock::now();
+	}
 }
 
 void PlayerConnection::injectRelEvent(int xCoord, int yCoord) const
 {
-	struct input_event eventHandle[2];
-	memset(&eventHandle, 0, sizeof(eventHandle));
+	if (uinputHandle_ != -1)
+	{
+		struct input_event eventHandle[2];
+		memset(&eventHandle, 0, sizeof(eventHandle));
 
-	eventHandle[0].type = EV_REL;
-	eventHandle[0].code = REL_X;
-	eventHandle[0].value = xCoord;
+		eventHandle[0].type = EV_REL;
+		eventHandle[0].code = REL_X;
+		eventHandle[0].value = xCoord;
 
-	eventHandle[1].type = EV_REL;
-	eventHandle[1].code = REL_Y;
-	eventHandle[1].value = yCoord;
+		eventHandle[1].type = EV_REL;
+		eventHandle[1].code = REL_Y;
+		eventHandle[1].value = yCoord;
 
-	write(uinputHandle_, &eventHandle, sizeof(eventHandle));
+		write(uinputHandle_, &eventHandle, sizeof(eventHandle));
 
-	struct input_event syncEventHandle;
-	memset(&syncEventHandle, 0, sizeof(syncEventHandle));
+		struct input_event syncEventHandle;
+		memset(&syncEventHandle, 0, sizeof(syncEventHandle));
 
-	syncEventHandle.type = EV_SYN;
-	syncEventHandle.code = SYN_REPORT;
-	syncEventHandle.value = 1;
+		syncEventHandle.type = EV_SYN;
+		syncEventHandle.code = SYN_REPORT;
+		syncEventHandle.value = 1;
 
-	write(uinputHandle_, &syncEventHandle, sizeof(syncEventHandle));
+		write(uinputHandle_, &syncEventHandle, sizeof(syncEventHandle));
 
-	lastInputTime_ = Clock::now();
+		lastInputTime_ = Clock::now();
+	}
 }
 
 void PlayerConnection::unregisterEventDevice()
 {
-	ioctl(uinputHandle_, UI_DEV_DESTROY);
+	if (uinputHandle_ != -1)
+		ioctl(uinputHandle_, UI_DEV_DESTROY);
 }
 
 bool PlayerConnection::checkAlive() const
@@ -179,5 +196,14 @@ std::string const PlayerConnection::getName()
 
 void PlayerConnection::setName(std::string const& name)
 {
-	name_ = name;
+	if (uinputHandle_ == -1)
+	{
+		name_ = name;
+		createEventDevice();
+	}
+	else
+	{
+		std::cout << "[Error] You have already set your name." << std::endl;
+	}
+
 }

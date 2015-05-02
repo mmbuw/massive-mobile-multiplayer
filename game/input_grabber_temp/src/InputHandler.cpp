@@ -26,6 +26,7 @@ void InputHandler::updateDeviceList()
     if (stream)
     {
         int idOfNextControllerToSave(-1);
+        std::string nameOfNextControllerToSave("");
 
         while (!feof(stream))
         {
@@ -37,9 +38,10 @@ void InputHandler::updateDeviceList()
                 {
                     int eventStringIndex(line.find("event"));
                     int endOfEventStringIndex(line.find(" ", eventStringIndex));
-                    addToDevicesIfNeeded(idOfNextControllerToSave, std::string("/dev/input/").append(line.substr(eventStringIndex, endOfEventStringIndex-eventStringIndex)));
+                    addToDevicesIfNeeded(idOfNextControllerToSave, nameOfNextControllerToSave, std::string("/dev/input/").append(line.substr(eventStringIndex, endOfEventStringIndex-eventStringIndex)));
 
                     idOfNextControllerToSave = -1;
+                    nameOfNextControllerToSave = "";
                 }
                 else
                 {
@@ -51,10 +53,13 @@ void InputHandler::updateDeviceList()
                         lineStream >> id;
                         lineStream >> id;
                         lineStream >> id;
-                        id = id.substr(0, id.size()-1);
 
                         idOfNextControllerToSave = std::stoi(id);
                         idsOfFoundDevices.insert(idOfNextControllerToSave);
+
+                        int openBracesIndex(line.find("("));
+                        int closeBracesIndex(line.find(")"));
+                        nameOfNextControllerToSave = line.substr(openBracesIndex+1, closeBracesIndex-openBracesIndex-1);
                     }
                 }
 
@@ -72,7 +77,6 @@ void InputHandler::updateDeviceList()
                 if (idsOfFoundDevices.find(deviceID) == idsOfFoundDevices.end())
                 {
                     it = removeDevice(deviceID);
-                    std::cout << "Removed input device " << deviceID << std::endl;
                 }
                 else
                 {
@@ -85,13 +89,13 @@ void InputHandler::updateDeviceList()
     }
 }
 
-void InputHandler::addToDevicesIfNeeded(int deviceID, std::string const& eventString)
+void InputHandler::addToDevicesIfNeeded(int deviceID, std::string const& name, std::string const& eventString)
 {
     if (currentInputDevices_.find(deviceID) == currentInputDevices_.end())
     {
-        InputDevice* newlyFoundInputDevice = new InputDevice(deviceID, eventString);
+        InputDevice* newlyFoundInputDevice = new InputDevice(deviceID, name, eventString);
         currentInputDevices_.insert(std::make_pair(deviceID, newlyFoundInputDevice));
-        std::cout << "Added an input device " << deviceID << " " << eventString << std::endl;
+        std::cout << "Added an input device with ID " << deviceID << " called " << name << " on " << eventString << std::endl;
     }
 }
 
@@ -102,6 +106,7 @@ std::map<int, InputDevice*>::iterator InputHandler::removeDevice(int deviceID)
     if (iteratorToDelete != currentInputDevices_.end())
     {
         delete iteratorToDelete->second;
+        std::cout << "Removed input device " << deviceID << std::endl;
         return currentInputDevices_.erase(iteratorToDelete);
     }
 }
