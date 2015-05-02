@@ -23,26 +23,11 @@ void InputDevice::readValuesAndReact()
 
 	struct input_event ev;
 
-	ssize_t read_result = read(deviceFileHandle_, &ev, sizeof(ev));
+	size_t read_result = read(deviceFileHandle_, &ev, sizeof(ev));
 
-	if (read_result == (ssize_t)-1)
+	if (read_result == (size_t)-1 || read_result != sizeof(ev))
 	{
-		if (errno == EINTR)
-		{
-			return;
-		}
-		else
-		{
-			return;
-		}
-	}
-	else
-	{
-		if (read_result != sizeof(ev))
-		{
-			errno = EIO;
-			return;
-		}
+		return;
 	}
 
 	// interpret and react to input events (ToDo: forward events to player)

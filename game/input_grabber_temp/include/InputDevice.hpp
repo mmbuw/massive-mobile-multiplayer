@@ -4,7 +4,6 @@
 #include <string>
 #include <iostream>
 #include <fcntl.h>
-#include <errno.h>
 #include <linux/input.h>
 #include <stdlib.h>
 #include <unistd.h>
