@@ -2,7 +2,7 @@
 
 InputDevice::InputDevice(int id, std::string const& fileAddress) : id_(id), fileAddress_(fileAddress) 
 {
-	deviceFileHandle_ = open(fileAddress_.c_str(), O_RDONLY);
+	deviceFileHandle_ = open(fileAddress_.c_str(), O_RDWR | O_NONBLOCK);
 
 	if (deviceFileHandle_ == -1)
 	{
@@ -33,13 +33,37 @@ void InputDevice::readValuesAndReact()
 	// interpret and react to input events (ToDo: forward events to player)
 	if (ev.type == EV_KEY && ev.value >= 0 && ev.value <= 2 && (int) ev.code == 304)
 	{
-		std::cout << "KEY EVENT: " << evval[ev.value] << " BTN_A" << std::endl;
+		std::cout << "[Device " << id_ << "] KEY EVENT: " << evval[ev.value] << " BTN_A" << std::endl;
 	}
 	else if (ev.type == EV_REL && ev.value >= 0 && ev.value <= 1024)
 	{
 		if ((int) ev.code == 0)
-			std::cout << "REL EVENT X: " << ev.value << std::endl;
+			std::cout << "[Device " << id_ << "] REL EVENT X: " << ev.value << std::endl;
 		else if ((int) ev.code == 1)
-			std::cout << "REL EVENT Y: " << ev.value << std::endl;
+			std::cout << "[Device " << id_ << "] REL EVENT Y: " << ev.value << std::endl;
 	}
+}
+
+void InputDevice::writeToDevice()
+{
+	struct input_event eventHandle;
+	memset(&eventHandle, 0, sizeof(eventHandle));
+
+	eventHandle.type = EV_KEY;
+	eventHandle.code = BTN_A;
+	eventHandle.value = 1;
+
+	write(deviceFileHandle_, &eventHandle, sizeof(eventHandle));
+
+	eventHandle.type = EV_KEY;
+	eventHandle.code = BTN_A;
+	eventHandle.value = 0;
+
+	write(deviceFileHandle_, &eventHandle, sizeof(eventHandle));
+
+	eventHandle.type = EV_SYN;
+	eventHandle.code = SYN_REPORT;
+	eventHandle.value = 1;
+
+	write(deviceFileHandle_, &eventHandle, sizeof(eventHandle));
 }

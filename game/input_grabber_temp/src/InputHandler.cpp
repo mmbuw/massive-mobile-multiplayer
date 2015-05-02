@@ -111,5 +111,6 @@ void InputHandler::processDeviceInputs()
     for (std::map<int, InputDevice*>::iterator it = currentInputDevices_.begin(); it != currentInputDevices_.end(); ++it)
     {
         it->second->readValuesAndReact();
+        //it->second->writeToDevice();
     }
 }

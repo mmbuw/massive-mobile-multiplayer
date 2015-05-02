@@ -9,6 +9,7 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <vector>
+#include <cstring>
 
 static const std::vector<std::string> evval = {"RELEASED", "PRESSED", "REPEATED"};
 
@@ -19,6 +20,7 @@ class InputDevice
 
 		int getDeviceId() const;
 		void readValuesAndReact();
+		void writeToDevice();
 
 	private:
 	    int id_;
