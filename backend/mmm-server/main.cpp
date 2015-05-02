@@ -223,7 +223,7 @@ int main()
 			            }
 
 			            //print message
-			            //std::cout << "[Client " << playerConnection->getID() << "] " << message << std::endl;
+			            std::cout << "[Client " << playerConnection->getID() << "] " << message << std::endl;
 
 			            //react on messages by injecting keystrokes
 			            if (message == "VAL A$")
@@ -233,14 +233,12 @@ int main()
 			            }
 			            else if (message.find("NAME") == 0)
 			            {
-			            	std::stringstream stream(message);
-			            	std::string nameString, nameToSet;
+			            	int nameStartIndex = 5;
+			            	int nameEndIndex = message.find("$");
+			            	std::string name = message.substr(nameStartIndex, nameEndIndex-nameStartIndex);
 
-			            	stream >> nameString;
-			            	stream >> nameToSet;
-
-			            	std::cout << "[Client " << playerConnection->getID() << "] Assigning name: " << nameToSet.substr(0, nameToSet.size()-1) << std::endl;
-			            	playerConnection->setName(nameToSet.substr(0, nameToSet.size()-1));
+			            	std::cout << "[Client " << playerConnection->getID() << "] Assigning name: " << name << std::endl;
+			            	playerConnection->setName(name);
 			            }
 			            else if (message.find("VAL") == 0)
 			            {
@@ -260,7 +258,7 @@ int main()
 			            }
 			            else
 			            {
-			            	//std::cout << "[Client " << playerConnection->getID() << "] Omitting invalid message: " << message << std::endl;
+			            	std::cout << "[Client " << playerConnection->getID() << "] Omitting invalid message: " << message << std::endl;
 			            	nextMessagePresent = false;
 			            }
 
