@@ -9,12 +9,9 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <stdio.h>
+#include <vector>
 
-static const char *const evval[3] = {
-    "RELEASED",
-    "PRESSED ",
-    "REPEATED"
-};
+static const std::vector<std::string> evval = {"RELEASED", "PRESSED", "REPEATED"};
 
 class InputDevice
 {
@@ -27,8 +24,9 @@ class InputDevice
 	private:
 	    int id_;
 	    std::string fileAddress_;
-
 	    int deviceFileHandle_;
+
+	    //ToDo: add player figure in game
 };
 
 #endif //INPUT_DEVICE_HPP

@@ -45,10 +45,10 @@ void InputDevice::readValuesAndReact()
 		}
 	}
 
-	// JUST PRINT KEY EVENTS
-	if (ev.type == EV_KEY && ev.value >= 0 && ev.value <= 2)
+	// interpret and react to input events (ToDo: forward events to player)
+	if (ev.type == EV_KEY && ev.value >= 0 && ev.value <= 2 && (int) ev.code == 304)
 	{
-		std::cout << "KEY EVENT: " << evval[ev.value] << " " << (int) ev.code << std::endl;
+		std::cout << "KEY EVENT: " << evval[ev.value] << " BTN_A" << std::endl;
 	}
 	else if (ev.type == EV_REL && ev.value >= 0 && ev.value <= 1024)
 	{
