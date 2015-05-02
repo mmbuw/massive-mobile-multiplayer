@@ -20,7 +20,7 @@ class InputDevice
 
 		int getDeviceId() const;
 		void readValuesAndReact();
-		void writeToDevice();
+		void writeLEDToDevice(int code);
 
 	private:
 	    int id_;

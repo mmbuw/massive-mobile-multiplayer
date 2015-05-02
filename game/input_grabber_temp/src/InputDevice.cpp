@@ -10,6 +10,9 @@ InputDevice::InputDevice(int id, std::string const& name, std::string const& fil
 		std::cout << "Cannot open input device " << fileAddress_ << std::endl;
 	}
 
+	//ToDo: register player figure in game and send corresponding LED code back
+	writeLEDToDevice(LED_COMPOSE);
+
 }
 
 int InputDevice::getDeviceId() const
@@ -45,19 +48,21 @@ void InputDevice::readValuesAndReact()
 	}
 }
 
-void InputDevice::writeToDevice()
+void InputDevice::writeLEDToDevice(int code)
 {
+	// allowed LED codes by the device are LED_MISC and LED_COMPOSE
+
 	struct input_event eventHandle;
 	memset(&eventHandle, 0, sizeof(eventHandle));
 
-	eventHandle.type = EV_KEY;
-	eventHandle.code = BTN_A;
+	eventHandle.type = EV_LED;
+	eventHandle.code = code;
 	eventHandle.value = 1;
 
 	write(deviceFileHandle_, &eventHandle, sizeof(eventHandle));
 
-	eventHandle.type = EV_KEY;
-	eventHandle.code = BTN_A;
+	eventHandle.type = EV_LED;
+	eventHandle.code = code;
 	eventHandle.value = 0;
 
 	write(deviceFileHandle_, &eventHandle, sizeof(eventHandle));
