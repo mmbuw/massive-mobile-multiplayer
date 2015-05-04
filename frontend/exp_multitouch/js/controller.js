@@ -12,6 +12,11 @@ window.addEventListener('load', function(){
 			socket.send('NAME '+localStorage.getItem('playername')+'$');	
 		}
 
+		socket.onmessage = function(evt)
+		{
+			console.log(evt.data);
+		}
+
  		//##################################################################################
  		//button control
 	    var button = document.getElementById('button');

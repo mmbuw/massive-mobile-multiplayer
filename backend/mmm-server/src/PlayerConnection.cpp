@@ -68,12 +68,14 @@ void PlayerConnection::createEventDevice()
 	if (ev.code == LED_MISC)
 	{
 		std::cout << "--> Joins blue team" << std::endl;
-		//Send team to player via socket
+		sendViaSocket("TEAM BLUE");
+		std::cout << "Sent via socket" << std::endl;
 	}
 	else if (ev.code == LED_COMPOSE)
 	{
 		std::cout << "--> Joins red team" << std::endl;
-		//Send team to player via socket
+		sendViaSocket("TEAM RED");
+		std::cout << "Sent via socket" << std::endl;
 	}
 
 	lastInputTime_ = Clock::now();
