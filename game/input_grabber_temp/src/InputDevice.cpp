@@ -51,6 +51,7 @@ void InputDevice::readValuesAndReact()
 void InputDevice::writeLEDToDevice(int code)
 {
 	// allowed LED codes by the device are LED_MISC and LED_COMPOSE
+	// LED_MISC is used to assign player to blue team, LED_COMPOSE for red team
 
 	struct input_event eventHandle;
 	memset(&eventHandle, 0, sizeof(eventHandle));

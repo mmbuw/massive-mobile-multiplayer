@@ -53,10 +53,10 @@ void PlayerConnection::createEventDevice()
 	eventDevice_.absmax[REL_Y] = 1023;
 
 	/* set event device properly */
-	//eventDevice_.id.bustype = BUS_USB;
+	eventDevice_.id.bustype = BUS_VIRTUAL;
 	//eventDevice_.id.vendor = 0x1234;
 	//eventDevice_.id.product = 0xfedc;
-	//eventDevice_.id.version = 1;
+	eventDevice_.id.version = 1;
 
 	write(uinputHandle_, &eventDevice_, sizeof(eventDevice_));
 	ioctl(uinputHandle_, UI_DEV_CREATE);
@@ -69,13 +69,11 @@ void PlayerConnection::createEventDevice()
 	{
 		std::cout << "--> Joins blue team" << std::endl;
 		sendViaSocket("TEAM BLUE");
-		std::cout << "Sent via socket" << std::endl;
 	}
 	else if (ev.code == LED_COMPOSE)
 	{
 		std::cout << "--> Joins red team" << std::endl;
 		sendViaSocket("TEAM RED");
-		std::cout << "Sent via socket" << std::endl;
 	}
 
 	lastInputTime_ = Clock::now();

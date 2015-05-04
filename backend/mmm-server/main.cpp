@@ -231,15 +231,6 @@ int main()
 			            	//std::cout << "Inject key input event for A" << std::endl;
 			            	playerConnection->injectKeyEvent(BTN_A);
 			            }
-			            else if (message.find("NAME") == 0)
-			            {
-			            	int nameStartIndex = 5;
-			            	int nameEndIndex = message.find("$");
-			            	std::string name = message.substr(nameStartIndex, nameEndIndex-nameStartIndex);
-
-			            	std::cout << "[Client " << playerConnection->getID() << "] Assigning name: " << name << std::endl;
-			            	playerConnection->setName(name);
-			            }
 			            else if (message.find("VAL") == 0)
 			            {
 			            	std::stringstream stream(message);
@@ -256,6 +247,15 @@ int main()
 			            		//std::cout << "Inject relative input event" << std::endl;
 			            	}
 			            }
+			            else if (message.find("NAME") == 0)
+			            {
+			            	int nameStartIndex = 5;
+			            	int nameEndIndex = message.find("$");
+			            	std::string name = message.substr(nameStartIndex, nameEndIndex-nameStartIndex);
+
+			            	std::cout << "[Client " << playerConnection->getID() << "] Assigning name: " << name << std::endl;
+			            	playerConnection->setName(name);
+			            }			            
 			            else
 			            {
 			            	std::cout << "[Client " << playerConnection->getID() << "] Omitting invalid message: " << message << std::endl;

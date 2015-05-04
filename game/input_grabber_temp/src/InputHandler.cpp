@@ -5,7 +5,7 @@ InputHandler::InputHandler()
     if (getuid() != 0)
     {
         std::cout << "Error: you must be root in order to access the input devices." << std::endl;
-        exit (EXIT_FAILURE);
+        exit(EXIT_FAILURE);
     }
 }
 
