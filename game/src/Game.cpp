@@ -17,11 +17,11 @@ Game::~Game()
 
 void Game::initPlayers() 
 {
-	//Player* player2 = new Player(480,600,sf::Color(0,0,0),sf::Color(0,0,255));	
-	//Player* player1 = new Player(1400,600,sf::Color(0,0,0),sf::Color(255,0,0));
+	Player* player2 = new Player(480,600,sf::Color(0,0,0),sf::Color(0,0,255));	
+	Player* player1 = new Player(1400,600,sf::Color(0,0,0),sf::Color(255,0,0));
 
-	//players.push_back(player2);
-	//players.push_back(player1);
+	players.push_back(player2);
+	players.push_back(player1);
 }
 
 Player* Game::addNewPlayer()
@@ -29,6 +29,20 @@ Player* Game::addNewPlayer()
 	Player* newPlayer = new Player(480,600,sf::Color(0,0,0),sf::Color(0,0,255));
 	players.push_back(newPlayer);
 	return newPlayer;
+}
+
+void Game::removePlayer(Player* playerToRemove)
+{
+	//ToDo: use more efficient data structure to find player faster
+	for (std::vector<Player*>::iterator it = players.begin(); it != players.end(); ++it)
+	{
+		if ((*it) == playerToRemove)
+		{
+			players.erase(it);
+			delete playerToRemove;
+			break;
+		}
+	}
 }
 
 void Game::initBall() 
@@ -156,6 +170,7 @@ void Game::renderScoreLine(sf::RenderWindow* window)
 	//sf::RectangleShape scoreLine = sf::RectangleShape(0,1200,1920,1350,sf::Color(0,0,0));
 	sf::RectangleShape scoreLine = sf::RectangleShape(sf::Vector2f(1920,150));
 	scoreLine.setPosition(0,1200);
+	scoreLine.setFillColor(sf::Color(0,0,0));
 	sf::Text score;
 	sf::Text fpsString;
 	sf::Font font;

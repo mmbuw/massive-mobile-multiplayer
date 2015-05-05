@@ -1,15 +1,22 @@
 #include <SFML/System.hpp>
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#include <time.h>
 
 #include "InputHandler.hpp"
 #include "Game.hpp"
 
 int main()
 {
+	  srand (time(NULL));
 	sf::Clock Clock;
-	sf::RenderWindow App(sf::VideoMode(1920,1350,32), "MMMBall");
+
+	sf::RenderWindow App(sf::VideoMode(1920,1350,20), "MMMBall");
+	App.setSize(sf::Vector2u(1920,1350));
+
+	
 	Game* game = new Game();
+
 
 	// MMM Input device recognizer and grabber
 	InputHandler inputHandler(game);

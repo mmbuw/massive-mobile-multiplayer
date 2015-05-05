@@ -20,6 +20,11 @@ int InputDevice::getDeviceId() const
 	return id_;
 }
 
+Player* InputDevice::getPlayerInstance() const
+{
+	return playerFigure_;
+}
+
 void InputDevice::readValuesAndReact()
 {
 	/* Read values from a /dev/input/event* source */
@@ -34,7 +39,7 @@ void InputDevice::readValuesAndReact()
 		return;
 	}
 
-	// interpret and react to input events (ToDo: forward events to player)
+	// interpret and react to input events
 	if (ev.type == EV_KEY && ev.value >= 0 && ev.value <= 2 && (int) ev.code == 304)
 	{
 		playerFigure_->shoot();
@@ -42,16 +47,19 @@ void InputDevice::readValuesAndReact()
 	}
 	else if (ev.type == EV_REL && ev.value >= 0 && ev.value <= 1024)
 	{
+		int shiftedValue(ev.value-250);
+        double percentage = shiftedValue / 250.0;
+
 		if ((int) ev.code == 0)
 		{
-			playerFigure_->addVelocityOffset(10.0, 0.0);
-		}
+			playerFigure_->addVelocityOffset(percentage * 10.0, 0.0);
 			//std::cout << "[" << name_ << "] Rel event X: " << ev.value << std::endl;
+		}
 		else if ((int) ev.code == 1)
 		{
-			playerFigure_->addVelocityOffset(10.0, 0.5);
-		}
+			playerFigure_->addVelocityOffset(0.0, percentage * 10.0);
 			//std::cout << "[" << name_ << "] Rel event Y: " << ev.value << std::endl;
+		}
 	}
 }
 

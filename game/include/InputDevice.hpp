@@ -21,6 +21,7 @@ class InputDevice
 		InputDevice(int id, std::string const& name, std::string const& fileAddress, Player* playerFigure);
 
 		int getDeviceId() const;
+		Player* getPlayerInstance() const;
 		void readValuesAndReact();
 		void writeLEDToDevice(int code);
 
