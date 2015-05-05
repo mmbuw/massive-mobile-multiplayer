@@ -128,7 +128,7 @@ window.addEventListener('load', function(){
 	       	timer = setTimeout(endGame, 30000);
 
 	       	//sent to server
-	       	socket.send('VAL '+ diffx-diffxprev + ' ' + diffy-diffyprev +'$');
+	       	socket.send('VAL '+ (diffx-diffxprev) + ' ' + (diffy-diffyprev) +'$');
 
 	       	//console debug
 	    	console.log('start: '+(diffx-diffxprev)+'/'+(diffy-diffyprev));
