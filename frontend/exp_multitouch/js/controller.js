@@ -3,7 +3,8 @@ window.addEventListener('load', function(){
 		//initialize timer
 		var timer = setTimeout(endGame, 30000);
 		// Websocket
-		var socket = new WebSocket("ws://29.4.93.1:53000");
+		//var socket = new WebSocket("ws://29.4.93.1:53000");
+		var socket = new WebSocket("ws://localhost:53000");
  
 		// Nach dem öffnen des Sockets den Status anzeigen
 		socket.onopen = function() 	
@@ -14,6 +15,7 @@ window.addEventListener('load', function(){
 
 		socket.onmessage = function(evt)
 		{
+			window.localStorage.setItem("team", evt.data);
 			console.log(evt.data);
 		}
 
@@ -82,7 +84,7 @@ window.addEventListener('load', function(){
 	       	e.preventDefault();
 
 	       	//sent to server
-	       	socket.send('VAL ' +startx+' '+starty+'$');
+	       	socket.send('VAL ' +0+' '+0+'$');
 
 	       	//console debug
 	       	console.log('start'+startx+'/'+starty);
@@ -124,7 +126,7 @@ window.addEventListener('load', function(){
 	       	timer = setTimeout(endGame, 30000);
 
 	       	//sent to server
-	       	socket.send('VAL '+currx + ' ' + curry +'$');
+	       	socket.send('VAL '+diffx + ' ' + diffy +'$');
 	       	sleepFor(10);
 
 	       	//console debug

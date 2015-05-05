@@ -11,13 +11,16 @@
 #include "PhysicalObject.hpp"
 
 
-class Game 
+class Game
 {
 	
 	public:
 		Game();
+		~Game();
 
 		void initPlayers();
+		Player* addNewPlayer();
+		void removePlayer(Player* playerToRemove);
 		void initBall();
 	
 		void renderBackground(sf::RenderWindow* window);
@@ -40,7 +43,7 @@ class Game
 
 
 	private:
-		std::vector<Player> players;
+		std::vector<Player*> players;
 		Ball ball;
 
 		bool ballWasInLeftGoal_;

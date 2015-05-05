@@ -3,17 +3,46 @@
 Game::Game() : ballWasInLeftGoal_(false), ballWasInRightGoal_(false), 
 			   framesToReset_(-1), pointsLeftTeam_(0), pointsRightTeam_(0) 
 {
-	initPlayers();
+	//initPlayers();
 	initBall();
+}
+
+Game::~Game()
+{
+	for (std::vector<Player*>::iterator it = players.begin(); it != players.end(); ++it)
+	{
+		delete (*it);
+	}
 }
 
 void Game::initPlayers() 
 {
-	Player player2(480,600,sf::Color(0,0,0),sf::Color(0,0,255));	
-	Player player1(1400,600,sf::Color(0,0,0),sf::Color(255,0,0));
+	Player* player2 = new Player(480,600,sf::Color(0,0,0),sf::Color(0,0,255));	
+	Player* player1 = new Player(1400,600,sf::Color(0,0,0),sf::Color(255,0,0));
 
 	players.push_back(player2);
-	players.push_back(player1);			
+	players.push_back(player1);
+}
+
+Player* Game::addNewPlayer()
+{
+	Player* newPlayer = new Player(480,600,sf::Color(0,0,0),sf::Color(0,0,255));
+	players.push_back(newPlayer);
+	return newPlayer;
+}
+
+void Game::removePlayer(Player* playerToRemove)
+{
+	//ToDo: use more efficient data structure to find player faster
+	for (std::vector<Player*>::iterator it = players.begin(); it != players.end(); ++it)
+	{
+		if ((*it) == playerToRemove)
+		{
+			players.erase(it);
+			delete playerToRemove;
+			break;
+		}
+	}
 }
 
 void Game::initBall() 
@@ -50,7 +79,7 @@ void Game::renderPlayers(sf::RenderWindow* window)
 {
 	for (int i = 0; i < players.size(); i++)
 	{
-		players[i].render(window);	
+		players[i]->render(window);	
 	}
 }
 
@@ -177,7 +206,7 @@ void Game::renderFpsDisplay(sf::RenderWindow* window, float value)
 	fpsString.setFont(font);
 	fpsString.setString(std::to_string(value) + " fps");
 	fpsString.setCharacterSize(30);
-	fpsString.move(1700.0f,1300.0f);
+	fpsString.move(1700.0f,0.0f);
 
 	window->draw(fpsString);
 }
@@ -190,7 +219,7 @@ void Game::updatePhysicalObjects()
 	// update players
 	for (int i = 0; i < players.size(); i++)
 	{
-		players[i].frameUpdate();	
+		players[i]->frameUpdate();	
 	}
 }
 
@@ -200,23 +229,23 @@ void Game::applyIntersectionPhysics()
 	for (int i = 0; i < players.size(); ++i)
 	{
 		//check if shoot animation is needed
-		if (players[i].intersectsCircle(ball.getPosX(), ball.getPosY(), ball.getRadius(), true) && players[i].inShootSequence())
+		if (players[i]->intersectsCircle(ball.getPosX(), ball.getPosY(), ball.getRadius(), true) && players[i]->inShootSequence())
 		{
-			applyShootingForce(players[i]);
+			applyShootingForce((*players[i]));
 		}
 
 		//check if player collides with ball
-		if (players[i].intersectsCircle(ball.getPosX(), ball.getPosY(), ball.getRadius(), false))
+		if (players[i]->intersectsCircle(ball.getPosX(), ball.getPosY(), ball.getRadius(), false))
 		{
-			applyElasticImpact(ball, players[i], 0.1 * players[i].computeCurrentSpeed(), 1.0);
+			applyElasticImpact(ball, (*players[i]), 0.1 * players[i]->computeCurrentSpeed(), 1.0);
 		}
 
 		// check if player collides with other player
 		for (int j = 0; j < i; ++j)
 		{
-			if (players[i].intersectsCircle(players[j].getPosX(), players[j].getPosY(), players[j].getRadius(), false))
+			if (players[i]->intersectsCircle(players[j]->getPosX(), players[j]->getPosY(), players[j]->getRadius(), false))
 			{
-				applyElasticImpact(players[i], players[j], 1.0, 1.0);
+				applyElasticImpact( (*players[i]), (*players[j]), 1.0, 1.0);
 			}
 		}
 	}
@@ -317,7 +346,7 @@ void Game::checkForGoal()
 			
 			for (int i = 0; i < players.size(); ++i)
 			{
-				players[i].resetToStart();
+				players[i]->resetToStart();
 			}
 
 			framesToReset_ = -1;
@@ -332,25 +361,25 @@ void Game::checkForGoal()
 
 void Game::playerShoot(int playerID)
 {
-	players[playerID].shoot();
+	players[playerID]->shoot();
 }
 
 void Game::movePlayer(int playerNumber, std::string direction)
 {
 	if (direction == "UP")
 	{
-		players[playerNumber].moveUp();	
+		players[playerNumber]->moveUp();	
 	}
 	else if (direction == "DOWN")
 	{
-		players[playerNumber].moveDown();	
+		players[playerNumber]->moveDown();	
 	}
 	else if (direction == "LEFT")
 	{
-		players[playerNumber].moveLeft();	
+		players[playerNumber]->moveLeft();	
 	}
 	else if (direction == "RIGHT")
 	{
-		players[playerNumber].moveRight();	
+		players[playerNumber]->moveRight();	
 	}
 }
