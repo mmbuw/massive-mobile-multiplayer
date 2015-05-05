@@ -16,8 +16,6 @@ int main()
 
 	
 	Game* game = new Game();
-
-
 	// MMM Input device recognizer and grabber
 	InputHandler inputHandler(game);
 

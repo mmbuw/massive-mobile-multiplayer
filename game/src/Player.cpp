@@ -6,8 +6,6 @@ Player::Player(int startX, int startY, sf::Color border, sf::Color center, std::
 {
 	shootCircleRadius_ = 1.5 * radius_;
 
-  	shirtNumber = rand() % 10;
-
 	shape_ = sf::CircleShape(radius_);
 	shape_.setFillColor(centerColor_);
 	shape_.setOutlineThickness(-5);
@@ -39,11 +37,19 @@ Player::Player(int startX, int startY, sf::Color border, sf::Color center, std::
 		number.move(posX_-35,posY_-35);
 	
 	}else{
-		number.move(posX_-25,posY_-35);
+		number.move(posX_-23,posY_-35);
 	}
 
-	window->draw(number);
+	sf::Text name;
+	name.setFont(font);
+	name.setString(name_);
+	name.setCharacterSize(30);
+	name.move(posX_-((name_.size()/2)*20),posY_+50);
+	
+	
 	window->draw(shootCircle_);
+	window->draw(name);
+	window->draw(number);
 }
 
 /* virtual */ void Player::frameUpdate()

@@ -47,10 +47,10 @@ void PlayerConnection::createEventDevice()
 	memset(&eventDevice_, 0, sizeof(eventDevice_));
 	snprintf(eventDevice_.name, UINPUT_MAX_NAME_SIZE, deviceName.c_str());
 
-	eventDevice_.absmin[REL_X] = -100;
-	eventDevice_.absmax[REL_X] = 100;
-	eventDevice_.absmin[REL_Y] = -100;
-	eventDevice_.absmax[REL_Y] = 100;
+	eventDevice_.absmin[REL_X] = -1000;
+	eventDevice_.absmax[REL_X] = 1000;
+	eventDevice_.absmin[REL_Y] = -1000;
+	eventDevice_.absmax[REL_Y] = 1000;
 
 	/* set event device properly */
 	eventDevice_.id.bustype = BUS_VIRTUAL;
