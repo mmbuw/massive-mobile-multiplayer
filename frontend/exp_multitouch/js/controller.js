@@ -125,8 +125,8 @@ window.addEventListener('load', function(){
 	       	clearTimeout(timer);
 	       	timer = setTimeout(endGame, 30000);
 
-	       	diffXsocket = Math.clip(Math.round((diffx/(canvas.width/2))*250)+250,0,250);
-			diffYsocket = Math.clip(Math.round((diffy/(canvas.height/2))*250)+250,0,250);
+	       	diffXsocket = Math.clip(Math.round((diffx/(canvas.width/2))*250)+250,0,500);
+			diffYsocket = Math.clip(Math.round((diffy/(canvas.height/2))*250)+250,0,500);
 	       	//sent to server
 	       	socket.send('VAL '+ diffXsocket + ' ' + diffYsocket +'$');
 	       	sleepFor(10);
