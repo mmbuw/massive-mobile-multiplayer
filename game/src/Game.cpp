@@ -38,7 +38,9 @@ void Game::renderBackground(sf::RenderWindow* window)
 			currentGreen = sf::Color(75,220,75);
 		}
 
-		sf::Shape rect = sf::Shape::Rectangle(pos,0,pos+192,1200,currentGreen);
+		sf::RectangleShape rect(sf::Vector2f(pos+192, 1200));
+		rect.setFillColor(currentGreen);
+		rect.setPosition(pos, 0);
 		window->draw(rect);
 		pos+=192;
 	}
@@ -59,62 +61,76 @@ void Game::renderBall(sf::RenderWindow* window)
 
 void Game::renderSidelines(sf::RenderWindow* window) 
 {
-	sf::Shape leftGoalLine;
-	leftGoalLine.AddPoint(100, 26, sf::Color(255, 255, 255), sf::Color(255, 255, 255));
-	leftGoalLine.AddPoint(100, 1173, sf::Color(255, 255, 255), sf::Color(22, 255, 255));
-	leftGoalLine.AddPoint(105, 1173, sf::Color(255, 255, 255), sf::Color(22, 255, 255));
-	leftGoalLine.AddPoint(105, 26, sf::Color(255, 255, 255), sf::Color(22, 255, 255));
+	sf::ConvexShape leftGoalLine;
+	leftGoalLine.setPointCount(4);
+	leftGoalLine.setPoint(0, sf::Vector2f(100, 26));
+	leftGoalLine.setPoint(1, sf::Vector2f(100, 1173));
+	leftGoalLine.setPoint(2, sf::Vector2f(105, 1173));
+	leftGoalLine.setPoint(3, sf::Vector2f(105, 26));
 	window->draw(leftGoalLine);
 
-	sf::Shape topSideLine;
-	topSideLine.AddPoint(100, 26,  sf::Color(255, 255, 255),     sf::Color(255, 255, 255));
-	topSideLine.AddPoint(1820, 26,  sf::Color(255, 255, 255),     sf::Color(255, 255, 255));
-	topSideLine.AddPoint(1820, 31,  sf::Color(255, 255, 255),     sf::Color(255, 255, 255));
-	topSideLine.AddPoint(105, 31,   sf::Color(255, 255, 255),   sf::Color(22, 255, 255));	
-	window->draw(topSideLine);
-
-	sf::Shape rightGoalLine;
-	rightGoalLine.AddPoint(1820,26, sf::Color(255,255,255), sf::Color(255,255,255));
-	rightGoalLine.AddPoint(1820,1178, sf::Color(255,255,255), sf::Color(255,255,255));
-	rightGoalLine.AddPoint(1815,1178, sf::Color(255,255,255), sf::Color(255,255,255));
-	rightGoalLine.AddPoint(1815,26, sf::Color(255,255,255), sf::Color(255,255,255));
+	sf::ConvexShape rightGoalLine;
+	rightGoalLine.setPointCount(4);
+	rightGoalLine.setPoint(0, sf::Vector2f(1815, 26));
+	rightGoalLine.setPoint(1, sf::Vector2f(1815, 1173));
+	rightGoalLine.setPoint(2, sf::Vector2f(1820, 1173));
+	rightGoalLine.setPoint(3, sf::Vector2f(1820, 26));
 	window->draw(rightGoalLine);
 
-	sf::Shape bottomSideLine;
-	bottomSideLine.AddPoint(1820,1178,sf::Color(255,255,255),sf::Color(255,255,255));
-	bottomSideLine.AddPoint(100,1178,sf::Color(255,255,255),sf::Color(255,255,255));
-	bottomSideLine.AddPoint(100,1173,sf::Color(255,255,255),sf::Color(255,255,255));
-	bottomSideLine.AddPoint(1820,1173,sf::Color(255,255,255),sf::Color(255,255,255));
+	sf::ConvexShape topSideLine;
+	topSideLine.setPointCount(4);
+	topSideLine.setPoint(0, sf::Vector2f(100, 26));
+	topSideLine.setPoint(1, sf::Vector2f(1820, 26));
+	topSideLine.setPoint(2, sf::Vector2f(1820, 31));
+	topSideLine.setPoint(3, sf::Vector2f(105, 31));
+	window->draw(topSideLine);
+
+	sf::ConvexShape bottomSideLine;
+	bottomSideLine.setPointCount(4);
+	bottomSideLine.setPoint(0, sf::Vector2f(1820, 1178));
+	bottomSideLine.setPoint(1, sf::Vector2f(100, 1178));
+	bottomSideLine.setPoint(2, sf::Vector2f(100, 1173));
+	bottomSideLine.setPoint(3, sf::Vector2f(1820, 1173));
 	window->draw(bottomSideLine);
 
-	sf::Shape centerLine;
-	centerLine.AddPoint(957,26,sf::Color(255,255,255),sf::Color(255,255,255));
-	centerLine.AddPoint(957,1178,sf::Color(255,255,255),sf::Color(255,255,255));
-	centerLine.AddPoint(962,1178,sf::Color(255,255,255),sf::Color(255,255,255));
-	centerLine.AddPoint(962,26,sf::Color(255,255,255),sf::Color(255,255,255));
+	sf::ConvexShape centerLine;
+	centerLine.setPointCount(4);
+	centerLine.setPoint(0, sf::Vector2f(957, 26));
+	centerLine.setPoint(1, sf::Vector2f(957, 1178));
+	centerLine.setPoint(2, sf::Vector2f(962, 1178));
+	centerLine.setPoint(3, sf::Vector2f(962, 26));
 	window->draw(centerLine);
-	
-	sf::Shape kickoffCircle = sf::Shape::Circle(960,600,185,sf::Color(0,0,0,0),5.f,sf::Color(255,255,255));
+
+	sf::CircleShape kickoffCircle = sf::CircleShape(185);
+	kickoffCircle.setFillColor(sf::Color(255,255,255,0));
+	kickoffCircle.setOutlineThickness(5);
+	kickoffCircle.setOutlineColor(sf::Color(255,255,255));
+	kickoffCircle.setOrigin(kickoffCircle.getRadius(), kickoffCircle.getRadius());
+	kickoffCircle.setPosition(960, 600);
 	window->draw(kickoffCircle);
 
-	sf::Shape kickoffPoint = sf::Shape::Circle(960,600,10,sf::Color(255,255,255));
+	sf::CircleShape kickoffPoint = sf::CircleShape(10);
+	kickoffPoint.setFillColor(sf::Color(255,255,255));
+	kickoffPoint.setOutlineColor(sf::Color(255,255,255));
+	kickoffPoint.setOrigin(kickoffPoint.getRadius(), kickoffPoint.getRadius());
+	kickoffPoint.setPosition(960, 600);
 	window->draw(kickoffPoint);
 }
 
 void Game::renderGoals(sf::RenderWindow* window)
 {
 	//sf::RectangleShape goalLeft = sf::RectangleShape(35,450,100,750,sf::Color(0,0,0,0),5,sf::Color(0,0,0));
-	sf::RectangleShape goalLeft = sf::RectangleShape(65,300);
+	sf::RectangleShape goalLeft = sf::RectangleShape(sf::Vector2f(65,300));
 	goalLeft.setPosition(35,450);
 	goalLeft.setFillColor(sf::Color(0,0,0,0));
 	goalLeft.setOutlineThickness(5);
 	goalLeft.setOutlineColor(sf::Color(255,255,255));
 	//sf::RectangleShape goalRight = sf::RectangleShape(1820,450,1885,750,sf::Color(0,0,0,0),5,sf::Color(0,0,0));
-	sf::RectangleShape goalRight = sf::RectangleShape(65,300);
+	sf::RectangleShape goalRight = sf::RectangleShape(sf::Vector2f(65,300));
 	goalRight.setPosition(1820,450);
 	goalRight.setFillColor(sf::Color(0,0,0,0));
 	goalRight.setOutlineThickness(5);
-	goalRight.setOutlineColor(af::Color(255,255,255));
+	goalRight.setOutlineColor(sf::Color(255,255,255));
 
 	window->draw(goalLeft);
 	window->draw(goalRight);

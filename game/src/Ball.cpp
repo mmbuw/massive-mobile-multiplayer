@@ -1,13 +1,13 @@
 #include "Ball.hpp"
 
-Ball::Ball() : PhysicalObject(1.0, 0, 0, 30.0), inLeftGoal_(false), inRightGoal_(false)
+Ball::Ball() : PhysicalObject(1.0, 960, 600, 30.0), inLeftGoal_(false), inRightGoal_(false)
 {
-	//initialize the shape with 0 position first in order to set center properly
-	shape_ = sf::Shape::Circle(posX_, posY_, radius_, sf::Color(255,255,255), -3, sf::Color(0,0,0));
-
-	posX_ = 960;
-	posY_ = 600;
-	shape_.SetPosition(posX_, posY_);
+	shape_ = sf::CircleShape(radius_);
+	shape_.setFillColor(sf::Color(255,255,255,255));
+	shape_.setOutlineThickness(-3);
+	shape_.setOutlineColor(sf::Color(0,0,0,255));
+	shape_.setOrigin(radius_, radius_);
+	shape_.setPosition(posX_, posY_);
 }
 
 /* virtual */ Ball::~Ball() {}
@@ -101,14 +101,14 @@ Ball::Ball() : PhysicalObject(1.0, 0, 0, 30.0), inLeftGoal_(false), inRightGoal_
 
 void Ball::setColor(sf::Color color)
 {
-	shape_.SetColor(color);
+	shape_.setFillColor(color);
 }
 
 void Ball::resetToCenter()
 {
 	setPosition(960, 600);
 	setVelocity(0, 0);
-	setColor(sf::Color(255,255,255));
+	setColor(sf::Color(255,255,255,255));
 }
 
 void Ball::changeAbsorptionVelocity(bool swapX, bool swapY)
