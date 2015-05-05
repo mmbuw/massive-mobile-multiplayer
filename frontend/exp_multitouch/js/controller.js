@@ -128,10 +128,10 @@ window.addEventListener('load', function(){
 	       	timer = setTimeout(endGame, 30000);
 
 	       	//sent to server
-	       	socket.send('VAL '+ (diffx-diffxprev) + ' ' + (diffy-diffyprev) +'$');
+	       	socket.send('VAL '+ (diffx) + ' ' + (diffy) +'$');
 
 	       	//console debug
-	    	console.log('start: '+(diffx-diffxprev)+'/'+(diffy-diffyprev));
+	    	console.log('start: '+(diffx)+'/'+(diffy));
 	       	//console.log('lineTo: '+Math.round((diffx/(canvas.width/2))*250)+'/'+canvas.height);
 
 	       	diffxprev = diffx;

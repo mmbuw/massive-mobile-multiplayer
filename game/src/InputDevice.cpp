@@ -54,18 +54,18 @@ void InputDevice::readValuesAndReact()
 		playerFigure_->shoot();
 		//std::cout << "[" << name_ << "] Key event: " << evval[ev.value] << " BTN_A" << std::endl;
 	}
-	else if (ev.type == EV_REL && ev.value >= -100 && ev.value <= 100)
+	else if (ev.type == EV_REL && ev.value >= -1000 && ev.value <= 1000)
 	{
-        double percentage = ev.value / 100.0;
+        double percentage = ev.value / 1000.0;
 
 		if ((int) ev.code == 0)
 		{
-			playerFigure_->addVelocityOffset(percentage * 10.0, 0.0);
+			playerFigure_->addVelocityOffset(percentage * 8.0, 0.0);
 			//std::cout << "[" << name_ << "] Rel event X: " << ev.value << std::endl;
 		}
 		else if ((int) ev.code == 1)
 		{
-			playerFigure_->addVelocityOffset(0.0, percentage * 10.0);
+			playerFigure_->addVelocityOffset(0.0, percentage * 8.0);
 			//std::cout << "[" << name_ << "] Rel event Y: " << ev.value << std::endl;
 		}
 	}
