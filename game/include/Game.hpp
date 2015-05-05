@@ -20,6 +20,7 @@ class Game
 
 		void initPlayers();
 		Player* addNewPlayer();
+		void removePlayer(Player* playerToRemove);
 		void initBall();
 	
 		void renderBackground(sf::RenderWindow* window);

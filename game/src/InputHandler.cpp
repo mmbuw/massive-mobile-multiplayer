@@ -106,6 +106,10 @@ std::map<int, InputDevice*>::iterator InputHandler::removeDevice(int deviceID)
 
     if (iteratorToDelete != currentInputDevices_.end())
     {
+        //remove player figure
+        gameToHandle_->removePlayer(iteratorToDelete->second->getPlayerInstance());
+        
+        //remove device
         delete iteratorToDelete->second;
         std::cout << "Removed input device " << deviceID << std::endl;
         return currentInputDevices_.erase(iteratorToDelete);
