@@ -31,6 +31,7 @@ class Player : public PhysicalObject
 		void shoot();
 		bool inShootSequence() const;
 		void resetToStart();
+		sf::Color const getTeamColor();
 
 
 	private:

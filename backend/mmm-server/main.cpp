@@ -241,7 +241,7 @@ int main()
 			            	stream >> x;
 			            	stream >> y;
 
-			            	if (x <= 1024 && y <= 1024 && x >= 0 && y >= 0)
+			            	if (x <= 1000 && y <= 1000 && x >= -1000 && y >= -1000)
 			            	{
 			            		playerConnection->injectRelEvent(x, y);
 			            		//std::cout << "Inject relative input event" << std::endl;

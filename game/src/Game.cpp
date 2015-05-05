@@ -1,9 +1,9 @@
 #include "Game.hpp"
 
 Game::Game() : ballWasInLeftGoal_(false), ballWasInRightGoal_(false), 
-			   framesToReset_(-1), pointsLeftTeam_(0), pointsRightTeam_(0) 
+			   framesToReset_(-1), pointsBlueTeam_(0), pointsRedTeam_(0),
+			   numPlayersRed_(0), numPlayersBlue_(0)
 {
-	//initPlayers();
 	initBall();
 }
 
@@ -15,15 +15,68 @@ Game::~Game()
 	}
 }
 
-Player* Game::addNewPlayer(sf::Color const& team, std::string const& name, int number)
+Player* Game::addNewPlayer(std::string const& name, int number)
 {
-	Player* newPlayer = new Player(480,600, sf::Color(0,0,0), team, name, number);
+	//determine team color of new player
+	//team with smaller number of players, if equal
+	//team with smaller number of points, if equal
+	//take blue team
+
+	sf::Color teamColor;
+
+	if (numPlayersBlue_ < numPlayersRed_)
+	{
+		teamColor = sf::Color(0, 0, 255);
+	}
+	else if (numPlayersBlue_ > numPlayersRed_)
+	{
+		teamColor = sf::Color(255, 0, 0);
+	}
+	else if (pointsBlueTeam_ < pointsRedTeam_)
+	{
+		teamColor = sf::Color(0, 0, 255);
+	}
+	else if (pointsBlueTeam_ > pointsRedTeam_)
+	{
+		teamColor = sf::Color(255, 0, 0);
+	}
+	else
+	{
+		teamColor = sf::Color(0, 0, 255);
+	}
+
+	//set spawn position dependent on team color
+	sf::Vector2f spawnPosition(0,0);
+
+	if (teamColor == sf::Color(0, 0, 255))
+	{
+		spawnPosition.x = 480;
+		spawnPosition.y = 600;
+		++numPlayersBlue_;
+	}
+	else if (teamColor == sf::Color(255, 0, 0))
+	{
+		spawnPosition.x = 1400;
+		spawnPosition.y = 600;
+		++numPlayersRed_;
+	}
+
+	Player* newPlayer = new Player(spawnPosition.x, spawnPosition.y, sf::Color(0,0,0), teamColor, name, number);
 	players.push_back(newPlayer);
 	return newPlayer;
 }
 
 void Game::removePlayer(Player* playerToRemove)
 {
+	if (playerToRemove->getTeamColor() == sf::Color(255, 0, 0))
+	{
+		--numPlayersRed_;
+	}
+	else if (playerToRemove->getTeamColor() == sf::Color(0, 0, 255))
+	{
+		--numPlayersBlue_;
+	}
+
 	//ToDo: use more efficient data structure to find player faster
 	for (std::vector<Player*>::iterator it = players.begin(); it != players.end(); ++it)
 	{
@@ -169,7 +222,7 @@ void Game::renderScoreLine(sf::RenderWindow* window)
 		std::cout<<"The sadness will last forever."<<std::endl;
 	}
 	score.setFont(font);
-	score.setString("Blue   "+std::to_string(pointsLeftTeam_)+":"+std::to_string(pointsRightTeam_)+"   Red");
+	score.setString("Blue   "+std::to_string(pointsBlueTeam_)+":"+std::to_string(pointsRedTeam_)+"   Red");
 	score.setCharacterSize(80);
 	score.move(685.f,1200.f);
 
@@ -297,26 +350,26 @@ void Game::checkForGoal()
 {
 	if (ball.isInLeftGoal() && ballWasInLeftGoal_ == false && framesToReset_ == -1)
 	{
-		++pointsRightTeam_;
+		++pointsRedTeam_;
 		ballWasInLeftGoal_ = true;
 		framesToReset_ = 100;
 		ball.setColor(sf::Color(0,0,0));
 
 		std::cout << std::endl;
 		std::cout << "The left team scored a goal!" << std::endl;
-		std::cout << "Current standings: Left " << pointsLeftTeam_ << " : " << pointsRightTeam_ << " Right" << std::endl;
+		std::cout << "Current standings: Left " << pointsBlueTeam_ << " : " << pointsRedTeam_ << " Right" << std::endl;
 		std::cout << std::endl;
 	}
 	else if (ball.isInRightGoal() && ballWasInRightGoal_ == false && framesToReset_ == -1)
 	{
-		++pointsLeftTeam_;
+		++pointsBlueTeam_;
 		ballWasInRightGoal_ = true;
 		framesToReset_ = 100;
 		ball.setColor(sf::Color(0,0,0));
 
 		std::cout << std::endl;
 		std::cout << "The left team scored a goal!" << std::endl;
-		std::cout << "Current standings: Left " << pointsLeftTeam_ << " : " << pointsRightTeam_ << " Right" << std::endl;
+		std::cout << "Current standings: Left " << pointsBlueTeam_ << " : " << pointsRedTeam_ << " Right" << std::endl;
 		std::cout << std::endl;
 	}
 	else if (ball.isInLeftGoal() == false && ballWasInLeftGoal_ == true)

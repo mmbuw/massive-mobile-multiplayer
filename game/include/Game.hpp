@@ -18,7 +18,7 @@ class Game
 		Game();
 		~Game();
 
-		Player* addNewPlayer(sf::Color const& team, std::string const& name, int number);
+		Player* addNewPlayer(std::string const& name, int number);
 		void removePlayer(Player* playerToRemove);
 		void initBall();
 	
@@ -49,8 +49,11 @@ class Game
 		bool ballWasInRightGoal_;
 		int framesToReset_;
 
-		int pointsLeftTeam_;
-		int pointsRightTeam_;
+		int pointsBlueTeam_;
+		int pointsRedTeam_;
+
+		int numPlayersRed_;
+		int numPlayersBlue_;
 };
 
 #endif //GAME_HPP
