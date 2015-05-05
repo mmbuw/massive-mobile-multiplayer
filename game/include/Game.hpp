@@ -5,6 +5,7 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <string>
+#include <set>
 
 #include "Player.hpp"
 #include "Ball.hpp"
@@ -20,7 +21,6 @@ class Game
 
 		Player* addNewPlayer(std::string const& name, int number);
 		void removePlayer(Player* playerToRemove);
-		void initBall();
 	
 		void renderBackground(sf::RenderWindow* window);
 		void renderPlayers(sf::RenderWindow* window);		
@@ -32,18 +32,14 @@ class Game
 
 		void updatePhysicalObjects();
 		void applyIntersectionPhysics(); 
-		void applyShootingForce(Player const& player);
-		void applyElasticImpact(PhysicalObject& lhs, PhysicalObject& rhs, float lhsAbsorption, float rhsAbsorption);
+		void applyShootingForce(Player* player);
+		void applyElasticImpact(PhysicalObject* lhs, PhysicalObject* rhs, float lhsAbsorption, float rhsAbsorption);
 
 		void checkForGoal();
-		void playerShoot(int playerID);
-
-		void movePlayer(int playerNumber, std::string direction);
-
 
 	private:
-		std::vector<Player*> players;
-		Ball ball;
+		std::set<Player*> players;
+		Ball* ball;
 
 		bool ballWasInLeftGoal_;
 		bool ballWasInRightGoal_;

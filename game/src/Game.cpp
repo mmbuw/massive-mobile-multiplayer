@@ -4,15 +4,17 @@ Game::Game() : ballWasInLeftGoal_(false), ballWasInRightGoal_(false),
 			   framesToReset_(-1), pointsBlueTeam_(0), pointsRedTeam_(0),
 			   numPlayersRed_(0), numPlayersBlue_(0)
 {
-	initBall();
+	ball = new Ball();
 }
 
 Game::~Game()
 {
-	for (std::vector<Player*>::iterator it = players.begin(); it != players.end(); ++it)
+	for (std::set<Player*>::iterator it = players.begin(); it != players.end(); ++it)
 	{
 		delete (*it);
 	}
+
+	delete ball;
 }
 
 Player* Game::addNewPlayer(std::string const& name, int number)
@@ -62,7 +64,7 @@ Player* Game::addNewPlayer(std::string const& name, int number)
 	}
 
 	Player* newPlayer = new Player(spawnPosition.x, spawnPosition.y, sf::Color(0,0,0), teamColor, name, number);
-	players.push_back(newPlayer);
+	players.insert(newPlayer);
 	return newPlayer;
 }
 
@@ -77,21 +79,13 @@ void Game::removePlayer(Player* playerToRemove)
 		--numPlayersBlue_;
 	}
 
-	//ToDo: use more efficient data structure to find player faster
-	for (std::vector<Player*>::iterator it = players.begin(); it != players.end(); ++it)
-	{
-		if ((*it) == playerToRemove)
-		{
-			players.erase(it);
-			delete playerToRemove;
-			break;
-		}
-	}
-}
+	std::set<Player*>::iterator deleteIterator = players.find(playerToRemove);
 
-void Game::initBall() 
-{
-	ball = Ball();
+	if (deleteIterator != players.end())
+	{
+		players.erase(deleteIterator);
+		delete playerToRemove;
+	}
 }
 
 void Game::renderBackground(sf::RenderWindow* window) 
@@ -121,15 +115,15 @@ void Game::renderBackground(sf::RenderWindow* window)
 
 void Game::renderPlayers(sf::RenderWindow* window) 
 {
-	for (int i = 0; i < players.size(); i++)
+	for (std::set<Player*>::iterator it = players.begin(); it != players.end(); ++it)
 	{
-		players[i]->render(window);	
+		(*it)->render(window);
 	}
 }
 
 void Game::renderBall(sf::RenderWindow* window)
 {
-	ball.render(window);
+	ball->render(window);
 }
 
 void Game::renderSidelines(sf::RenderWindow* window) 
@@ -258,59 +252,63 @@ void Game::renderFpsDisplay(sf::RenderWindow* window, float value)
 void Game::updatePhysicalObjects()
 {
 	// update ball
-	ball.frameUpdate();
+	ball->frameUpdate();
 
 	// update players
-	for (int i = 0; i < players.size(); i++)
+	for (std::set<Player*>::iterator it = players.begin(); it != players.end(); ++it)
 	{
-		players[i]->frameUpdate();	
+		(*it)->frameUpdate();	
 	}
 }
 
 void Game::applyIntersectionPhysics()
 {
 	// for each player
-	for (int i = 0; i < players.size(); ++i)
+	for (std::set<Player*>::iterator it = players.begin(); it != players.end(); ++it)
 	{
+		Player* currentPlayer = *it;
+
 		//check if shoot animation is needed
-		if (players[i]->intersectsCircle(ball.getPosX(), ball.getPosY(), ball.getRadius(), true) && players[i]->inShootSequence())
+		if (currentPlayer->intersectsCircle(ball->getPosX(), ball->getPosY(), ball->getRadius(), true) && currentPlayer->inShootSequence())
 		{
-			applyShootingForce((*players[i]));
+			applyShootingForce(currentPlayer);
 		}
 
 		//check if player collides with ball
-		if (players[i]->intersectsCircle(ball.getPosX(), ball.getPosY(), ball.getRadius(), false))
+		if (currentPlayer->intersectsCircle(ball->getPosX(), ball->getPosY(), ball->getRadius(), false))
 		{
-			applyElasticImpact(ball, (*players[i]), 0.1 * players[i]->computeCurrentSpeed(), 1.0);
+			applyElasticImpact(ball, currentPlayer, 0.1 * currentPlayer->computeCurrentSpeed(), 1.0);
 		}
 
 		// check if player collides with other player
-		for (int j = 0; j < i; ++j)
+		for (std::set<Player*>::iterator it2 = players.begin(); it2 != it; ++it2)
 		{
-			if (players[i]->intersectsCircle(players[j]->getPosX(), players[j]->getPosY(), players[j]->getRadius(), false))
+			Player* otherPlayer = *it2;
+
+			if (currentPlayer->intersectsCircle(otherPlayer->getPosX(), otherPlayer->getPosY(), otherPlayer->getRadius(), false))
 			{
-				applyElasticImpact( (*players[i]), (*players[j]), 1.0, 1.0);
+				applyElasticImpact( currentPlayer, otherPlayer, 1.0, 1.0);
 			}
 		}
 	}
 }
 
-void Game::applyShootingForce(Player const& player)
+void Game::applyShootingForce(Player* player)
 {
 	// apply shooting forces
-	sf::Vector2f shootDir( ball.getPosX() - player.getPosX(), ball.getPosY() - player.getPosY() );
+	sf::Vector2f shootDir( ball->getPosX() - player->getPosX(), ball->getPosY() - player->getPosY() );
 	float scaleFactor(0.2);
-	ball.setVelocity(scaleFactor * shootDir.x, scaleFactor * shootDir.y);
+	ball->setVelocity(scaleFactor * shootDir.x, scaleFactor * shootDir.y);
 }
 
-void Game::applyElasticImpact(PhysicalObject& lhs, PhysicalObject& rhs, float lhsAbsorption, float rhsAbsorption)
+void Game::applyElasticImpact(PhysicalObject* lhs, PhysicalObject* rhs, float lhsAbsorption, float rhsAbsorption)
 {
 	//elastic impact computation
-	float lhsMass = lhs.getMass();
-	float rhsMass = rhs.getMass();
+	float lhsMass = lhs->getMass();
+	float rhsMass = rhs->getMass();
 
-	sf::Vector2f lhsVel(lhs.getVelX(), lhs.getVelY());
-	sf::Vector2f rhsVel(rhs.getVelX(), rhs.getVelY());
+	sf::Vector2f lhsVel(lhs->getVelX(), lhs->getVelY());
+	sf::Vector2f rhsVel(rhs->getVelX(), rhs->getVelY());
 
 	sf::Vector2f lhsVelAfterCollision( (lhsMass * lhsVel.x + rhsMass * (2 * rhsVel.x - lhsVel.x)) / (lhsMass + rhsMass),
 										(lhsMass * lhsVel.y + rhsMass * (2 * rhsVel.y - lhsVel.y)) / (lhsMass + rhsMass));
@@ -320,14 +318,14 @@ void Game::applyElasticImpact(PhysicalObject& lhs, PhysicalObject& rhs, float lh
 	
 
 	//scale using absorption coefficients
-	lhs.setVelocity(lhsAbsorption * lhsVelAfterCollision.x, lhsAbsorption * lhsVelAfterCollision.y);
-	rhs.setVelocity(rhsAbsorption * rhsVelAfterCollision.x, rhsAbsorption * rhsVelAfterCollision.y);
+	lhs->setVelocity(lhsAbsorption * lhsVelAfterCollision.x, lhsAbsorption * lhsVelAfterCollision.y);
+	rhs->setVelocity(rhsAbsorption * rhsVelAfterCollision.x, rhsAbsorption * rhsVelAfterCollision.y);
 
 	//pull rhs and lhs apart such that they can not overlap
-	sf::Vector2f lhsCenter(lhs.getPosX(), lhs.getPosY());
-	sf::Vector2f rhsCenter(rhs.getPosX(), rhs.getPosY());
-	float lhsRadius(lhs.getRadius());
-	float rhsRadius(rhs.getRadius());
+	sf::Vector2f lhsCenter(lhs->getPosX(), lhs->getPosY());
+	sf::Vector2f rhsCenter(rhs->getPosX(), rhs->getPosY());
+	float lhsRadius(lhs->getRadius());
+	float rhsRadius(rhs->getRadius());
 
 	sf::Vector2f diffVec = rhsCenter - lhsCenter;
 	float diffLength = std::sqrt(diffVec.x*diffVec.x + diffVec.y*diffVec.y);
@@ -341,42 +339,42 @@ void Game::applyElasticImpact(PhysicalObject& lhs, PhysicalObject& rhs, float lh
 		sf::Vector2f newBallPosition(lhsCenter - diffVec);
 		sf::Vector2f newPlayerPosition(rhsCenter + diffVec);
 
-		lhs.setPosition(newBallPosition.x, newBallPosition.y);
-		rhs.setPosition(newPlayerPosition.x, newPlayerPosition.y);
+		lhs->setPosition(newBallPosition.x, newBallPosition.y);
+		rhs->setPosition(newPlayerPosition.x, newPlayerPosition.y);
 	}
 }
 
 void Game::checkForGoal()
 {
-	if (ball.isInLeftGoal() && ballWasInLeftGoal_ == false && framesToReset_ == -1)
+	if (ball->isInLeftGoal() && ballWasInLeftGoal_ == false && framesToReset_ == -1)
 	{
 		++pointsRedTeam_;
 		ballWasInLeftGoal_ = true;
 		framesToReset_ = 100;
-		ball.setColor(sf::Color(0,0,0));
+		ball->setColor(sf::Color(0,0,0));
 
 		std::cout << std::endl;
 		std::cout << "The left team scored a goal!" << std::endl;
 		std::cout << "Current standings: Left " << pointsBlueTeam_ << " : " << pointsRedTeam_ << " Right" << std::endl;
 		std::cout << std::endl;
 	}
-	else if (ball.isInRightGoal() && ballWasInRightGoal_ == false && framesToReset_ == -1)
+	else if (ball->isInRightGoal() && ballWasInRightGoal_ == false && framesToReset_ == -1)
 	{
 		++pointsBlueTeam_;
 		ballWasInRightGoal_ = true;
 		framesToReset_ = 100;
-		ball.setColor(sf::Color(0,0,0));
+		ball->setColor(sf::Color(0,0,0));
 
 		std::cout << std::endl;
 		std::cout << "The left team scored a goal!" << std::endl;
 		std::cout << "Current standings: Left " << pointsBlueTeam_ << " : " << pointsRedTeam_ << " Right" << std::endl;
 		std::cout << std::endl;
 	}
-	else if (ball.isInLeftGoal() == false && ballWasInLeftGoal_ == true)
+	else if (ball->isInLeftGoal() == false && ballWasInLeftGoal_ == true)
 	{
 		ballWasInLeftGoal_ = false;
 	}
-	else if (ball.isInRightGoal() == false && ballWasInRightGoal_ == true)
+	else if (ball->isInRightGoal() == false && ballWasInRightGoal_ == true)
 	{
 		ballWasInRightGoal_ = false;
 	}
@@ -386,44 +384,19 @@ void Game::checkForGoal()
 	{
 		if (framesToReset_ == 0)
 		{
-			ball.resetToCenter();
+			ball->resetToCenter();
 			
-			for (int i = 0; i < players.size(); ++i)
+			for (std::set<Player*>::iterator it = players.begin(); it != players.end(); ++it)
 			{
-				players[i]->resetToStart();
+				(*it)->resetToStart();
 			}
 
 			framesToReset_ = -1;
 		}
 		else
 		{
-			ball.setColor(sf::Color(rand() % 256, rand() % 256, rand() % 256));
+			ball->setColor(sf::Color(rand() % 256, rand() % 256, rand() % 256));
 			--framesToReset_;
 		}
-	}
-}
-
-void Game::playerShoot(int playerID)
-{
-	players[playerID]->shoot();
-}
-
-void Game::movePlayer(int playerNumber, std::string direction)
-{
-	if (direction == "UP")
-	{
-		players[playerNumber]->moveUp();	
-	}
-	else if (direction == "DOWN")
-	{
-		players[playerNumber]->moveDown();	
-	}
-	else if (direction == "LEFT")
-	{
-		players[playerNumber]->moveLeft();	
-	}
-	else if (direction == "RIGHT")
-	{
-		players[playerNumber]->moveRight();	
 	}
 }
