@@ -18,8 +18,7 @@ class Game
 		Game();
 		~Game();
 
-		void initPlayers();
-		Player* addNewPlayer();
+		Player* addNewPlayer(sf::Color const& team, std::string const& name, int number);
 		void removePlayer(Player* playerToRemove);
 		void initBall();
 	
