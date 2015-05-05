@@ -16,6 +16,7 @@ class Game
 	
 	public:
 		Game();
+		~Game();
 
 		void initPlayers();
 		void initBall();
@@ -40,7 +41,7 @@ class Game
 
 
 	private:
-		std::vector<Player> players;
+		std::vector<Player*> players;
 		Ball ball;
 
 		bool ballWasInLeftGoal_;
