@@ -141,6 +141,7 @@ void Game::renderScoreLine(sf::RenderWindow* window)
 	//sf::RectangleShape scoreLine = sf::RectangleShape(0,1200,1920,1350,sf::Color(0,0,0));
 	sf::RectangleShape scoreLine = sf::RectangleShape(sf::Vector2f(1920,150));
 	scoreLine.setPosition(0,1200);
+	scoreLine.setFillColor(sf::Color(0,0,0));
 	sf::Text score;
 	sf::Text fpsString;
 	sf::Font font;

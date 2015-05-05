@@ -4,8 +4,12 @@
 #include <SFML/System.hpp>
 #include <SFML/Graphics.hpp>
 
+#include <time.h>
+#include <stdlib.h>
+
 #include "Ball.hpp"
 #include "PhysicalObject.hpp"
+
 
 class Player : public PhysicalObject
 {
@@ -32,6 +36,9 @@ class Player : public PhysicalObject
 	private:
 		sf::Color borderColor_;
 		sf::Color centerColor_;
+
+		std::string name;
+		int shirtNumber;
 
 		float shootCircleRadius_;
 		int blockShootFrames_;

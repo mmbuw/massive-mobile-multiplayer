@@ -5,6 +5,8 @@ Player::Player(int startX, int startY, sf::Color border, sf::Color center) :
 {
 	shootCircleRadius_ = 1.5 * radius_;
 
+  	shirtNumber = rand() % 10;
+
 	shape_ = sf::CircleShape(radius_);
 	shape_.setFillColor(centerColor_);
 	shape_.setOutlineThickness(-5);
@@ -23,6 +25,23 @@ Player::Player(int startX, int startY, sf::Color border, sf::Color center) :
 /* virtual */ void Player::render(sf::RenderWindow* window) const 
 {
 	PhysicalObject::render(window);
+	
+	sf::Text number;
+	sf::Font font;
+	if (!font.loadFromFile("font.ttf")){
+		std::cout<<"The sadness will last forever."<<std::endl;
+	}
+	number.setFont(font);
+	number.setString(std::to_string(shirtNumber));
+	number.setCharacterSize(50);
+	if (shirtNumber > 9){
+		number.move(posX_-35,posY_-35);
+	
+	}else{
+		number.move(posX_-25,posY_-35);
+	}
+
+	window->draw(number);
 	window->draw(shootCircle_);
 }
 
