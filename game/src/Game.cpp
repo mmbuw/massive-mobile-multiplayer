@@ -3,7 +3,6 @@
 Game::Game() : ballWasInLeftGoal_(false), ballWasInRightGoal_(false), 
 			   framesToReset_(-1), pointsLeftTeam_(0), pointsRightTeam_(0) 
 {
-	//initPlayers();
 	initBall();
 }
 

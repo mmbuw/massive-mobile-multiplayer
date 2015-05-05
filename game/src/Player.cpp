@@ -153,3 +153,8 @@ void Player::resetToStart()
 	setPosition(startX_, startY_);
 	setVelocity(0.0, 0.0);
 }
+
+sf::Color const Player::getTeamColor()
+{
+	return centerColor_;
+}

@@ -11,7 +11,16 @@ InputDevice::InputDevice(int id, std::string const& name, std::string const& fil
 	}
 
 	//ToDo: register player figure in game and send corresponding LED code back
-	writeLEDToDevice(LED_COMPOSE);
+	sf::Color teamColor = playerFigure_->getTeamColor();
+
+	if (teamColor == sf::Color(0, 0, 255))
+	{
+		writeLEDToDevice(LED_MISC);
+	}
+	else if (teamColor == sf::Color(255, 0, 0))
+	{
+		writeLEDToDevice(LED_COMPOSE);
+	}
 
 }
 
@@ -45,10 +54,9 @@ void InputDevice::readValuesAndReact()
 		playerFigure_->shoot();
 		//std::cout << "[" << name_ << "] Key event: " << evval[ev.value] << " BTN_A" << std::endl;
 	}
-	else if (ev.type == EV_REL && ev.value >= 0 && ev.value <= 1024)
+	else if (ev.type == EV_REL && ev.value >= -100 && ev.value <= 100)
 	{
-		int shiftedValue(ev.value-250);
-        double percentage = shiftedValue / 250.0;
+        double percentage = ev.value / 100.0;
 
 		if ((int) ev.code == 0)
 		{
