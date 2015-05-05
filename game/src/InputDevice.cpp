@@ -60,12 +60,12 @@ void InputDevice::readValuesAndReact()
 
 		if ((int) ev.code == 0)
 		{
-			playerFigure_->addVelocityOffset(percentage * 8.0, 0.0);
+			playerFigure_->addVelocityOffset(percentage * 5.0, 0.0);
 			//std::cout << "[" << name_ << "] Rel event X: " << ev.value << std::endl;
 		}
 		else if ((int) ev.code == 1)
 		{
-			playerFigure_->addVelocityOffset(0.0, percentage * 8.0);
+			playerFigure_->addVelocityOffset(0.0, percentage * 5.0);
 			//std::cout << "[" << name_ << "] Rel event Y: " << ev.value << std::endl;
 		}
 	}
