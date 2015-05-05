@@ -125,13 +125,15 @@ window.addEventListener('load', function(){
 	       	clearTimeout(timer);
 	       	timer = setTimeout(endGame, 30000);
 
+	       	diffXsocket = Math.clip(Math.round((diffx/(canvas.width/2))*250)+250,0,250);
+			diffYsocket = Math.clip(Math.round((diffy/(canvas.height/2))*250)+250,0,250);
 	       	//sent to server
-	       	socket.send('VAL '+diffx + ' ' + diffy +'$');
+	       	socket.send('VAL '+ diffXsocket + ' ' + diffYsocket +'$');
 	       	sleepFor(10);
 
 	       	//console debug
-	    	console.log('start: '+centerX+'/'+centerY);
-	       	console.log('lineTo: '+currx+'/'+curry);
+	    	console.log('start: '+diffXsocket+'/'+diffYsocket);
+	       	console.log('lineTo: '+Math.round((diffx/(canvas.width/2))*250)+'/'+canvas.height);
 
 	    }, false)
 
@@ -152,7 +154,7 @@ window.addEventListener('load', function(){
 //close connection and forward	
 function endGame(){
 	//close socket
-	socket.close();
+	//socket.close();
 	//forward to controller
 	window.location.href = './leaving.html';
 }
@@ -166,4 +168,9 @@ function sleepFor( sleepDuration ){
 function clearMarker(input){
 	
 	return input.replace('$','');
+}
+
+//clipping function
+Math.clip = function(number, min, max) {
+  return Math.max(min, Math.min(number, max));
 }
