@@ -19,6 +19,10 @@ window.addEventListener('load', function(){
 			console.log(evt.data);
 		}
 
+		//global vars
+		var colorbase;
+		var navtouchstate;
+
  		//##################################################################################
  		//button control
 	    var button = document.getElementById('button');
@@ -40,7 +44,7 @@ window.addEventListener('load', function(){
 	    }, false)
 	 
 	    button.addEventListener('touchend', function(e){
-	    	button.style.backgroundColor = '#cccccc';
+	    	button.style.backgroundColor = colorbase;
 	       	e.preventDefault();
 
 	       	//console debug
@@ -87,6 +91,7 @@ window.addEventListener('load', function(){
 
 	       	//sent to server
 	       	socket.send('VAL ' +0+' '+0+'$');
+	       	navtouchstate = true;
 
 	       	//console debug
 	       	console.log('start'+startx+'/'+starty);
@@ -128,19 +133,16 @@ window.addEventListener('load', function(){
 	       	timer = setTimeout(endGame, 30000);
 
 	       	//sent to server
-	       	socket.send('VAL '+ (diffx-diffxprev) + ' ' + (diffy-diffyprev) +'$');
+	       	socket.send('VAL '+ diffx + ' ' + diffy +'$');
 
 	       	//console debug
-	    	console.log('start: '+(diffx-diffxprev)+'/'+(diffy-diffyprev));
-	       	//console.log('lineTo: '+Math.round((diffx/(canvas.width/2))*250)+'/'+canvas.height);
+	    	//console.log('start: '+(diffx-diffxprev)+'/'+(diffy-diffyprev));
 
-	       	diffxprev = diffx;
-			diffyprev = diffy;
 	    }, false)
 
 	   	//touchend and reset joystick
 	    circle.addEventListener('touchend', function(e){
-	    	circle.style.backgroundColor = '#cccccc';
+	    	circle.style.backgroundColor = colorbase;
 	    	//set circle to start
 	        circle.style.top = centerY - circle.offsetHeight/2;
  			circle.style.left = centerX -circle.offsetWidth/2;
@@ -148,17 +150,45 @@ window.addEventListener('load', function(){
  			//clear canvas
  			context.clearRect(0, 0, canvas.width, canvas.height);
 	       	e.preventDefault();
+	       	navtouchstate = false;
 	    }, false)
+
+
+	    //##################################################################################
+	    //loop
+
+
+
+
+	    //##################################################################################
+	    //colorsetting
+
+	    if(localStorage.getItem('team').indexOf("RED") > -1) {
+	    	colorbase = 'red';
+	    	button.style.backgroundColor = colorbase;
+	    	circle.style.backgroundColor = colorbase;
+	    	console.location(colorbase);
+
+	    } else if(localStorage.getItem('team').indexOf("BLUE") > -1) {
+	    	colorbase = 'blue';
+	    	button.style.backgroundColor = colorbase;
+	    	circle.style.backgroundColor = colorbase;
+	    	console.location(colorbase);
+
+	    } 
 
 }, false)
 
-//close connection and forward	
+ //##################################################################################
+ //forward
 function endGame(){
-	//close socket
-	//socket.close();
+
 	//forward to controller
 	window.location.href = './leaving.html';
 }
+
+ //##################################################################################
+ //helper functions
 
 function sleepFor( sleepDuration ){
     var now = new Date().getTime();
