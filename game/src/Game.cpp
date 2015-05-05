@@ -3,7 +3,7 @@
 Game::Game() : ballWasInLeftGoal_(false), ballWasInRightGoal_(false), 
 			   framesToReset_(-1), pointsLeftTeam_(0), pointsRightTeam_(0) 
 {
-	initPlayers();
+	//initPlayers();
 	initBall();
 }
 
@@ -17,11 +17,18 @@ Game::~Game()
 
 void Game::initPlayers() 
 {
-	Player* player2 = new Player(480,600,sf::Color(0,0,0),sf::Color(0,0,255));	
-	Player* player1 = new Player(1400,600,sf::Color(0,0,0),sf::Color(255,0,0));
+	//Player* player2 = new Player(480,600,sf::Color(0,0,0),sf::Color(0,0,255));	
+	//Player* player1 = new Player(1400,600,sf::Color(0,0,0),sf::Color(255,0,0));
 
-	players.push_back(player2);
-	players.push_back(player1);
+	//players.push_back(player2);
+	//players.push_back(player1);
+}
+
+Player* Game::addNewPlayer()
+{
+	Player* newPlayer = new Player(480,600,sf::Color(0,0,0),sf::Color(0,0,255));
+	players.push_back(newPlayer);
+	return newPlayer;
 }
 
 void Game::initBall() 

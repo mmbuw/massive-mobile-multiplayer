@@ -11,7 +11,7 @@
 #include "PhysicalObject.hpp"
 
 
-class Game 
+class Game
 {
 	
 	public:
@@ -19,6 +19,7 @@ class Game
 		~Game();
 
 		void initPlayers();
+		Player* addNewPlayer();
 		void initBall();
 	
 		void renderBackground(sf::RenderWindow* window);

@@ -11,12 +11,14 @@
 #include <vector>
 #include <cstring>
 
+#include "Player.hpp"
+
 static const std::vector<std::string> evval = {"RELEASED", "PRESSED", "REPEATED"};
 
 class InputDevice
 {
 	public:
-		InputDevice(int id, std::string const& name, std::string const& fileAddress);
+		InputDevice(int id, std::string const& name, std::string const& fileAddress, Player* playerFigure);
 
 		int getDeviceId() const;
 		void readValuesAndReact();
@@ -28,7 +30,7 @@ class InputDevice
 	    std::string fileAddress_;
 	    int deviceFileHandle_;
 
-	    //ToDo: add player figure in game
+	    Player* playerFigure_;
 };
 
 #endif //INPUT_DEVICE_HPP
