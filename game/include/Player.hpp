@@ -15,7 +15,7 @@ class Player : public PhysicalObject
 {
 
 	public:
-		Player(int startX, int startY, sf::Color border, sf::Color center);
+		Player(int startX, int startY, sf::Color border, sf::Color center, std::string const& name, int number);
 		
 		/* virtual */ void render(sf::RenderWindow* window) const;
 		/* virtual */ void frameUpdate();
@@ -37,7 +37,7 @@ class Player : public PhysicalObject
 		sf::Color borderColor_;
 		sf::Color centerColor_;
 
-		std::string name;
+		std::string name_;
 		int shirtNumber;
 
 		float shootCircleRadius_;

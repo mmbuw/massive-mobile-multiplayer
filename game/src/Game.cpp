@@ -15,18 +15,9 @@ Game::~Game()
 	}
 }
 
-void Game::initPlayers() 
+Player* Game::addNewPlayer(sf::Color const& team, std::string const& name, int number)
 {
-	Player* player2 = new Player(480,600,sf::Color(0,0,0),sf::Color(0,0,255));	
-	Player* player1 = new Player(1400,600,sf::Color(0,0,0),sf::Color(255,0,0));
-
-	players.push_back(player2);
-	players.push_back(player1);
-}
-
-Player* Game::addNewPlayer()
-{
-	Player* newPlayer = new Player(480,600,sf::Color(0,0,0),sf::Color(0,0,255));
+	Player* newPlayer = new Player(480,600, sf::Color(0,0,0), team, name, number);
 	players.push_back(newPlayer);
 	return newPlayer;
 }

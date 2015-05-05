@@ -93,7 +93,7 @@ void InputHandler::addToDevicesIfNeeded(int deviceID, std::string const& name, s
 {
     if (currentInputDevices_.find(deviceID) == currentInputDevices_.end())
     {
-        Player* playerFigure = gameToHandle_->addNewPlayer();
+        Player* playerFigure = gameToHandle_->addNewPlayer(sf::Color(255,255,0), "Cat", 29);
         InputDevice* newlyFoundInputDevice = new InputDevice(deviceID, name, eventString, playerFigure);
         currentInputDevices_.insert(std::make_pair(deviceID, newlyFoundInputDevice));
         std::cout << "Added an input device with ID " << deviceID << " called " << name << " on " << eventString << std::endl;
