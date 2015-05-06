@@ -167,13 +167,11 @@ window.addEventListener('load', function(){
 	    	colorbase = 'red';
 	    	button.style.backgroundColor = colorbase;
 	    	circle.style.backgroundColor = colorbase;
-	    	console.location(colorbase);
 
 	    } else if(localStorage.getItem('team').indexOf("BLUE") > -1) {
 	    	colorbase = 'blue';
 	    	button.style.backgroundColor = colorbase;
 	    	circle.style.backgroundColor = colorbase;
-	    	console.location(colorbase);
 
 	    } 
 
