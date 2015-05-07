@@ -19,6 +19,8 @@ int main()
 	// MMM Input device recognizer and grabber
 	InputHandler inputHandler(game);
 
+	game->createField();
+
 	int frameCounterMod(0);
 	float lastFramerate(0.0);
 
