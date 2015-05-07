@@ -269,7 +269,7 @@ void Game::renderFpsDisplay(sf::RenderWindow* window, float value)
 	fpsString.setFont(font);
 	fpsString.setString(std::to_string(value) + " fps");
 	fpsString.setCharacterSize(30);
-	fpsString.move(1700.0f,0.0f);
+	fpsString.move(100.0f,0.0f);
 
 	window->draw(fpsString);
 }
