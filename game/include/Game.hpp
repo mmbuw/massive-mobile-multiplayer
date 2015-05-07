@@ -47,8 +47,15 @@ class Game
 
 		void createFieldLines();
 		void createGreen();
+		void createScoreLine();
+		
 		sf::CircleShape centerCircle;
 		sf::CircleShape centerPoint;
+		sf::RectangleShape scoreLine;
+		sf::Text score;
+		sf::Font font;
+		sf::CircleShape blueBox;
+		sf::CircleShape redBox;
 
 		Ball* ball;
 

@@ -111,6 +111,7 @@ void Game::renderBall(sf::RenderWindow* window)
 void Game::createField(){
 	createGreen();
 	createFieldLines();
+	createScoreLine();
 }
 
 void Game::createFieldLines(){
@@ -128,7 +129,7 @@ void Game::createFieldLines(){
 	rightGoalLine.setPoint(1, sf::Vector2f(1815, 1173));
 	rightGoalLine.setPoint(2, sf::Vector2f(1820, 1173));
 	rightGoalLine.setPoint(3, sf::Vector2f(1820, 26));
-	lines.push_back(leftGoalLine);
+	lines.push_back(rightGoalLine);
 
 
 	sf::ConvexShape topSideLine;
@@ -137,7 +138,7 @@ void Game::createFieldLines(){
 	topSideLine.setPoint(1, sf::Vector2f(1820, 26));
 	topSideLine.setPoint(2, sf::Vector2f(1820, 31));
 	topSideLine.setPoint(3, sf::Vector2f(105, 31));
-	lines.push_back(rightGoalLine);
+	lines.push_back(topSideLine);
 
 
 	sf::ConvexShape bottomSideLine;
@@ -199,6 +200,29 @@ void Game::createGreen(){
 	}
 }
 
+void Game::createScoreLine()
+{
+	//sf::RectangleShape scoreLine = sf::RectangleShape(0,1200,1920,1350,sf::Color(0,0,0));
+	scoreLine = sf::RectangleShape(sf::Vector2f(1920,150));
+	scoreLine.setPosition(0,1200);
+	scoreLine.setFillColor(sf::Color(0,0,0));
+
+	if (!font.loadFromFile("font.ttf")){
+		std::cout<<"The sadness will last forever."<<std::endl;
+	}
+	score.setFont(font);
+	score.setString("Blue   "+std::to_string(pointsBlueTeam_)+":"+std::to_string(pointsRedTeam_)+"   Red");
+	score.setCharacterSize(80);
+	score.move(685.f,1200.f);
+
+	blueBox = sf::CircleShape(35);
+	blueBox.setPosition(600,1250);
+	blueBox.setFillColor(sf::Color(0,0,255));
+	redBox = sf::CircleShape(35);
+	redBox.setPosition(1300,1250);
+	redBox.setFillColor(sf::Color(255,0,0));
+}
+
 void Game::renderSidelines(sf::RenderWindow* window) 
 {
 	for(int i = 0; i < lines.size(); ++i){
@@ -230,28 +254,7 @@ void Game::renderGoals(sf::RenderWindow* window)
 
 void Game::renderScoreLine(sf::RenderWindow* window) 
 {
-	//sf::RectangleShape scoreLine = sf::RectangleShape(0,1200,1920,1350,sf::Color(0,0,0));
-	sf::RectangleShape scoreLine = sf::RectangleShape(sf::Vector2f(1920,150));
-	scoreLine.setPosition(0,1200);
-	scoreLine.setFillColor(sf::Color(0,0,0));
-	sf::Text score;
-	sf::Text fpsString;
-	sf::Font font;
-	if (!font.loadFromFile("font.ttf")){
-		std::cout<<"The sadness will last forever."<<std::endl;
-	}
-	score.setFont(font);
 	score.setString("Blue   "+std::to_string(pointsBlueTeam_)+":"+std::to_string(pointsRedTeam_)+"   Red");
-	score.setCharacterSize(80);
-	score.move(685.f,1200.f);
-
-	sf::CircleShape blueBox = sf::CircleShape(35);
-	blueBox.setPosition(600,1250);
-	blueBox.setFillColor(sf::Color(0,0,255));
-	sf::CircleShape redBox = sf::CircleShape(35);
-	redBox.setPosition(1300,1250);
-	redBox.setFillColor(sf::Color(255,0,0));
-
 	window->draw(scoreLine);
 	window->draw(blueBox);
 	window->draw(redBox);
