@@ -35,33 +35,34 @@ class Game
 		void applyShootingForce(Player* player);
 		void applyElasticImpact(PhysicalObject* lhs, PhysicalObject* rhs, float lhsAbsorption, float rhsAbsorption);
 
+		void checkForGoal();
 		void createField();
 
-		void checkForGoal();
-
 	private:
-		std::set<Player*> players;
 
-		std::vector<sf::ConvexShape> lines;
-		std::vector<sf::RectangleShape> field;
+		//graphical objects
+		std::vector<sf::ConvexShape> lines_;
+		std::vector<sf::RectangleShape> field_;
+		sf::RectangleShape goalLeft_;
+		sf::RectangleShape goalRight_;
+		sf::CircleShape centerCircle_;
+		sf::CircleShape centerPoint_;
+		sf::RectangleShape scoreLine_;
+		sf::Text score_;
+		sf::Text fpsString_;
+		sf::Font font_;
+		sf::CircleShape blueBox_;
+		sf::CircleShape redBox_;
 
+		//internal graphical methods
 		void createFieldLines();
 		void createGreen();
 		void createGoals();
 		void createScoreLine();
 		void createFpsDisplay();
 
-		sf::RectangleShape goalLeft;
-		sf::RectangleShape goalRight;
-		sf::CircleShape centerCircle;
-		sf::CircleShape centerPoint;
-		sf::RectangleShape scoreLine;
-		sf::Text score;
-		sf::Text fpsString;
-		sf::Font font;
-		sf::CircleShape blueBox;
-		sf::CircleShape redBox;
-
+		//game logic objects
+		std::set<Player*> players;
 		Ball* ball;
 
 		bool ballWasInLeftGoal_;
