@@ -47,12 +47,17 @@ class Game
 
 		void createFieldLines();
 		void createGreen();
+		void createGoals();
 		void createScoreLine();
-		
+		void createFpsDisplay();
+
+		sf::RectangleShape goalLeft;
+		sf::RectangleShape goalRight;
 		sf::CircleShape centerCircle;
 		sf::CircleShape centerPoint;
 		sf::RectangleShape scoreLine;
 		sf::Text score;
+		sf::Text fpsString;
 		sf::Font font;
 		sf::CircleShape blueBox;
 		sf::CircleShape redBox;

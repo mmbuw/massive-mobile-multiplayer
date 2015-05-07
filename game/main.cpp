@@ -13,13 +13,13 @@ int main()
 
 	sf::RenderWindow App(sf::VideoMode(1920,1350,20), "MMMBall");
 	App.setSize(sf::Vector2u(1920,1350));
-
+	App.setFramerateLimit(60);
 	
 	Game* game = new Game();
+	game->createField();
+
 	// MMM Input device recognizer and grabber
 	InputHandler inputHandler(game);
-
-	game->createField();
 
 	int frameCounterMod(0);
 	float lastFramerate(0.0);
@@ -28,7 +28,6 @@ int main()
 
 	while (App.isOpen()) 
 	{
-	
 		App.clear(sf::Color(255,255,0));
 
 		//handle events - do not use App.pollEvent(..) as it slows framerate on mouse move
@@ -38,8 +37,8 @@ int main()
 		}
 
 		// input handling
-		inputHandler.updateDeviceList();
-		inputHandler.processDeviceInputs();
+		//inputHandler.updateDeviceList();
+		//inputHandler.processDeviceInputs();
 		
 
 		// application logic

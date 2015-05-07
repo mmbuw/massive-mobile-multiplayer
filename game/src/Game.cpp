@@ -111,7 +111,9 @@ void Game::renderBall(sf::RenderWindow* window)
 void Game::createField(){
 	createGreen();
 	createFieldLines();
+	createGoals();
 	createScoreLine();
+	createFpsDisplay();
 }
 
 void Game::createFieldLines(){
@@ -223,6 +225,21 @@ void Game::createScoreLine()
 	redBox.setFillColor(sf::Color(255,0,0));
 }
 
+void Game::createGoals()
+{
+	goalLeft = sf::RectangleShape(sf::Vector2f(65,300));
+	goalLeft.setPosition(35,450);
+	goalLeft.setFillColor(sf::Color(0,0,0,0));
+	goalLeft.setOutlineThickness(5);
+	goalLeft.setOutlineColor(sf::Color(255,255,255));
+
+	goalRight = sf::RectangleShape(sf::Vector2f(65,300));
+	goalRight.setPosition(1820,450);
+	goalRight.setFillColor(sf::Color(0,0,0,0));
+	goalRight.setOutlineThickness(5);
+	goalRight.setOutlineColor(sf::Color(255,255,255));
+}
+
 void Game::renderSidelines(sf::RenderWindow* window) 
 {
 	for(int i = 0; i < lines.size(); ++i){
@@ -235,19 +252,6 @@ void Game::renderSidelines(sf::RenderWindow* window)
 
 void Game::renderGoals(sf::RenderWindow* window)
 {
-	//sf::RectangleShape goalLeft = sf::RectangleShape(35,450,100,750,sf::Color(0,0,0,0),5,sf::Color(0,0,0));
-	sf::RectangleShape goalLeft = sf::RectangleShape(sf::Vector2f(65,300));
-	goalLeft.setPosition(35,450);
-	goalLeft.setFillColor(sf::Color(0,0,0,0));
-	goalLeft.setOutlineThickness(5);
-	goalLeft.setOutlineColor(sf::Color(255,255,255));
-	//sf::RectangleShape goalRight = sf::RectangleShape(1820,450,1885,750,sf::Color(0,0,0,0),5,sf::Color(0,0,0));
-	sf::RectangleShape goalRight = sf::RectangleShape(sf::Vector2f(65,300));
-	goalRight.setPosition(1820,450);
-	goalRight.setFillColor(sf::Color(0,0,0,0));
-	goalRight.setOutlineThickness(5);
-	goalRight.setOutlineColor(sf::Color(255,255,255));
-
 	window->draw(goalLeft);
 	window->draw(goalRight);
 }
@@ -262,18 +266,20 @@ void Game::renderScoreLine(sf::RenderWindow* window)
 
 }
 
-void Game::renderFpsDisplay(sf::RenderWindow* window, float value)
+void Game::createFpsDisplay()
 {
-	sf::Text fpsString;
-	sf::Font font;
 	if (!font.loadFromFile("font.ttf")){
 		std::cout<<"The sadness will last forever."<<std::endl;
 	}
+
 	fpsString.setFont(font);
-	fpsString.setString(std::to_string(value) + " fps");
 	fpsString.setCharacterSize(30);
 	fpsString.move(100.0f,0.0f);
+}
 
+void Game::renderFpsDisplay(sf::RenderWindow* window, float value)
+{
+	fpsString.setString(std::to_string(value) + " fps");
 	window->draw(fpsString);
 }
 
