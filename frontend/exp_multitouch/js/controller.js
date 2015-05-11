@@ -101,19 +101,12 @@ window.addEventListener('load', function(){
 	        startx = parseInt(touchobj.clientX);
 	        starty = parseInt(touchobj.clientX);
 
-
-
 	       	//sent to server
-
 	       	var navtouchstate = 1;
-	       	interval = window.setInterval(function(){
-	       		socket.send('VAL '+ diffx + ' ' + diffy +'$');
-	       		console.log('start: '+(diffx)+'/'+(diffy));
-	       	},20);
-
-
+			socket.send('VAL '+ 0 + ' ' + 0 +'$');
 
 		}, false)
+		
  		//move circle and update canvas
 	   	circle.addEventListener('touchmove', function(e){
 
@@ -169,9 +162,8 @@ window.addEventListener('load', function(){
  			//clear canvas
  			context.clearRect(0, 0, canvas.width, canvas.height);
 	       	e.preventDefault();
-	       	clearInterval(interval);
-	       	console.log('ende');
 
+			socket.send('VAL '+ 0 + ' ' + 0 +'$');
 	   	}, false)
 
 
