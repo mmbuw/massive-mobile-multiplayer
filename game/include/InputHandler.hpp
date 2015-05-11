@@ -35,6 +35,8 @@ class InputHandler
 		~InputHandler();
 
 		void updateDeviceList();
+		void retrieveInputs();
+
 		void addToDevices(int deviceID, std::string const& name, std::string const& eventString);
 		std::map<int, InputDevice*>::iterator removeDevice(int deviceID);
 
@@ -46,12 +48,15 @@ class InputHandler
 		Game* gameToHandle_;
 		std::map<int, InputDevice*> currentInputDevices_;
 		
-		std::thread updateDeviceListThread;
+		std::thread updateDeviceListThread_;
 		std::atomic<bool> updateDeviceListThreadRunning_;
 
-		std::mutex vectorAccessMutex;
+		std::mutex vectorAccessMutex_;
 		std::map<int, AddDeviceQuery> devicesToAdd_;
 		std::set<int> devicesToRemove_;
+
+		std::thread inputValueThread_;
+		std::atomic<bool> inputValueThreadRunning_;
 
 };
 

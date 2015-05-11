@@ -1,6 +1,6 @@
 #include "InputHandler.hpp"
 
-InputHandler::InputHandler(Game* gameToHandle) : gameToHandle_(gameToHandle), updateDeviceListThreadRunning_(true)
+InputHandler::InputHandler(Game* gameToHandle) : gameToHandle_(gameToHandle), updateDeviceListThreadRunning_(true), inputValueThreadRunning_(true)
 {
     if (getuid() != 0)
     {
@@ -8,15 +8,19 @@ InputHandler::InputHandler(Game* gameToHandle) : gameToHandle_(gameToHandle), up
         exit(EXIT_FAILURE);
     }
 
-    updateDeviceListThread = std::thread(&InputHandler::updateDeviceList, this);
+    updateDeviceListThread_ = std::thread(&InputHandler::updateDeviceList, this);
+    inputValueThread_ = std::thread(&InputHandler::retrieveInputs, this);
 }
 
 InputHandler::~InputHandler()
 {
     updateDeviceListThreadRunning_ = false;
-    updateDeviceListThread.join();
+    inputValueThreadRunning_ = false;
+    updateDeviceListThread_.join();
+    inputValueThread_.join();
 }
 
+//function of updateDeviceListThread_
 void InputHandler::updateDeviceList()
 {
     while (updateDeviceListThreadRunning_)
@@ -53,7 +57,7 @@ void InputHandler::updateDeviceList()
                         //only add devices which haven't been captured yet
                         if (currentInputDevices_.find(idOfNextControllerToSave) == currentInputDevices_.end())
                         {
-                            vectorAccessMutex.lock();
+                            vectorAccessMutex_.lock();
                             if (devicesToAdd_.find(idOfNextControllerToSave) == devicesToAdd_.end())
                             {
                                 AddDeviceQuery adq;
@@ -63,7 +67,7 @@ void InputHandler::updateDeviceList()
                                 
                                 devicesToAdd_.insert(std::make_pair(idOfNextControllerToSave, adq));
                             }
-                            vectorAccessMutex.unlock();
+                            vectorAccessMutex_.unlock();
                         }
 
                         idOfNextControllerToSave = -1;
@@ -102,12 +106,12 @@ void InputHandler::updateDeviceList()
 
                     if (idsOfFoundDevices.find(deviceID) == idsOfFoundDevices.end())
                     {
-                        vectorAccessMutex.lock();
+                        vectorAccessMutex_.lock();
                         if (devicesToRemove_.find(deviceID) == devicesToRemove_.end())
                         {
                             devicesToRemove_.insert(deviceID);
                         }
-                        vectorAccessMutex.unlock();
+                        vectorAccessMutex_.unlock();
                     }
 
                 }
@@ -117,6 +121,77 @@ void InputHandler::updateDeviceList()
         }
 
     }
+}
+
+//function of inputValueThread_
+void InputHandler::retrieveInputs()
+{
+    fd_set rfds;
+    struct timeval tv;
+    int retval;
+
+    while (inputValueThreadRunning_)
+    {
+        //Clear the file descriptor set
+        FD_ZERO(&rfds);
+        int maxDescriptor = -1;
+
+        //Iterate over every InputDevice and add file descriptor to selector
+        for (std::map<int, InputDevice*>::iterator it = currentInputDevices_.begin(); it != currentInputDevices_.end(); ++it)
+        {
+            int fileHandle(it->second->getDeviceFileHandle());
+            FD_SET(fileHandle, &rfds);
+
+            if (fileHandle > maxDescriptor)
+                maxDescriptor = fileHandle;
+
+        }
+
+        //Set Timeout to 1 second (due to possibly joining and leaving players)
+        tv.tv_sec = 1;
+        tv.tv_usec = 0;
+
+        //Blocking call: waits until at least one descriptor is ready to read
+        retval = select(maxDescriptor+1, &rfds, NULL, NULL, &tv); // first parameter is highest descriptor number +1
+
+        //If no timeout was triggered
+        if (retval)
+        {
+            //Iterate over every InputDevice and check if file descriptor is in set of readable devices
+            for (std::map<int, InputDevice*>::iterator it = currentInputDevices_.begin(); it != currentInputDevices_.end(); ++it)
+            {
+                int fileHandle(it->second->getDeviceFileHandle());
+                Player* playerFigure(it->second->getPlayerInstance());
+
+                if (FD_ISSET(fileHandle, &rfds))
+                {
+                    //read event from device
+                    struct input_event ev;
+                    size_t read_result = read(fileHandle, &ev, sizeof(ev));
+
+                    //key events
+                    if (ev.type == EV_KEY && ev.value >= 0 && ev.value <= 2 && (int) ev.code == 304)
+                    {
+                        it->second->setButtonA(true);
+                    }
+                    //relative events
+                    else if (ev.type == EV_REL && ev.value >= -1000 && ev.value <= 1000)
+                    {
+                        if ((int) ev.code == 0)
+                        {
+                            it->second->setValueX(ev.value);
+                        }
+                        else if ((int) ev.code == 1)
+                        {
+                            it->second->setValueY(ev.value);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    
 }
 
 void InputHandler::addToDevices(int deviceID, std::string const& name, std::string const& eventString)
@@ -145,7 +220,7 @@ std::map<int, InputDevice*>::iterator InputHandler::removeDevice(int deviceID)
 
 void InputHandler::processAddRemoveQueries()
 {
-    vectorAccessMutex.lock();
+    vectorAccessMutex_.lock();
 
     for (std::map<int, AddDeviceQuery>::iterator it = devicesToAdd_.begin(); it != devicesToAdd_.end(); ++it)
     {
@@ -160,13 +235,13 @@ void InputHandler::processAddRemoveQueries()
     devicesToAdd_.clear();
     devicesToRemove_.clear();
 
-    vectorAccessMutex.unlock();
+    vectorAccessMutex_.unlock();
 }
 
 void InputHandler::processDeviceInputs()
 {
     for (std::map<int, InputDevice*>::iterator it = currentInputDevices_.begin(); it != currentInputDevices_.end(); ++it)
     {
-        it->second->readValuesAndReact();
+        it->second->mapValuesAndApply();
     }
 }

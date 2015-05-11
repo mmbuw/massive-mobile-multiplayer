@@ -22,16 +22,26 @@ class InputDevice
 
 		int getDeviceId() const;
 		Player* getPlayerInstance() const;
-		void readValuesAndReact();
+		int getDeviceFileHandle() const;
 		void writeLEDToDevice(int code);
+
+		void setValueX(int value);
+		void setValueY(int value);
+		void setButtonA(bool value);
+
+		//to be called every frame
+		void mapValuesAndApply();
 
 	private:
 	    int id_;
 	    std::string name_;
 	    std::string fileAddress_;
 	    int deviceFileHandle_;
-
 	    Player* playerFigure_;
+
+	    int inputValueX_;
+	    int inputValueY_;
+	    bool inputButtonA_;
 };
 
 #endif //INPUT_DEVICE_HPP
