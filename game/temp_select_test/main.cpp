@@ -11,6 +11,7 @@
 int main(void) 
 {
 	fd_set rfds;
+	struct timeval tv;
 	int retval;
 
 	int handle = open("/dev/input/event4", O_RDWR);
@@ -26,7 +27,6 @@ int main(void)
 	fileDescriptors.push_back(handle);
 	fileDescriptors.push_back(handle2);
 
-
 	while (true)
 	{
 		FD_ZERO(&rfds);
@@ -40,21 +40,33 @@ int main(void)
 				maxDescriptor = *it;
 		}
 
-		retval = select(maxDescriptor+1, &rfds, NULL, NULL, NULL); // first parameter is highest descriptor number +1
+		tv.tv_sec = 1;
+		tv.tv_usec = 0;
 
-		for (std::vector<int>::iterator it = fileDescriptors.begin(); it < fileDescriptors.end(); ++it)
+		retval = select(maxDescriptor+1, &rfds, NULL, NULL, &tv); // first parameter is highest descriptor number +1
+
+		if (retval)
 		{
-			if (FD_ISSET(*it, &rfds))
+			for (std::vector<int>::iterator it = fileDescriptors.begin(); it < fileDescriptors.end(); ++it)
 			{
-				std::cout << "Data is ready on file descriptor: " << *it << std::endl;
+				if (FD_ISSET(*it, &rfds))
+				{
+					std::cout << "Data is ready on file descriptor: " << *it << std::endl;
 
-				struct input_event ev;
-				size_t read_result = read(*it, &ev, sizeof(ev));
+					struct input_event ev;
+					size_t read_result = read(*it, &ev, sizeof(ev));
 
-				std::cout << ev.type << ", " << ev.code << ", " << ev.value << std::endl;
-				std::cout << std::endl;
+					std::cout << ev.type << ", " << ev.code << ", " << ev.value << std::endl;
+					std::cout << std::endl;
+				}
 			}
 		}
+		else
+		{
+			//std::cout << "Continue due to timeout" << std::endl;
+			continue;
+		}
+
 
 	}
 
