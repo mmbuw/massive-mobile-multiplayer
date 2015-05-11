@@ -1,7 +1,14 @@
 
 window.addEventListener('load', function(){
-		//initialize timer
+		//global vars
 		var timer = setTimeout(endGame, 30000);
+		var colorbase;
+		var button = document.getElementById('button');
+		var wrapper = document.getElementById('canvas-wrap');
+ 		var canvas = document.getElementById('sadstick');
+ 		var circle = document.getElementById('circle');
+
+ 		//##################################################################################
 		// Websocket
 		//var socket = new WebSocket("ws://29.4.93.1:53000");
 		var socket = new WebSocket("ws://localhost:53000");
@@ -12,20 +19,29 @@ window.addEventListener('load', function(){
 			console.log('Socket Status: '+socket.readyState+' (open)');
 			socket.send('NAME '+localStorage.getItem('playername')+'$');	
 		}
-
+		//recive from server
 		socket.onmessage = function(evt)
 		{
 			window.localStorage.setItem("team", evt.data);
 			console.log(evt.data);
 		}
 
-		//global vars
-		var colorbase;
-		var navtouchstate;
+
+		//set colorbase by socketinput/teamident
+		if(localStorage.getItem('team').indexOf("RED") > -1) {
+	    	colorbase = 'red';
+	    	button.style.backgroundColor = colorbase;
+	    	circle.style.backgroundColor = colorbase;
+
+	    } else if(localStorage.getItem('team').indexOf("BLUE") > -1) {
+	    	colorbase = 'blue';
+	    	button.style.backgroundColor = colorbase;
+	    	circle.style.backgroundColor = colorbase;
+
+	    } 
 
  		//##################################################################################
  		//button control
-	    var button = document.getElementById('button');
 	 
 	    button.addEventListener('touchstart', function(e){
 
@@ -52,10 +68,6 @@ window.addEventListener('load', function(){
 	    }, false)
 
 		//##################################################################################
-	    //steuernippel
-	    var wrapper = document.getElementById('canvas-wrap');
- 		var canvas = document.getElementById('sadstick');
- 		var circle = document.getElementById('circle');
 
  		//initialize canvas with and height
  		var context = canvas.getContext('2d');
@@ -73,6 +85,7 @@ window.addEventListener('load', function(){
 	    var diffy = 0;	       	
 	    var diffxprev;
 		var diffyprev;
+		var interval;
 
 	    //blurr fix
 	   	context.translate(0.5, 0.5);
@@ -87,16 +100,13 @@ window.addEventListener('load', function(){
 	        var touchobj = e.changedTouches[0];
 	        startx = parseInt(touchobj.clientX);
 	        starty = parseInt(touchobj.clientX);
-	       	e.preventDefault();
 
 	       	//sent to server
-	       	socket.send('VAL ' +0+' '+0+'$');
-	       	navtouchstate = true;
+	       	var navtouchstate = 1;
+			socket.send('VAL '+ 0 + ' ' + 0 +'$');
 
-	       	//console debug
-	       	console.log('start'+startx+'/'+starty);
-	    }, false)
-
+		}, false)
+		
  		//move circle and update canvas
 	   	circle.addEventListener('touchmove', function(e){
 
@@ -136,11 +146,13 @@ window.addEventListener('load', function(){
 	       	socket.send('VAL '+ diffx + ' ' + diffy +'$');
 
 	       	//console debug
-	    	//console.log('start: '+(diffx-diffxprev)+'/'+(diffy-diffyprev));
+	    	console.log('start: '+(diffx)+'/'+(diffy));
+	 
 
 	    }, false)
-
-	   	//touchend and reset joystick
+	    
+		 			        
+ 	  	//touchend and reset joystick
 	    circle.addEventListener('touchend', function(e){
 	    	circle.style.backgroundColor = colorbase;
 	    	//set circle to start
@@ -150,30 +162,10 @@ window.addEventListener('load', function(){
  			//clear canvas
  			context.clearRect(0, 0, canvas.width, canvas.height);
 	       	e.preventDefault();
-	       	navtouchstate = false;
-	    }, false)
 
+			socket.send('VAL '+ 0 + ' ' + 0 +'$');
+	   	}, false)
 
-	    //##################################################################################
-	    //loop
-
-
-
-
-	    //##################################################################################
-	    //colorsetting
-
-	    if(localStorage.getItem('team').indexOf("RED") > -1) {
-	    	colorbase = 'red';
-	    	button.style.backgroundColor = colorbase;
-	    	circle.style.backgroundColor = colorbase;
-
-	    } else if(localStorage.getItem('team').indexOf("BLUE") > -1) {
-	    	colorbase = 'blue';
-	    	button.style.backgroundColor = colorbase;
-	    	circle.style.backgroundColor = colorbase;
-
-	    } 
 
 }, false)
 

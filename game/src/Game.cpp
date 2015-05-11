@@ -90,8 +90,9 @@ void Game::removePlayer(Player* playerToRemove)
 
 void Game::renderBackground(sf::RenderWindow* window) 
 {
-	for (int i = 0; i < field.size(); ++i){
-		window->draw(field[i]);
+	for (int i = 0; i < field_.size(); ++i)
+	{
+		window->draw(field_[i]);
 	}
 }
 
@@ -125,7 +126,8 @@ int Game::getScreenHeight(){
 	return screenHeight_;
 }
 
-void Game::createField(){
+void Game::createField()
+{
 	createGreen();
 	createFieldLines();
 	createGoals();
@@ -155,7 +157,7 @@ void Game::createFieldLines(){
 	leftGoalLine.setPoint(1, sf::Vector2f(leftLineAt, bottomLineAt));
 	leftGoalLine.setPoint(2, sf::Vector2f(leftLineAt+5, bottomLineAt));
 	leftGoalLine.setPoint(3, sf::Vector2f(leftLineAt+5, topLineAt));
-	lines.push_back(leftGoalLine);
+	lines_.push_back(leftGoalLine);
 
 	sf::ConvexShape rightGoalLine;
 	rightGoalLine.setPointCount(4);
@@ -163,7 +165,7 @@ void Game::createFieldLines(){
 	rightGoalLine.setPoint(1, sf::Vector2f(rightLineAt, bottomLineAt));
 	rightGoalLine.setPoint(2, sf::Vector2f(rightLineAt+5, bottomLineAt));
 	rightGoalLine.setPoint(3, sf::Vector2f(rightLineAt+5, topLineAt));
-	lines.push_back(rightGoalLine);
+	lines_.push_back(rightGoalLine);
 
 
 	sf::ConvexShape topSideLine;
@@ -172,7 +174,7 @@ void Game::createFieldLines(){
 	topSideLine.setPoint(1, sf::Vector2f(rightLineAt, topLineAt));
 	topSideLine.setPoint(2, sf::Vector2f(rightLineAt, topLineAt+5));
 	topSideLine.setPoint(3, sf::Vector2f(leftLineAt, topLineAt+5));
-	lines.push_back(topSideLine);
+	lines_.push_back(topSideLine);
 
 
 	sf::ConvexShape bottomSideLine;
@@ -181,7 +183,7 @@ void Game::createFieldLines(){
 	bottomSideLine.setPoint(1, sf::Vector2f(leftLineAt, bottomLineAt+5));
 	bottomSideLine.setPoint(2, sf::Vector2f(leftLineAt, bottomLineAt));
 	bottomSideLine.setPoint(3, sf::Vector2f(rightLineAt, bottomLineAt));
-	lines.push_back(bottomSideLine);
+	lines_.push_back(bottomSideLine);
 
 
 	sf::ConvexShape centerLine;
@@ -190,7 +192,7 @@ void Game::createFieldLines(){
 	centerLine.setPoint(1, sf::Vector2f(centerLineAt, bottomLineAt));
 	centerLine.setPoint(2, sf::Vector2f(centerLineAt+5, bottomLineAt));
 	centerLine.setPoint(3, sf::Vector2f(centerLineAt+5, topLineAt));
-	lines.push_back(centerLine);
+	lines_.push_back(centerLine);
 
 
 	sf::CircleShape kickoffCircle = sf::CircleShape(185);
@@ -199,7 +201,7 @@ void Game::createFieldLines(){
 	kickoffCircle.setOutlineColor(sf::Color(255,255,255));
 	kickoffCircle.setOrigin(kickoffCircle.getRadius(), kickoffCircle.getRadius());
 	kickoffCircle.setPosition(screenWidth_/2, screenHeight_/2);;
-	centerCircle = kickoffCircle;
+	centerCircle_ = kickoffCircle;
 
 
 	sf::CircleShape kickoffPoint = sf::CircleShape(10);
@@ -207,7 +209,7 @@ void Game::createFieldLines(){
 	kickoffPoint.setOutlineColor(sf::Color(255,255,255));
 	kickoffPoint.setOrigin(kickoffPoint.getRadius(), kickoffPoint.getRadius());
 	kickoffPoint.setPosition(screenWidth_/2, screenHeight_/2);
-	centerPoint = kickoffPoint;
+	centerPoint_ = kickoffPoint;
 
 }
 
@@ -230,90 +232,55 @@ void Game::createGreen(){
 		sf::RectangleShape rect(sf::Vector2f(pos+increment, screenHeight_));
 		rect.setFillColor(currentGreen);
 		rect.setPosition(pos, 0);
-		field.push_back(rect);
+		field_.push_back(rect);
 		pos+=increment;
 	}
 }
 
-void Game::createScoreLine()
-{
-	//sf::RectangleShape scoreLine = sf::RectangleShape(0,1200,1920,1350,sf::Color(0,0,0));
-	scoreLine = sf::RectangleShape(sf::Vector2f(1920,150));
-	scoreLine.setPosition(0,1200);
-	scoreLine.setFillColor(sf::Color(0,0,0));
-
-	if (!font.loadFromFile("font.ttf")){
-		std::cout<<"The sadness will last forever."<<std::endl;
-	}
-	score.setFont(font);
-	score.setString("Blue   "+std::to_string(pointsBlueTeam_)+":"+std::to_string(pointsRedTeam_)+"   Red");
-	score.setCharacterSize(80);
-	score.move(685.f,1200.f);
-
-	blueBox = sf::CircleShape(35);
-	blueBox.setPosition(600,1250);
-	blueBox.setFillColor(sf::Color(0,0,255));
-	redBox = sf::CircleShape(35);
-	redBox.setPosition(1300,1250);
-	redBox.setFillColor(sf::Color(255,0,0));
-}
-
 void Game::createGoals()
 {
-	goalLeft = sf::RectangleShape(sf::Vector2f(65,300));
-	goalLeft.setPosition(35,450);
-	goalLeft.setFillColor(sf::Color(0,0,0,0));
-	goalLeft.setOutlineThickness(5);
-	goalLeft.setOutlineColor(sf::Color(255,255,255));
+	goalLeft_ = sf::RectangleShape(sf::Vector2f(65,300));
+	goalLeft_.setPosition(35,450);
+	goalLeft_.setFillColor(sf::Color(0,0,0,0));
+	goalLeft_.setOutlineThickness(5);
+	goalLeft_.setOutlineColor(sf::Color(255,255,255));
 
-	goalRight = sf::RectangleShape(sf::Vector2f(65,300));
-	goalRight.setPosition(1820,450);
-	goalRight.setFillColor(sf::Color(0,0,0,0));
-	goalRight.setOutlineThickness(5);
-	goalRight.setOutlineColor(sf::Color(255,255,255));
+	goalRight_ = sf::RectangleShape(sf::Vector2f(65,300));
+	goalRight_.setPosition(1820,450);
+	goalRight_.setFillColor(sf::Color(0,0,0,0));
+	goalRight_.setOutlineThickness(5);
+	goalRight_.setOutlineColor(sf::Color(255,255,255));
 }
 
 void Game::renderSidelines(sf::RenderWindow* window) 
 {
-	for(int i = 0; i < lines.size(); ++i){
-		window->draw(lines[i]);
+	for(int i = 0; i < lines_.size(); ++i){
+		window->draw(lines_[i]);
 	}
 
-	window->draw(centerCircle);
-	window->draw(centerPoint);
+	window->draw(centerCircle_);
+	window->draw(centerPoint_);
 }
 
 void Game::renderGoals(sf::RenderWindow* window)
 {
-	window->draw(goalLeft);
-	window->draw(goalRight);
+	window->draw(goalLeft_);
+	window->draw(goalRight_);
 }
 
 void Game::renderScoreLine(sf::RenderWindow* window) 
 {
-	score.setString("Blue   "+std::to_string(pointsBlueTeam_)+":"+std::to_string(pointsRedTeam_)+"   Red");
-	window->draw(scoreLine);
-	window->draw(blueBox);
-	window->draw(redBox);
-	window->draw(score);
-
-}
-
-void Game::createFpsDisplay()
-{
-	if (!font.loadFromFile("font.ttf")){
-		std::cout<<"The sadness will last forever."<<std::endl;
-	}
-
-	fpsString.setFont(font);
-	fpsString.setCharacterSize(30);
-	fpsString.move(100.0f,0.0f);
+	score_.setString("Blue   "+std::to_string(pointsBlueTeam_)+":"+std::to_string(pointsRedTeam_)+"   Red");
+	window->draw(scoreLine_);
+	window->draw(blueBox_);
+	window->draw(redBox_);
+	window->draw(score_);
 }
 
 void Game::renderFpsDisplay(sf::RenderWindow* window, float value)
 {
-	fpsString.setString(std::to_string(value) + " fps");
-	window->draw(fpsString);
+	fpsString_.setString(std::to_string(value) + " fps");
+	window->draw(fpsString_);
 }
 
 void Game::updatePhysicalObjects()
@@ -466,4 +433,42 @@ void Game::checkForGoal()
 			--framesToReset_;
 		}
 	}
+}
+
+
+
+
+
+void Game::createScoreLine()
+{
+	//sf::RectangleShape scoreLine_ = sf::RectangleShape(0,1200,1920,1350,sf::Color(0,0,0));
+	scoreLine_ = sf::RectangleShape(sf::Vector2f(1920,150));
+	scoreLine_.setPosition(0,1200);
+	scoreLine_.setFillColor(sf::Color(0,0,0));
+
+	if (!font_.loadFromFile("font.ttf")){
+		std::cout<<"The sadness will last forever."<<std::endl;
+	}
+	score_.setFont(font_);
+	score_.setString("Blue   "+std::to_string(pointsBlueTeam_)+":"+std::to_string(pointsRedTeam_)+"   Red");
+	score_.setCharacterSize(80);
+	score_.move(685.f,1200.f);
+
+	blueBox_ = sf::CircleShape(35);
+	blueBox_.setPosition(600,1250);
+	blueBox_.setFillColor(sf::Color(0,0,255));
+	redBox_ = sf::CircleShape(35);
+	redBox_.setPosition(1300,1250);
+	redBox_.setFillColor(sf::Color(255,0,0));
+}
+
+void Game::createFpsDisplay()
+{
+	if (!font_.loadFromFile("font.ttf")){
+		std::cout<<"The sadness will last forever."<<std::endl;
+	}
+
+	fpsString_.setFont(font_);
+	fpsString_.setCharacterSize(30);
+	fpsString_.move(100.0f,0.0f);
 }

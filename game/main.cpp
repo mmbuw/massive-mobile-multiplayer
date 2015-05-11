@@ -6,6 +6,7 @@
 #include "InputHandler.hpp"
 #include "Game.hpp"
 
+
 int main()
 {
 	srand (time(NULL));
@@ -40,8 +41,8 @@ int main()
 		}
 
 		// input handling
-		//inputHandler.updateDeviceList();
-		//inputHandler.processDeviceInputs();
+		inputHandler.processAddRemoveQueries();
+		inputHandler.processDeviceInputs();
 		
 
 		// application logic
