@@ -19,6 +19,8 @@ class Game
 		Game();
 		~Game();
 
+
+
 		Player* addNewPlayer(std::string const& name, int number);
 		void removePlayer(Player* playerToRemove);
 	
@@ -38,7 +40,16 @@ class Game
 		void checkForGoal();
 		void createField();
 
+		int getScreenWidth();
+		int getScreenHeight();
+		void setScreenWidth(int in);
+		void setScreenHeight(int in);
+
 	private:
+
+
+		int screenWidth_;
+		int screenHeight_;
 
 		//graphical objects
 		std::vector<sf::ConvexShape> lines_;
@@ -61,8 +72,17 @@ class Game
 		void createScoreLine();
 		void createFpsDisplay();
 
+		void calculateLinePoistions();
+
+		double leftLineAt;
+		double rightLineAt;
+		double topLineAt;
+		double bottomLineAt;
+		double centerLineAt;
+
 		//game logic objects
 		std::set<Player*> players;
+
 		Ball* ball;
 
 		bool ballWasInLeftGoal_;

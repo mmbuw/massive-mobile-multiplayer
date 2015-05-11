@@ -12,13 +12,16 @@ int main()
 	srand (time(NULL));
 	sf::Clock Clock;
 
-	sf::RenderWindow App(sf::VideoMode(1920,1350,20), "MMMBall");
-	App.setSize(sf::Vector2u(1920,1350));
+
+	sf::RenderWindow App(sf::VideoMode(sf::VideoMode::getDesktopMode().width,sf::VideoMode::getDesktopMode().width,20), "MMMBall");
+
 	App.setFramerateLimit(60);
 	
 	Game* game = new Game();
+	game->setScreenWidth(sf::VideoMode::getDesktopMode().width);
+	game->setScreenHeight(sf::VideoMode::getDesktopMode().height);
 	game->createField();
-
+	
 	// MMM Input device recognizer and grabber
 	InputHandler inputHandler(game);
 

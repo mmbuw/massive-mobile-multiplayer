@@ -109,6 +109,148 @@ void Game::renderBall(sf::RenderWindow* window)
 	ball->render(window);
 }
 
+void Game::setScreenWidth(int in){
+	screenWidth_ = in;
+}
+
+void Game::setScreenHeight(int in){
+	screenHeight_ = in;
+}
+
+
+int Game::getScreenWidth(){
+	return screenWidth_;
+}
+
+int Game::getScreenHeight(){
+	return screenHeight_;
+}
+
+void Game::createField()
+{
+	createGreen();
+	createFieldLines();
+	createGoals();
+	createScoreLine();
+	createFpsDisplay();
+}
+
+void Game::calculateLinePoistions(){
+	 leftLineAt = screenWidth_*0.0520833f;
+	 topLineAt = screenHeight_*0.0192592f;
+	 bottomLineAt = screenHeight_*0.86888f;
+	 rightLineAt = screenWidth_*0.945312f;
+	 centerLineAt = (screenWidth_*0.5)-3;
+
+
+	 std::cout<<screenHeight_<<","<<screenWidth_;
+	 std::cout<<"Left: "<<leftLineAt<<", Right: "<<rightLineAt<<", Bottom: "<<bottomLineAt<<", top: "<<topLineAt<<", center"<<centerLineAt<<std::endl;
+
+}
+
+void Game::createFieldLines(){
+	calculateLinePoistions();
+	sf::ConvexShape leftGoalLine;
+
+	leftGoalLine.setPointCount(4);
+	leftGoalLine.setPoint(0, sf::Vector2f(leftLineAt, topLineAt));
+	leftGoalLine.setPoint(1, sf::Vector2f(leftLineAt, bottomLineAt));
+	leftGoalLine.setPoint(2, sf::Vector2f(leftLineAt+5, bottomLineAt));
+	leftGoalLine.setPoint(3, sf::Vector2f(leftLineAt+5, topLineAt));
+	lines_.push_back(leftGoalLine);
+
+	sf::ConvexShape rightGoalLine;
+	rightGoalLine.setPointCount(4);
+	rightGoalLine.setPoint(0, sf::Vector2f(rightLineAt, topLineAt));
+	rightGoalLine.setPoint(1, sf::Vector2f(rightLineAt, bottomLineAt));
+	rightGoalLine.setPoint(2, sf::Vector2f(rightLineAt+5, bottomLineAt));
+	rightGoalLine.setPoint(3, sf::Vector2f(rightLineAt+5, topLineAt));
+	lines_.push_back(rightGoalLine);
+
+
+	sf::ConvexShape topSideLine;
+	topSideLine.setPointCount(4);
+	topSideLine.setPoint(0, sf::Vector2f(leftLineAt, topLineAt));
+	topSideLine.setPoint(1, sf::Vector2f(rightLineAt, topLineAt));
+	topSideLine.setPoint(2, sf::Vector2f(rightLineAt, topLineAt+5));
+	topSideLine.setPoint(3, sf::Vector2f(leftLineAt, topLineAt+5));
+	lines_.push_back(topSideLine);
+
+
+	sf::ConvexShape bottomSideLine;
+	bottomSideLine.setPointCount(4);
+	bottomSideLine.setPoint(0, sf::Vector2f(rightLineAt, bottomLineAt+5));
+	bottomSideLine.setPoint(1, sf::Vector2f(leftLineAt, bottomLineAt+5));
+	bottomSideLine.setPoint(2, sf::Vector2f(leftLineAt, bottomLineAt));
+	bottomSideLine.setPoint(3, sf::Vector2f(rightLineAt, bottomLineAt));
+	lines_.push_back(bottomSideLine);
+
+
+	sf::ConvexShape centerLine;
+	centerLine.setPointCount(4);
+	centerLine.setPoint(0, sf::Vector2f(centerLineAt, topLineAt));
+	centerLine.setPoint(1, sf::Vector2f(centerLineAt, bottomLineAt));
+	centerLine.setPoint(2, sf::Vector2f(centerLineAt+5, bottomLineAt));
+	centerLine.setPoint(3, sf::Vector2f(centerLineAt+5, topLineAt));
+	lines_.push_back(centerLine);
+
+
+	sf::CircleShape kickoffCircle = sf::CircleShape(185);
+	kickoffCircle.setFillColor(sf::Color(255,255,255,0));
+	kickoffCircle.setOutlineThickness(5);
+	kickoffCircle.setOutlineColor(sf::Color(255,255,255));
+	kickoffCircle.setOrigin(kickoffCircle.getRadius(), kickoffCircle.getRadius());
+	kickoffCircle.setPosition(screenWidth_/2, screenHeight_/2);;
+	centerCircle_ = kickoffCircle;
+
+
+	sf::CircleShape kickoffPoint = sf::CircleShape(10);
+	kickoffPoint.setFillColor(sf::Color(255,255,255));
+	kickoffPoint.setOutlineColor(sf::Color(255,255,255));
+	kickoffPoint.setOrigin(kickoffPoint.getRadius(), kickoffPoint.getRadius());
+	kickoffPoint.setPosition(screenWidth_/2, screenHeight_/2);
+	centerPoint_ = kickoffPoint;
+
+}
+
+void Game::createGreen(){
+	int pos = 0;
+	int increment = screenWidth_/10;
+	for (int i = 0; i < 10; ++i)
+	{
+		sf::Color currentGreen;	
+
+		if (i%2 == 0)
+		{
+			currentGreen = sf::Color(50,200,50);						
+		}
+		else
+		{
+			currentGreen = sf::Color(75,220,75);
+		}
+
+		sf::RectangleShape rect(sf::Vector2f(pos+increment, screenHeight_));
+		rect.setFillColor(currentGreen);
+		rect.setPosition(pos, 0);
+		field_.push_back(rect);
+		pos+=increment;
+	}
+}
+
+void Game::createGoals()
+{
+	goalLeft_ = sf::RectangleShape(sf::Vector2f(65,300));
+	goalLeft_.setPosition(35,450);
+	goalLeft_.setFillColor(sf::Color(0,0,0,0));
+	goalLeft_.setOutlineThickness(5);
+	goalLeft_.setOutlineColor(sf::Color(255,255,255));
+
+	goalRight_ = sf::RectangleShape(sf::Vector2f(65,300));
+	goalRight_.setPosition(1820,450);
+	goalRight_.setFillColor(sf::Color(0,0,0,0));
+	goalRight_.setOutlineThickness(5);
+	goalRight_.setOutlineColor(sf::Color(255,255,255));
+}
 
 void Game::renderSidelines(sf::RenderWindow* window) 
 {
@@ -293,117 +435,9 @@ void Game::checkForGoal()
 	}
 }
 
-void Game::createField()
-{
-	createGreen();
-	createFieldLines();
-	createGoals();
-	createScoreLine();
-	createFpsDisplay();
-}
-
-void Game::createFieldLines()
-{
-	sf::ConvexShape leftGoalLine;
-	leftGoalLine.setPointCount(4);
-	leftGoalLine.setPoint(0, sf::Vector2f(100, 26));
-	leftGoalLine.setPoint(1, sf::Vector2f(100, 1173));
-	leftGoalLine.setPoint(2, sf::Vector2f(105, 1173));
-	leftGoalLine.setPoint(3, sf::Vector2f(105, 26));
-	lines_.push_back(leftGoalLine);
-
-	sf::ConvexShape rightGoalLine;
-	rightGoalLine.setPointCount(4);
-	rightGoalLine.setPoint(0, sf::Vector2f(1815, 26));
-	rightGoalLine.setPoint(1, sf::Vector2f(1815, 1173));
-	rightGoalLine.setPoint(2, sf::Vector2f(1820, 1173));
-	rightGoalLine.setPoint(3, sf::Vector2f(1820, 26));
-	lines_.push_back(rightGoalLine);
 
 
-	sf::ConvexShape topSideLine;
-	topSideLine.setPointCount(4);
-	topSideLine.setPoint(0, sf::Vector2f(100, 26));
-	topSideLine.setPoint(1, sf::Vector2f(1820, 26));
-	topSideLine.setPoint(2, sf::Vector2f(1820, 31));
-	topSideLine.setPoint(3, sf::Vector2f(105, 31));
-	lines_.push_back(topSideLine);
 
-
-	sf::ConvexShape bottomSideLine;
-	bottomSideLine.setPointCount(4);
-	bottomSideLine.setPoint(0, sf::Vector2f(1820, 1178));
-	bottomSideLine.setPoint(1, sf::Vector2f(100, 1178));
-	bottomSideLine.setPoint(2, sf::Vector2f(100, 1173));
-	bottomSideLine.setPoint(3, sf::Vector2f(1820, 1173));
-	lines_.push_back(bottomSideLine);
-
-
-	sf::ConvexShape centerLine;
-	centerLine.setPointCount(4);
-	centerLine.setPoint(0, sf::Vector2f(957, 26));
-	centerLine.setPoint(1, sf::Vector2f(957, 1178));
-	centerLine.setPoint(2, sf::Vector2f(962, 1178));
-	centerLine.setPoint(3, sf::Vector2f(962, 26));
-	lines_.push_back(centerLine);
-
-
-	sf::CircleShape kickoffCircle = sf::CircleShape(185);
-	kickoffCircle.setFillColor(sf::Color(255,255,255,0));
-	kickoffCircle.setOutlineThickness(5);
-	kickoffCircle.setOutlineColor(sf::Color(255,255,255));
-	kickoffCircle.setOrigin(kickoffCircle.getRadius(), kickoffCircle.getRadius());
-	kickoffCircle.setPosition(960, 600);
-	centerCircle_ = kickoffCircle;
-
-
-	sf::CircleShape kickoffPoint = sf::CircleShape(10);
-	kickoffPoint.setFillColor(sf::Color(255,255,255));
-	kickoffPoint.setOutlineColor(sf::Color(255,255,255));
-	kickoffPoint.setOrigin(kickoffPoint.getRadius(), kickoffPoint.getRadius());
-	kickoffPoint.setPosition(960, 600);
-	centerPoint_ = kickoffPoint;
-
-}
-
-void Game::createGreen()
-{
-	int pos = 0;
-	for (int i = 0; i < 10; ++i)
-	{
-		sf::Color currentGreen;	
-
-		if (i%2 == 0)
-		{
-			currentGreen = sf::Color(50,200,50);						
-		}
-		else
-		{
-			currentGreen = sf::Color(75,220,75);
-		}
-
-		sf::RectangleShape rect(sf::Vector2f(pos+192, 1200));
-		rect.setFillColor(currentGreen);
-		rect.setPosition(pos, 0);
-		field_.push_back(rect);
-		pos+=192;
-	}
-}
-
-void Game::createGoals()
-{
-	goalLeft_ = sf::RectangleShape(sf::Vector2f(65,300));
-	goalLeft_.setPosition(35,450);
-	goalLeft_.setFillColor(sf::Color(0,0,0,0));
-	goalLeft_.setOutlineThickness(5);
-	goalLeft_.setOutlineColor(sf::Color(255,255,255));
-
-	goalRight_ = sf::RectangleShape(sf::Vector2f(65,300));
-	goalRight_.setPosition(1820,450);
-	goalRight_.setFillColor(sf::Color(0,0,0,0));
-	goalRight_.setOutlineThickness(5);
-	goalRight_.setOutlineColor(sf::Color(255,255,255));
-}
 
 void Game::createScoreLine()
 {
