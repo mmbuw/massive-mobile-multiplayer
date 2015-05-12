@@ -57,7 +57,7 @@ void InputHandler::updateDeviceList()
                         //only add devices which haven't been captured yet
                         if (currentInputDevices_.find(idOfNextControllerToSave) == currentInputDevices_.end())
                         {
-                            vectorAccessMutex_.lock();
+                            devicesToAddMutex_.lock();
                             if (devicesToAdd_.find(idOfNextControllerToSave) == devicesToAdd_.end())
                             {
                                 AddDeviceQuery adq;
@@ -67,7 +67,7 @@ void InputHandler::updateDeviceList()
                                 
                                 devicesToAdd_.insert(std::make_pair(idOfNextControllerToSave, adq));
                             }
-                            vectorAccessMutex_.unlock();
+                            devicesToAddMutex_.unlock();
                         }
 
                         idOfNextControllerToSave = -1;
@@ -106,12 +106,12 @@ void InputHandler::updateDeviceList()
 
                     if (idsOfFoundDevices.find(deviceID) == idsOfFoundDevices.end())
                     {
-                        vectorAccessMutex_.lock();
+                        devicesToRemoveMutex_.lock();
                         if (devicesToRemove_.find(deviceID) == devicesToRemove_.end())
                         {
                             devicesToRemove_.insert(deviceID);
                         }
-                        vectorAccessMutex_.unlock();
+                        devicesToRemoveMutex_.unlock();
                     }
 
                 }
@@ -137,6 +137,7 @@ void InputHandler::retrieveInputs()
         int maxDescriptor = -1;
 
         //Iterate over every InputDevice and add file descriptor to selector
+        currentInputDevicesMutex_.lock();
         for (std::map<int, InputDevice*>::iterator it = currentInputDevices_.begin(); it != currentInputDevices_.end(); ++it)
         {
             int fileHandle(it->second->getDeviceFileHandle());
@@ -146,6 +147,7 @@ void InputHandler::retrieveInputs()
                 maxDescriptor = fileHandle;
 
         }
+        currentInputDevicesMutex_.unlock();
 
         //Set Timeout to 1 second (due to possibly joining and leaving players)
         tv.tv_sec = 1;
@@ -158,6 +160,7 @@ void InputHandler::retrieveInputs()
         if (retval)
         {
             //Iterate over every InputDevice and check if file descriptor is in set of readable devices
+            currentInputDevicesMutex_.lock();
             for (std::map<int, InputDevice*>::iterator it = currentInputDevices_.begin(); it != currentInputDevices_.end(); ++it)
             {
                 int fileHandle(it->second->getDeviceFileHandle());
@@ -188,6 +191,7 @@ void InputHandler::retrieveInputs()
                     }
                 }
             }
+            currentInputDevicesMutex_.unlock();
         }
     }
 
@@ -198,7 +202,9 @@ void InputHandler::addToDevices(int deviceID, std::string const& name, std::stri
 {
     Player* playerFigure = gameToHandle_->addNewPlayer(name, rand()%100);
     InputDevice* newlyFoundInputDevice = new InputDevice(deviceID, name, eventString, playerFigure);
+    currentInputDevicesMutex_.lock();
     currentInputDevices_.insert(std::make_pair(deviceID, newlyFoundInputDevice));
+    currentInputDevicesMutex_.unlock();
     std::cout << "Added an input device with ID " << deviceID << " called " << name << " on " << eventString << std::endl;
 }
 
@@ -214,28 +220,34 @@ std::map<int, InputDevice*>::iterator InputHandler::removeDevice(int deviceID)
         //remove device
         delete iteratorToDelete->second;
         std::cout << "Removed input device " << deviceID << std::endl;
-        return currentInputDevices_.erase(iteratorToDelete);
+        currentInputDevicesMutex_.lock();
+        std::map<int, InputDevice*>::iterator nextIterator = currentInputDevices_.erase(iteratorToDelete);
+        currentInputDevicesMutex_.unlock();
+        return nextIterator;
     }
 }
 
 void InputHandler::processAddRemoveQueries()
 {
-    vectorAccessMutex_.lock();
+    devicesToAddMutex_.lock();
 
     for (std::map<int, AddDeviceQuery>::iterator it = devicesToAdd_.begin(); it != devicesToAdd_.end(); ++it)
     {
         addToDevices(it->second.deviceID, it->second.name, it->second.eventString);
     }
 
+    devicesToAdd_.clear();
+    devicesToAddMutex_.unlock();
+
+    devicesToRemoveMutex_.lock();
+
     for (std::set<int>::iterator it = devicesToRemove_.begin(); it != devicesToRemove_.end(); ++it)
     {
         removeDevice(*it);
     }
 
-    devicesToAdd_.clear();
     devicesToRemove_.clear();
-
-    vectorAccessMutex_.unlock();
+    devicesToRemoveMutex_.unlock();
 }
 
 void InputHandler::processDeviceInputs()

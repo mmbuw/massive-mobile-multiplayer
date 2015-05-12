@@ -46,13 +46,15 @@ class InputHandler
 
 	private:
 		Game* gameToHandle_;
+		std::mutex currentInputDevicesMutex_;
 		std::map<int, InputDevice*> currentInputDevices_;
 		
 		std::thread updateDeviceListThread_;
 		std::atomic<bool> updateDeviceListThreadRunning_;
 
-		std::mutex vectorAccessMutex_;
+		std::mutex devicesToAddMutex_;
 		std::map<int, AddDeviceQuery> devicesToAdd_;
+		std::mutex devicesToRemoveMutex_;
 		std::set<int> devicesToRemove_;
 
 		std::thread inputValueThread_;
