@@ -29,21 +29,9 @@ Player::Player(int startX, int startY, sf::Color border, sf::Color center, std::
 	numberText_.setString(std::to_string(shirtNumber_));
 	numberText_.setCharacterSize(50);
 
-	if (shirtNumber_ > 9)
-	{
-		numberText_.move(posX_-35, posY_-35);
-	}
-	else
-	{
-		numberText_.move(posX_-23, posY_-35);
-	}
-
 	nameText_.setFont(font_);
 	nameText_.setString(name_);
 	nameText_.setCharacterSize(30);
-	nameText_.move(posX_-((name_.size()/2)*20), posY_+50);
-
-
 }
 
 /* virtual */ void Player::render(sf::RenderWindow* window) const 
@@ -58,6 +46,17 @@ Player::Player(int startX, int startY, sf::Color border, sf::Color center, std::
 /* virtual */ void Player::frameUpdate()
 {
 	PhysicalObject::frameUpdate();
+
+	nameText_.setPosition(posX_-((name_.size()/2)*20), posY_+50);
+
+	if (shirtNumber_ > 9)
+	{
+		numberText_.setPosition(posX_-35, posY_-35);
+	}
+	else
+	{
+		numberText_.setPosition(posX_-23, posY_-35);
+	}
 
 	if (inShootSequence())
 	{
