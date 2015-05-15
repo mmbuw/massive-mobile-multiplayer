@@ -98,7 +98,7 @@ void InputHandler::updateDeviceList()
             }
 
             //check for device removal
-            if (!currentInputDevices_.size() == idsOfFoundDevices.size())
+            if (currentInputDevices_.size() != idsOfFoundDevices.size())
             {
                 for (std::map<int, InputDevice*>::iterator it = currentInputDevices_.begin(); it != currentInputDevices_.end(); ++it)
                 {
