@@ -16,7 +16,7 @@
 #include <sstream>
 #include <chrono>
 
-#define CONNECTION_TIMEOUT_SECONDS 500
+#define CONNECTION_TIMEOUT_SECONDS 30
 
 typedef std::chrono::high_resolution_clock Clock;
 typedef std::chrono::seconds seconds;

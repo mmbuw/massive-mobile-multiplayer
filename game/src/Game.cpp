@@ -58,8 +58,13 @@ Player* Game::addNewPlayer(std::string const& name, int number)
 	}
 	else if (teamColor == sf::Color(255, 0, 0))
 	{
-		spawnPosition.x = 1400;
-		spawnPosition.y = 600;
+		//spawnPosition.x = 1400;
+		//spawnPosition.y = 600;
+
+		//debug as long as resolution is buggy
+		spawnPosition.x = 480;
+		spawnPosition.y = 300;
+
 		++numPlayersRed_;
 	}
 
