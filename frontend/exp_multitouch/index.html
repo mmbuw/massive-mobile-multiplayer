@@ -2,17 +2,17 @@
 	<head>
 		<meta charset="ISO-8859-1"> 
 		<link rel="stylesheet" type="text/css" href="./style.css">
-		<script src="./jquery.min.js"></script>
-		<script src="./functions.js"></script>
+		<script src="./js/jquery.min.js"></script>
+		<script src="./js/setup.js"></script>
 	</head>
 	<body>
-		<div id="canvas-wrap">
-			<canvas id="sadstick" class="sadstick"></canvas>
-			<div id="circle" class="circle"></div>
-		</div>
-		<div id="button" class="button">
-		</div>
-
-
+	<div class="form-page">
+		<p>Wilkommen bei MMMBalls</p>
+		<form>
+			<input type="text" name="playername" id="input-name" placeholder="Spielername">
+			</br>	
+			<button onclick="playerSetup(); return false;">Anmelden</button>
+		</form>
+	</div>
 	</body>
 </html>
