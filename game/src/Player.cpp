@@ -20,7 +20,7 @@ Player::Player(int startX, int startY, sf::Color border, sf::Color center, std::
 	shootCircle_.setOrigin(shootCircleRadius_, shootCircleRadius_);
 	shootCircle_.setPosition(startX, startY);
 
-	if (!font_.loadFromFile("font.ttf"))
+	if (!font_.loadFromFile("resources/font.ttf"))
 	{
 		std::cout << "[Player.cpp] Error loading font." << std::endl;
 	}

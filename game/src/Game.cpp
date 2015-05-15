@@ -451,9 +451,11 @@ void Game::createScoreLine()
 	scoreLine_.setPosition(0,1200);
 	scoreLine_.setFillColor(sf::Color(0,0,0));
 
-	if (!font_.loadFromFile("font.ttf")){
-		std::cout<<"The sadness will last forever."<<std::endl;
+	if (!font_.loadFromFile("resources/font.ttf"))
+	{
+		std::cout << "[Game.cpp] Error loading font." << std::endl;
 	}
+
 	score_.setFont(font_);
 	score_.setString("Blue   "+std::to_string(pointsBlueTeam_)+":"+std::to_string(pointsRedTeam_)+"   Red");
 	score_.setCharacterSize(80);
@@ -469,8 +471,9 @@ void Game::createScoreLine()
 
 void Game::createFpsDisplay()
 {
-	if (!font_.loadFromFile("font.ttf")){
-		std::cout<<"The sadness will last forever."<<std::endl;
+	if (!font_.loadFromFile("resources/font.ttf"))
+	{
+		std::cout << "[Game.cpp] Error loading font." << std::endl;
 	}
 
 	fpsString_.setFont(font_);

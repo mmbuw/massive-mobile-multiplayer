@@ -1,8 +1,7 @@
-all: 
-	g++ -std=c++0x -c *.cpp src/*.cpp -Iinclude/ -pthread
-	g++ -std=c++0x -o main *.o -lsfml-graphics -lsfml-window -lsfml-system -pthread
-	./main
+all:
+	rm -rf build/
+	mkdir build
+	g++ -std=c++0x *.cpp src/*.cpp -Iinclude/ -pthread -o build/mmm-ball -lsfml-graphics -lsfml-window -lsfml-system -pthread
 
 clean:
-	rm -f *.o
-	rm -f main
+	rm -rf build/
