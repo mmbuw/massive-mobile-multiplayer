@@ -9,6 +9,8 @@ window.addEventListener('load', function(){
  		var circle = document.getElementById('circle');
 
  		//##################################################################################
+
+ 		socket.close();
 		// Websocket
 		var socket = new WebSocket("ws://29.4.93.1:53000");
 		//var socket = new WebSocket("ws://localhost:53000");
@@ -24,21 +26,8 @@ window.addEventListener('load', function(){
 		{
 			window.localStorage.setItem("team", evt.data);
 			console.log(evt.data);
+			colorUI();
 		}
-
-
-		//set colorbase by socketinput/teamident
-		if(localStorage.getItem('team').indexOf("RED") > -1) {
-	    	colorbase = 'red';
-	    	button.style.backgroundColor = colorbase;
-	    	circle.style.backgroundColor = colorbase;
-
-	    } else if(localStorage.getItem('team').indexOf("BLUE") > -1) {
-	    	colorbase = 'blue';
-	    	button.style.backgroundColor = colorbase;
-	    	circle.style.backgroundColor = colorbase;
-
-	    } 
 
  		//##################################################################################
  		//button control
@@ -194,4 +183,19 @@ function clearMarker(input){
 //clipping function
 Math.clip = function(number, min, max) {
   return Math.max(min, Math.min(number, max));
+}
+
+function colorUI () {
+	//set colorbase by socketinput/teamident
+	if(localStorage.getItem('team').indexOf("RED") > -1) {
+    	colorbase = 'red';
+    	button.style.backgroundColor = colorbase;
+    	circle.style.backgroundColor = colorbase;
+
+    } else if(localStorage.getItem('team').indexOf("BLUE") > -1) {
+    	colorbase = 'blue';
+    	button.style.backgroundColor = colorbase;
+    	circle.style.backgroundColor = colorbase;
+
+    } 
 }
