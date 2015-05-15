@@ -39,7 +39,7 @@ class Player : public PhysicalObject
 		sf::Color centerColor_;
 
 		std::string name_;
-		int shirtNumber;
+		int shirtNumber_;
 
 		float shootCircleRadius_;
 		int blockShootFrames_;
@@ -47,6 +47,10 @@ class Player : public PhysicalObject
 		sf::CircleShape shootCircle_;
 		int startX_;
 		int startY_;
+
+		sf::Text numberText_;
+		sf::Text nameText_;
+		sf::Font font_;
 };
 
 #endif //PLAYER_HPP

@@ -2,7 +2,7 @@
 
 Player::Player(int startX, int startY, sf::Color border, sf::Color center, std::string const& name, int number) :
 	PhysicalObject(10.2, startX, startY, 50.0), borderColor_(border), centerColor_(center), 
-	blockShootFrames_(0), startX_(startX), startY_(startY), name_(name), shirtNumber(number)
+	blockShootFrames_(0), startX_(startX), startY_(startY), name_(name), shirtNumber_(number)
 {
 	shootCircleRadius_ = 1.5 * radius_;
 
@@ -19,42 +19,44 @@ Player::Player(int startX, int startY, sf::Color border, sf::Color center, std::
 	shootCircle_.setOutlineColor(sf::Color(0,0,0,128));
 	shootCircle_.setOrigin(shootCircleRadius_, shootCircleRadius_);
 	shootCircle_.setPosition(startX, startY);
+
+	if (!font_.loadFromFile("font.ttf"))
+	{
+		std::cout << "[Player.cpp] Error loading font." << std::endl;
+	}
+
+	numberText_.setFont(font_);
+	numberText_.setString(std::to_string(shirtNumber_));
+	numberText_.setCharacterSize(50);
+
+	nameText_.setFont(font_);
+	nameText_.setString(name_);
+	nameText_.setCharacterSize(30);
 }
 
 /* virtual */ void Player::render(sf::RenderWindow* window) const 
 {
 	PhysicalObject::render(window);
 	
-	sf::Text number;
-	sf::Font font;
-	if (!font.loadFromFile("font.ttf")){
-		std::cout<<"The sadness will last forever."<<std::endl;
-	}
-	number.setFont(font);
-	number.setString(std::to_string(shirtNumber));
-	number.setCharacterSize(50);
-	if (shirtNumber > 9){
-		number.move(posX_-35,posY_-35);
-	
-	}else{
-		number.move(posX_-23,posY_-35);
-	}
-
-	sf::Text name;
-	name.setFont(font);
-	name.setString(name_);
-	name.setCharacterSize(30);
-	name.move(posX_-((name_.size()/2)*20),posY_+50);
-	
-	
 	window->draw(shootCircle_);
-	window->draw(name);
-	window->draw(number);
+	window->draw(nameText_);
+	window->draw(numberText_);
 }
 
 /* virtual */ void Player::frameUpdate()
 {
 	PhysicalObject::frameUpdate();
+
+	nameText_.setPosition(posX_-((name_.size()/2)*20), posY_+50);
+
+	if (shirtNumber_ > 9)
+	{
+		numberText_.setPosition(posX_-35, posY_-35);
+	}
+	else
+	{
+		numberText_.setPosition(posX_-23, posY_-35);
+	}
 
 	if (inShootSequence())
 	{
