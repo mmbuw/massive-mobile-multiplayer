@@ -55,19 +55,28 @@ void InputHandler::updateDeviceList()
                         int endOfEventStringIndex(line.find(" ", eventStringIndex));
 
                         //only add devices which haven't been captured yet
-                        if (currentInputDevices_.find(idOfNextControllerToSave) == currentInputDevices_.end())
+                        currentInputDevicesMutex_.lock();
+                        //devicesToAddMutex_.lock();
+
+                        if (currentInputDevices_.find(idOfNextControllerToSave) == currentInputDevices_.end() &&
+                            devicesToAdd_.find(idOfNextControllerToSave) == devicesToAdd_.end())
                         {
+                            currentInputDevicesMutex_.unlock();
+                            //devicesToAddMutex_.unlock();
+
+                            AddDeviceQuery adq;
+                            adq.deviceID = idOfNextControllerToSave;
+                            adq.name = nameOfNextControllerToSave;
+                            adq.eventString = std::string("/dev/input/").append(line.substr(eventStringIndex, endOfEventStringIndex-eventStringIndex));
+                            
                             devicesToAddMutex_.lock();
-                            if (devicesToAdd_.find(idOfNextControllerToSave) == devicesToAdd_.end())
-                            {
-                                AddDeviceQuery adq;
-                                adq.deviceID = idOfNextControllerToSave;
-                                adq.name = nameOfNextControllerToSave;
-                                adq.eventString = std::string("/dev/input/").append(line.substr(eventStringIndex, endOfEventStringIndex-eventStringIndex));
-                                
-                                devicesToAdd_.insert(std::make_pair(idOfNextControllerToSave, adq));
-                            }
+                            devicesToAdd_.insert(std::make_pair(idOfNextControllerToSave, adq));
                             devicesToAddMutex_.unlock();
+                        }
+                        else
+                        {
+                            currentInputDevicesMutex_.unlock();
+                            //devicesToAddMutex_.unlock();
                         }
 
                         idOfNextControllerToSave = -1;
