@@ -10,7 +10,7 @@ window.addEventListener('load', function(){
 
  		//##################################################################################
 
- 		socket.close();
+ 		//socket.close();
 		// Websocket
 		var socket = new WebSocket("ws://29.4.93.1:53000");
 		//var socket = new WebSocket("ws://localhost:53000");
