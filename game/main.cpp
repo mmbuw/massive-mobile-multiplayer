@@ -6,6 +6,7 @@
 #include "InputHandler.hpp"
 #include "Game.hpp"
 
+#define INSERT_KEYBOARD_DEBUG_PLAYER false
 
 int main()
 {
@@ -30,6 +31,15 @@ int main()
 
 	sf::Event event;
 
+	//debug keyboard player
+	#if INSERT_KEYBOARD_DEBUG_PLAYER
+	    Player* debugPlayer = game->addNewPlayer("Keyboard", 29);
+		bool wPressed(false);
+		bool aPressed(false);
+		bool sPressed(false);
+		bool dPressed(false);
+	#endif
+
 	while (App.isOpen()) 
 	{
 		App.clear(sf::Color(255,255,0));
@@ -39,6 +49,60 @@ int main()
 		{
 			App.close();
 		}
+
+		//handle keyboard debug player inputs
+		#if INSERT_KEYBOARD_DEBUG_PLAYER
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) && wPressed == false)
+			{
+				wPressed = true;
+			}
+			else if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) == false && wPressed == true)
+			{
+				wPressed = false;
+			}
+
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) && aPressed == false)
+			{
+				aPressed = true;
+			}
+			else if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) == false && aPressed == true)
+			{
+				aPressed = false;
+			}
+
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && sPressed == false)
+			{
+				sPressed = true;
+			}
+			else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) == false && sPressed == true)
+			{
+				sPressed = false;
+			}
+
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) && dPressed == false)
+			{
+				dPressed = true;
+			}
+			else if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) == false && dPressed == true)
+			{
+				dPressed = false;
+			}
+
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+			{
+				debugPlayer->shoot();
+			}
+
+
+			if (wPressed)
+				debugPlayer->moveUp();
+			if (aPressed)
+				debugPlayer->moveLeft();
+			if (sPressed)
+				debugPlayer->moveDown();
+			if (dPressed)
+				debugPlayer->moveRight();
+		#endif
 
 		// input handling
 		inputHandler.processAddRemoveQueries();
