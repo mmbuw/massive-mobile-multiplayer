@@ -1,4 +1,6 @@
 
+var socket;
+
 window.addEventListener('load', function(){
 		//global vars
 		var timer = setTimeout(endGame, 30000);
@@ -19,15 +21,30 @@ window.addEventListener('load', function(){
 		socket.onopen = function() 	
 		{ 
 			console.log('Socket Status: '+socket.readyState+' (open)');
-			socket.send('NAME '+localStorage.getItem('playername')+'$');	
+			socket.send('NAME '+localStorage.getItem('playername')+'$');
+			console.log(socket.readyState);	
 		}
 		//recive from server
 		socket.onmessage = function(evt)
 		{
 			window.localStorage.setItem("team", evt.data);
 			console.log(evt.data);
-			colorUI();
+
+			//set colorbase by socketinput/teamident
+			if(localStorage.getItem('team').indexOf("RED") > -1) {
+		    	colorbase = 'red';
+		    	button.style.backgroundColor = colorbase;
+		    	circle.style.backgroundColor = colorbase;
+
+		    } else if(localStorage.getItem('team').indexOf("BLUE") > -1) {
+		    	colorbase = 'blue';
+		    	button.style.backgroundColor = colorbase;
+		    	circle.style.backgroundColor = colorbase;
+
+		    } 
+
 		}
+
 
  		//##################################################################################
  		//button control
@@ -153,21 +170,31 @@ window.addEventListener('load', function(){
 	       	e.preventDefault();
 
 			socket.send('VAL '+ 0 + ' ' + 0 +'$');
+			console.log(socket.readyState);
 	   	}, false)
+
+
+
+
+		//##################################################################################
+		//forward
+		function endGame(){
+
+			console.log(socket.readyState);
+			if (socket.readyState == 1) {
+				socket.close();
+			}
+			//forward to controller
+			window.location.href = './leaving.html';
+		}
+
 
 
 }, false)
 
- //##################################################################################
- //forward
-function endGame(){
 
-	//forward to controller
-	window.location.href = './leaving.html';
-}
-
- //##################################################################################
- //helper functions
+//##################################################################################
+//helper functions
 
 function sleepFor( sleepDuration ){
     var now = new Date().getTime();
