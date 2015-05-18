@@ -58,10 +58,7 @@ Player* Game::addNewPlayer(std::string const& name, int number)
 	}
 	else if (teamColor == sf::Color(255, 0, 0))
 	{
-		//spawnPosition.x = 1400;
-		//spawnPosition.y = 600;
 
-		//debug as long as resolution is buggy
 		spawnPosition.x = 480;
 		spawnPosition.y = 300;
 
@@ -144,12 +141,8 @@ void Game::calculateLinePoistions(){
 	 leftLineAt = screenWidth_*0.0520833f;
 	 topLineAt = screenHeight_*0.0192592f;
 	 bottomLineAt = screenHeight_*0.86888f;
-	 rightLineAt = screenWidth_*0.945312f;
-	 centerLineAt = (screenWidth_*0.5)-3;
-
-
-	 std::cout<<screenHeight_<<","<<screenWidth_;
-	 std::cout<<"Left: "<<leftLineAt<<", Right: "<<rightLineAt<<", Bottom: "<<bottomLineAt<<", top: "<<topLineAt<<", center"<<centerLineAt<<std::endl;
+	 rightLineAt = screenWidth_*0.925312f;
+	 centerLineAt = ((rightLineAt-leftLineAt)/2)+leftLineAt;
 
 }
 
@@ -224,6 +217,11 @@ void Game::createFieldLines(){
 	kickoffPoint.setPosition(centerCirclePosX,centerCirclePosY);
 	centerPoint_ = kickoffPoint;
 
+	
+
+	ball->setPosition(centerCirclePosX,centerCirclePosY);
+
+
 }
 
 void Game::createGreen(){
@@ -252,14 +250,21 @@ void Game::createGreen(){
 
 void Game::createGoals()
 {
-	goalLeft_ = sf::RectangleShape(sf::Vector2f(65,300));
-	goalLeft_.setPosition(35,450);
+	double middleoflines = ((bottomLineAt-topLineAt)/2)+topLineAt;
+	double goalsStartAt = middleoflines - (0.2*(middleoflines));
+
+
+	goalLeft_ = sf::RectangleShape(sf::Vector2f(0.03385416*screenWidth_,0.3*screenHeight_));
+	goalLeft_.setPosition(0.01822916*screenWidth_,middleoflines-(0.15*screenHeight_));
 	goalLeft_.setFillColor(sf::Color(0,0,0,0));
 	goalLeft_.setOutlineThickness(5);
 	goalLeft_.setOutlineColor(sf::Color(255,255,255));
 
-	goalRight_ = sf::RectangleShape(sf::Vector2f(65,300));
-	goalRight_.setPosition(1820,450);
+
+
+
+	goalRight_ = sf::RectangleShape(sf::Vector2f(0.03385416*screenWidth_,0.3*screenHeight_));
+	goalRight_.setPosition(0.92760416*screenWidth_,middleoflines-(0.15*screenHeight_));
 	goalRight_.setFillColor(sf::Color(0,0,0,0));
 	goalRight_.setOutlineThickness(5);
 	goalRight_.setOutlineColor(sf::Color(255,255,255));
