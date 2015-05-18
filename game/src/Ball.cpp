@@ -1,6 +1,6 @@
 #include "Ball.hpp"
 
-Ball::Ball() : PhysicalObject(1.0, 960, 600, 30.0), inLeftGoal_(false), inRightGoal_(false)
+Ball::Ball() : PhysicalObject(1.0, 960, 600, 25.0), inLeftGoal_(false), inRightGoal_(false)
 {
 	shape_ = sf::CircleShape(radius_);
 	shape_.setFillColor(sf::Color(255,255,255,255));
