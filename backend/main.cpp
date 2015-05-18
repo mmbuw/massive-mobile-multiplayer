@@ -223,7 +223,7 @@ int main()
 			            }
 
 			            //print message
-			            std::cout << "[Client " << playerConnection->getID() << "] " << message << std::endl;
+			            //std::cout << "[Client " << playerConnection->getID() << "] " << message << std::endl;
 
 			            //react on messages by injecting keystrokes
 			            if (message == "VAL A$")
