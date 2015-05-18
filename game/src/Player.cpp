@@ -69,10 +69,10 @@ Player::Player(int startX, int startY, sf::Color border, sf::Color center, std::
 
 }
 
-/* virtual */ void Player::setPosition(int x, int y)
+/* virtual */ void Player::setPosition(float x, float y)
 {
 	PhysicalObject::setPosition(x,y);
-	shootCircle_.setPosition(x,y);
+	shootCircle_.setPosition(sf::Vector2f(x,y));
 }
 
 /* virtual */ void Player::clampPosition()

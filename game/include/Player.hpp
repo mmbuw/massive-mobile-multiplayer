@@ -19,7 +19,7 @@ class Player : public PhysicalObject
 		
 		/* virtual */ void render(sf::RenderWindow* window) const;
 		/* virtual */ void frameUpdate();
-		/* virtual */ void setPosition(int x, int y);
+		/* virtual */ void setPosition(float x, float y);
 		/* virtual */ void clampPosition();
 
 		void moveUp();

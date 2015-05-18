@@ -1,6 +1,6 @@
 #include "PhysicalObject.hpp"
 
-PhysicalObject::PhysicalObject(float mass, int posX, int posY, float radius) : 
+PhysicalObject::PhysicalObject(float mass, float posX, float posY, float radius) : 
 	mass_(mass), posX_(posX), posY_(posY), velX_(0.0), velY_(0.0), radius_(radius) {}
 
 /* virtual */ PhysicalObject::~PhysicalObject() {}
@@ -39,11 +39,11 @@ PhysicalObject::PhysicalObject(float mass, int posX, int posY, float radius) :
 	setPosition(posX_ + velX_, posY_ + velY_);
 }
 
-/* virtual */ void PhysicalObject::setPosition(int x, int y)
+/* virtual */ void PhysicalObject::setPosition(float x, float y)
 {
 	posX_ = x;
 	posY_ = y;
-	shape_.setPosition(posX_, posY_);
+	shape_.setPosition(sf::Vector2f(posX_, posY_));
 }
 
 sf::CircleShape const PhysicalObject::getShape() const
@@ -51,12 +51,12 @@ sf::CircleShape const PhysicalObject::getShape() const
 	return shape_;
 }
 
-int PhysicalObject::getPosX() const
+float PhysicalObject::getPosX() const
 {
 	return posX_;
 }
 
-int PhysicalObject::getPosY() const
+float PhysicalObject::getPosY() const
 {
 	return posY_;
 }

@@ -11,18 +11,18 @@
 class PhysicalObject
 {	
 	public:
-		PhysicalObject(float mass, int posX, int posY, float radius);
+		PhysicalObject(float mass, float posX, float posY, float radius);
 		virtual ~PhysicalObject();
 		
 		virtual void render(sf::RenderWindow* window) const;
 		virtual void frameFrictionUpdate();
 		virtual void frameUpdate();
-		virtual void setPosition(int x, int y);
+		virtual void setPosition(float x, float y);
 		virtual void clampPosition() = 0;
 
 		sf::CircleShape const getShape() const;
-		int getPosX() const;
-		int getPosY() const;
+		float getPosX() const;
+		float getPosY() const;
 		double getVelX() const;
 		double getVelY() const;
 		float getMass() const;
@@ -35,8 +35,8 @@ class PhysicalObject
 	protected:
 		sf::CircleShape shape_;
 
-		int posX_;
-		int posY_;
+		float posX_;
+		float posY_;
 
 		double velX_;
 		double velY_;
