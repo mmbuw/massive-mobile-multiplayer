@@ -16,7 +16,7 @@ Player::Player(int startX, int startY, sf::Color border, sf::Color center, std::
 	shootCircle_ = sf::CircleShape(shootCircleRadius_);
 	shootCircle_.setFillColor(sf::Color(0,0,0,0));
 	shootCircle_.setOutlineThickness(-5);
-	shootCircle_.setOutlineColor(sf::Color(0,0,0,128));
+	shootCircle_.setOutlineColor(sf::Color(0,0,0,255));
 	shootCircle_.setOrigin(shootCircleRadius_, shootCircleRadius_);
 	shootCircle_.setPosition(startX, startY);
 
