@@ -110,7 +110,7 @@ int main()
 
 		// windowlication logic
 		game->updatePhysicalObjects();
-		game->windowlyIntersectionPhysics();
+		game->applyIntersectionPhysics();
 		game->checkForGoal();
 
 
