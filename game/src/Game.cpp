@@ -51,16 +51,14 @@ Player* Game::addNewPlayer(std::string const& name, int number)
 
 	if (teamColor == sf::Color(0, 0, 255))
 	{
-		spawnPosition.x = 480;
-		spawnPosition.y = 600;
+		spawnPosition.x = 0.06 * screenWidth_;
+		spawnPosition.y = 100 + (rand() % (screenHeight_-200));
 		++numPlayersBlue_;
 	}
 	else if (teamColor == sf::Color(255, 0, 0))
 	{
-
-		spawnPosition.x = 480;
-		spawnPosition.y = 300;
-
+		spawnPosition.x = 0.94 * screenWidth_;
+		spawnPosition.y = 100 + (rand() % (screenHeight_-200));
 		++numPlayersRed_;
 	}
 
