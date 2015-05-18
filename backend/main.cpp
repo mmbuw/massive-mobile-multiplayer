@@ -258,7 +258,7 @@ int main()
 			            }			            
 			            else
 			            {
-			            	std::cout << "[Client " << playerConnection->getID() << "] Omitting invalid message: " << message << std::endl;
+			            	//std::cout << "[Client " << playerConnection->getID() << "] Omitting invalid message: " << message << std::endl;
 			            	nextMessagePresent = false;
 			            }
 
