@@ -116,6 +116,7 @@ void PlayerConnection::injectKeyEvent(int eventCode) const
 
 void PlayerConnection::injectRelEvent(int xCoord, int yCoord) const
 {
+
 	if (uinputHandle_ != -1)
 	{
 		struct input_event eventHandle[2];
@@ -123,11 +124,22 @@ void PlayerConnection::injectRelEvent(int xCoord, int yCoord) const
 
 		eventHandle[0].type = EV_REL;
 		eventHandle[0].code = REL_X;
-		eventHandle[0].value = xCoord;
+
+		//Strangely, the event interface does not accept 0 values
+		//that's why they are set to -1 here
+
+		if (xCoord != 0)
+			eventHandle[0].value = xCoord;
+		else
+			eventHandle[0].value = -1;
 
 		eventHandle[1].type = EV_REL;
 		eventHandle[1].code = REL_Y;
-		eventHandle[1].value = yCoord;
+
+		if (yCoord != 0)
+			eventHandle[1].value = yCoord;
+		else
+			eventHandle[1].value = -1;
 
 		write(uinputHandle_, &eventHandle, sizeof(eventHandle));
 
