@@ -188,7 +188,7 @@ void InputHandler::retrieveInputs()
                         inputDevice->setButtonA(true);
                     }
                     //relative events
-                    else if (ev.type == EV_REL && ev.value >= -1000 && ev.value <= 1000)
+                    else if (ev.type == EV_ABS && ev.value >= -1000 && ev.value <= 1000)
                     {
                         if ((int) ev.code == 0)
                         {

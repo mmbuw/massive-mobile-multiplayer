@@ -243,8 +243,8 @@ int main()
 
 			            	if (x <= 1000 && y <= 1000 && x >= -1000 && y >= -1000)
 			            	{
-			            		playerConnection->injectRelEvent(x, y);
-			            		//std::cout << "Inject relative input event" << std::endl;
+			            		playerConnection->injectAbsEvent(x, y);
+			            		//std::cout << "Inject absolute input event" << std::endl;
 			            	}
 			            }
 			            else if (message.find("NAME") == 0)
