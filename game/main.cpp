@@ -17,6 +17,7 @@ int main()
 	sf::RenderWindow App(sf::VideoMode(sf::VideoMode::getDesktopMode().width,sf::VideoMode::getDesktopMode().width,20), "MMMBall");
 
 	App.setFramerateLimit(60);
+	App.setVerticalSyncEnabled(true);
 	
 	Game* game = new Game();
 	game->setScreenWidth(sf::VideoMode::getDesktopMode().width);
