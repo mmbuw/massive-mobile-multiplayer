@@ -144,6 +144,7 @@ void InputHandler::retrieveInputs()
         //Clear the file descriptor set
         FD_ZERO(&rfds);
         int maxDescriptor = -1;
+        std::unordered_map<int, InputDevice*> fileDescriptors;
 
         //Iterate over every InputDevice and add file descriptor to selector
         currentInputDevicesMutex_.lock();
@@ -151,6 +152,7 @@ void InputHandler::retrieveInputs()
         {
             int fileHandle(it->second->getDeviceFileHandle());
             FD_SET(fileHandle, &rfds);
+            fileDescriptors[fileHandle] = it->second;
 
             if (fileHandle > maxDescriptor)
                 maxDescriptor = fileHandle;
@@ -168,43 +170,41 @@ void InputHandler::retrieveInputs()
         //If no timeout was triggered
         if (retval)
         {
-            //Iterate over every InputDevice and check if file descriptor is in set of readable devices
-            currentInputDevicesMutex_.lock();
-            for (std::map<int, InputDevice*>::iterator it = currentInputDevices_.begin(); it != currentInputDevices_.end(); ++it)
+            //Iterate over the range of file descriptors and check if they are ready to read
+            for (int i = 1; i < maxDescriptor+1; ++i)
             {
-                int fileHandle(it->second->getDeviceFileHandle());
-                Player* playerFigure(it->second->getPlayerInstance());
-
-                if (FD_ISSET(fileHandle, &rfds))
+                if (FD_ISSET(i, &rfds))
                 {
+                    InputDevice* inputDevice(fileDescriptors[i]);
+                    Player* playerFigure(inputDevice->getPlayerInstance());
+
                     //read event from device
                     struct input_event ev;
-                    size_t read_result = read(fileHandle, &ev, sizeof(ev));
+                    size_t read_result = read(i, &ev, sizeof(ev));
 
                     //key events
                     if (ev.type == EV_KEY && ev.value >= 0 && ev.value <= 2 && (int) ev.code == 304)
                     {
-                        it->second->setButtonA(true);
+                        inputDevice->setButtonA(true);
                     }
                     //relative events
                     else if (ev.type == EV_REL && ev.value >= -1000 && ev.value <= 1000)
                     {
                         if ((int) ev.code == 0)
                         {
-                            it->second->setValueX(ev.value);
+                            inputDevice->setValueX(ev.value);
                         }
                         else if ((int) ev.code == 1)
                         {
-                            it->second->setValueY(ev.value);
+                            inputDevice->setValueY(ev.value);
                         }
                     }
                 }
             }
-            currentInputDevicesMutex_.unlock();
         }
-    }
 
-    
+
+    }
 }
 
 void InputHandler::addToDevices(int deviceID, std::string const& name, std::string const& eventString)
