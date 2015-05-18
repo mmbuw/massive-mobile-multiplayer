@@ -194,13 +194,21 @@ void Game::createFieldLines(){
 	centerLine.setPoint(3, sf::Vector2f(centerLineAt+5, topLineAt));
 	lines_.push_back(centerLine);
 
+	int totalFieldHeight = bottomLineAt-topLineAt;
+	double centerCirclePosY = totalFieldHeight/2;
+	centerCirclePosY = centerCirclePosY+topLineAt;
+
+	int totalFieldWidth = rightLineAt-leftLineAt;
+	double centerCirclePosX = totalFieldWidth/2;
+	centerCirclePosX = centerCirclePosX+leftLineAt;
+
 
 	sf::CircleShape kickoffCircle = sf::CircleShape(185);
 	kickoffCircle.setFillColor(sf::Color(255,255,255,0));
 	kickoffCircle.setOutlineThickness(5);
 	kickoffCircle.setOutlineColor(sf::Color(255,255,255));
 	kickoffCircle.setOrigin(kickoffCircle.getRadius(), kickoffCircle.getRadius());
-	kickoffCircle.setPosition(screenWidth_/2, screenHeight_/2);;
+	kickoffCircle.setPosition(centerCirclePosX,centerCirclePosY);
 	centerCircle_ = kickoffCircle;
 
 
@@ -208,7 +216,7 @@ void Game::createFieldLines(){
 	kickoffPoint.setFillColor(sf::Color(255,255,255));
 	kickoffPoint.setOutlineColor(sf::Color(255,255,255));
 	kickoffPoint.setOrigin(kickoffPoint.getRadius(), kickoffPoint.getRadius());
-	kickoffPoint.setPosition(screenWidth_/2, screenHeight_/2);
+	kickoffPoint.setPosition(centerCirclePosX,centerCirclePosY);
 	centerPoint_ = kickoffPoint;
 
 }
