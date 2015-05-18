@@ -6,6 +6,7 @@
 #include <iostream>
 #include <string>
 #include <set>
+#include <cmath>
 
 #include "Player.hpp"
 #include "Ball.hpp"
@@ -38,6 +39,7 @@ class Game
 		void applyElasticImpact(PhysicalObject* lhs, PhysicalObject* rhs, float lhsAbsorption, float rhsAbsorption);
 
 		void checkForGoal();
+		void resetPlayers();
 		void createField();
 
 		int getScreenWidth();

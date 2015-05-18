@@ -217,8 +217,6 @@ void Game::createFieldLines(){
 	kickoffPoint.setPosition(centerCirclePosX,centerCirclePosY);
 	centerPoint_ = kickoffPoint;
 
-
-
 	ball->setPosition(centerCirclePosX,centerCirclePosY);
 
 
@@ -437,12 +435,7 @@ void Game::checkForGoal()
 		if (framesToReset_ == 0)
 		{
 			ball->resetToCenter();
-			
-			for (std::set<Player*>::iterator it = players.begin(); it != players.end(); ++it)
-			{
-				(*it)->resetToStart();
-			}
-
+			resetPlayers();
 			framesToReset_ = -1;
 		}
 		else
@@ -453,8 +446,49 @@ void Game::checkForGoal()
 	}
 }
 
+void Game::resetPlayers()
+{
+	int currentBluePlayer(0);
+	int currentRedPlayer(0);
 
+	float redSectorSize(180.0/numPlayersRed_);
+	float blueSectorSize(180.0/numPlayersBlue_);
 
+	float radiusFromCenter(300.0);
+
+	for (std::set<Player*>::iterator it = players.begin(); it != players.end(); ++it)
+	{
+		sf::Color teamColor = (*it)->getTeamColor();
+		float angleDegrees;
+		int xDirectionFactor;
+
+		if (teamColor == sf::Color(255, 0, 0))
+		{
+			angleDegrees = 90.0 - redSectorSize/2.0 - currentRedPlayer * redSectorSize;
+			xDirectionFactor = 1;
+			++currentRedPlayer;
+		}
+		else if (teamColor == sf::Color(0, 0, 255))
+		{
+			angleDegrees = 90.0 - blueSectorSize/2.0 - currentBluePlayer * blueSectorSize;
+			xDirectionFactor = -1;
+			++currentBluePlayer;
+		}
+
+		float vecFromCenterX = xDirectionFactor * std::cos(angleDegrees * M_PI / 180.0);
+		float vecFromCenterY = std::sqrt(1 - vecFromCenterX*vecFromCenterX);
+
+		if (angleDegrees < 0)
+			vecFromCenterY = -vecFromCenterY;
+
+		sf::Vector2f center = centerPoint_.getPosition();
+
+		(*it)->setPosition(center.x + radiusFromCenter * vecFromCenterX,
+			               center.y + radiusFromCenter * vecFromCenterY);
+
+	}
+
+}
 
 
 void Game::createScoreLine()
