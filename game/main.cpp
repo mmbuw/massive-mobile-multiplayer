@@ -6,7 +6,7 @@
 #include "InputHandler.hpp"
 #include "Game.hpp"
 
-#define INSERT_KEYBOARD_DEBUG_PLAYER false
+#define INSERT_KEYBOARD_DEBUG_PLAYER true
 
 int main()
 {
@@ -14,10 +14,8 @@ int main()
 	sf::Clock Clock;
 
 
-	sf::RenderWindow App(sf::VideoMode(sf::VideoMode::getDesktopMode().width,sf::VideoMode::getDesktopMode().width,20), "MMMBall");
-
-	App.setFramerateLimit(60);
-	App.setVerticalSyncEnabled(true);
+	sf::RenderWindow window(sf::VideoMode(sf::VideoMode::getDesktopMode().width,sf::VideoMode::getDesktopMode().width,20), "MMMBall");
+	window.setVerticalSyncEnabled(true);
 	
 	Game* game = new Game();
 	game->setScreenWidth(sf::VideoMode::getDesktopMode().width);
@@ -41,14 +39,14 @@ int main()
 		bool dPressed(false);
 	#endif
 
-	while (App.isOpen()) 
+	while (window.isOpen()) 
 	{
-		App.clear(sf::Color(255,255,0));
+		window.clear(sf::Color(255,255,0));
 
-		//handle events - do not use App.pollEvent(..) as it slows framerate on mouse move
+		//handle events - do not use window.pollEvent(..) as it slows framerate on mouse move
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
 		{
-			App.close();
+			window.close();
 		}
 
 		//handle keyboard debug player inputs
@@ -110,19 +108,19 @@ int main()
 		inputHandler.processDeviceInputs();
 		
 
-		// application logic
+		// windowlication logic
 		game->updatePhysicalObjects();
-		game->applyIntersectionPhysics();
+		game->windowlyIntersectionPhysics();
 		game->checkForGoal();
 
 
 		// render output
-		game->renderBackground(&App);
-		game->renderGoals(&App);
-	    game->renderSidelines(&App);
-		game->renderPlayers(&App);
-		game->renderBall(&App);
-		game->renderScoreLine(&App);
+		game->renderBackground(&window);
+		game->renderGoals(&window);
+	    game->renderSidelines(&window);
+		game->renderPlayers(&window);
+		game->renderBall(&window);
+		game->renderScoreLine(&window);
 		
 		frameCounterMod = (frameCounterMod + 1) % 5;
 		
@@ -130,15 +128,15 @@ int main()
 		{
 			float framerate = 5.0f/Clock.getElapsedTime().asSeconds();
 			Clock.restart();
-			game->renderFpsDisplay(&App, framerate);
+			game->renderFpsDisplay(&window, framerate);
 			lastFramerate = framerate;
 		}
 		else
 		{
-			game->renderFpsDisplay(&App, lastFramerate);
+			game->renderFpsDisplay(&window, lastFramerate);
 		}
 
-		App.display();
+		window.display();
 	}
 
 	delete game;
