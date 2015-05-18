@@ -26,6 +26,8 @@ class Ball : public PhysicalObject
 	private:
 		bool inLeftGoal_;
 		bool inRightGoal_;
+
+		
 };
 
 #endif //BALL_HPP
