@@ -23,14 +23,14 @@ class PhysicalObject
 		sf::CircleShape const getShape() const;
 		float getPosX() const;
 		float getPosY() const;
-		double getVelX() const;
-		double getVelY() const;
+		float getVelX() const;
+		float getVelY() const;
 		float getMass() const;
 		float getRadius() const;
-		double computeCurrentSpeed() const;
+		float computeCurrentSpeed() const;
 
-		void setVelocity(double x, double y);
-		void addVelocityOffset(double x, double y);
+		void setVelocity(float x, float y);
+		void addVelocityOffset(float x, float y);
 
 	protected:
 		sf::CircleShape shape_;
@@ -38,8 +38,8 @@ class PhysicalObject
 		float posX_;
 		float posY_;
 
-		double velX_;
-		double velY_;
+		float velX_;
+		float velY_;
 
 		float mass_;
 		float radius_;

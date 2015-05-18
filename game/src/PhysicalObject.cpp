@@ -12,13 +12,13 @@ PhysicalObject::PhysicalObject(float mass, float posX, float posY, float radius)
 
 /* virtual */ void PhysicalObject::frameFrictionUpdate()
 {
-	double frictionDecrement(0.25);
+	float frictionDecrement(0.25);
 
-	double currentSpeed = computeCurrentSpeed();
+	float currentSpeed = computeCurrentSpeed();
 
 	if (currentSpeed > 0.0)
 	{
-		double targetSpeed;
+		float targetSpeed;
 		if (currentSpeed - frictionDecrement > 0.0)
 			targetSpeed = currentSpeed-frictionDecrement;
 		else
@@ -61,12 +61,12 @@ float PhysicalObject::getPosY() const
 	return posY_;
 }
 
-double PhysicalObject::getVelX() const
+float PhysicalObject::getVelX() const
 {
 	return velX_;
 }
 
-double PhysicalObject::getVelY() const
+float PhysicalObject::getVelY() const
 {
 	return velY_;
 }
@@ -81,18 +81,18 @@ float PhysicalObject::getRadius() const
 	return radius_;
 }
 
-void PhysicalObject::setVelocity(double x, double y)
+void PhysicalObject::setVelocity(float x, float y)
 {
 	velX_ = x;
 	velY_ = y;
 }
 
-void PhysicalObject::addVelocityOffset(double x, double y)
+void PhysicalObject::addVelocityOffset(float x, float y)
 {
 	velX_ += x;
 	velY_ += y;
 
-	double newSpeed = computeCurrentSpeed();
+	float newSpeed = computeCurrentSpeed();
 
 	if (newSpeed > MAX_SPEED)
 	{
@@ -104,7 +104,7 @@ void PhysicalObject::addVelocityOffset(double x, double y)
 
 }
 
-double PhysicalObject::computeCurrentSpeed() const
+float PhysicalObject::computeCurrentSpeed() const
 {
 	return std::sqrt(velX_*velX_ + velY_*velY_);
 }
