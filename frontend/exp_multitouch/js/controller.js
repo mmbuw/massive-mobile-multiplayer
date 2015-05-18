@@ -1,10 +1,10 @@
-
-var socket;
+window.scrollTo(0,1);
 
 window.addEventListener('load', function(){
 		//global vars
 		var timer = setTimeout(endGame, 30000);
 		var colorbase;
+		var socket;
 		var button = document.getElementById('button');
 		var wrapper = document.getElementById('canvas-wrap');
  		var canvas = document.getElementById('sadstick');
@@ -12,11 +12,16 @@ window.addEventListener('load', function(){
 
  		//##################################################################################
 
- 		//socket.close();
-		// Websocket
-		var socket = new WebSocket("ws://29.4.93.1:53000");
-		//var socket = new WebSocket("ws://localhost:53000");
- 
+
+		//Websocket
+		//var socket = new WebSocket("ws://29.4.93.1:53000");
+
+		var socket = new WebSocket("ws://localhost:53000");
+ 		
+
+ 		socket.onerror = function(error) {
+ 			window.location.href = './leaving.html';
+		};
 		// Nach dem öffnen des Sockets den Status anzeigen
 		socket.onopen = function() 	
 		{ 
@@ -180,7 +185,6 @@ window.addEventListener('load', function(){
 		//forward
 		function endGame(){
 
-			console.log(socket.readyState);
 			if (socket.readyState == 1) {
 				socket.close();
 			}
@@ -212,17 +216,3 @@ Math.clip = function(number, min, max) {
   return Math.max(min, Math.min(number, max));
 }
 
-function colorUI () {
-	//set colorbase by socketinput/teamident
-	if(localStorage.getItem('team').indexOf("RED") > -1) {
-    	colorbase = 'red';
-    	button.style.backgroundColor = colorbase;
-    	circle.style.backgroundColor = colorbase;
-
-    } else if(localStorage.getItem('team').indexOf("BLUE") > -1) {
-    	colorbase = 'blue';
-    	button.style.backgroundColor = colorbase;
-    	circle.style.backgroundColor = colorbase;
-
-    } 
-}
