@@ -17,10 +17,8 @@ class Game
 {
 	
 	public:
-		Game();
+		Game(int screenWidth, int screenHeight);
 		~Game();
-
-
 
 		Player* addNewPlayer(std::string const& name, int number);
 		void removePlayer(Player* playerToRemove);
@@ -69,6 +67,7 @@ class Game
 
 		//internal graphical methods
 		void createFieldLines();
+		void createBall(int startX, int startY);
 		void createGreen();
 		void createGoals();
 		void createScoreLine();

@@ -17,9 +17,8 @@ int main()
 	sf::RenderWindow window(sf::VideoMode(sf::VideoMode::getDesktopMode().width,sf::VideoMode::getDesktopMode().width,20), "MMMBall");
 	window.setVerticalSyncEnabled(true);
 	
-	Game* game = new Game();
-	game->setScreenWidth(sf::VideoMode::getDesktopMode().width);
-	game->setScreenHeight(sf::VideoMode::getDesktopMode().height);
+	Game* game = new Game(sf::VideoMode::getDesktopMode().width,
+		                  sf::VideoMode::getDesktopMode().height);
 	game->createField();
 	
 	// MMM Input device recognizer and grabber
