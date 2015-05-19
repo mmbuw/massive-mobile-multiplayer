@@ -13,8 +13,8 @@ int main()
 	srand (time(NULL));
 	sf::Clock Clock;
 
-	//sf::RenderWindow window(sf::VideoMode(sf::VideoMode::getDesktopMode().width,sf::VideoMode::getDesktopMode().width,20), "MMMBall", sf::Style::Fullscreen);
-	sf::RenderWindow window(sf::VideoMode(sf::VideoMode::getDesktopMode().width,sf::VideoMode::getDesktopMode().width,20), "MMMBall");
+	sf::RenderWindow window(sf::VideoMode(sf::VideoMode::getDesktopMode().width,sf::VideoMode::getDesktopMode().width,20), "MMMBall", sf::Style::Fullscreen);
+	//sf::RenderWindow window(sf::VideoMode(sf::VideoMode::getDesktopMode().width,sf::VideoMode::getDesktopMode().width,20), "MMMBall");
 	window.setVerticalSyncEnabled(true);
 	
 	Game* game = new Game(sf::VideoMode::getDesktopMode().width,
@@ -33,7 +33,6 @@ int main()
 	//debug keyboard player
 	#if INSERT_KEYBOARD_DEBUG_PLAYER
 	    Player* debugPlayer = game->addNewPlayer("Keyboard", 29);
-
 
 		bool wPressed(false);
 		bool aPressed(false);
