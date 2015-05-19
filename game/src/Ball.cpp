@@ -142,13 +142,15 @@ void Ball::setAllLines(double left, double right, double top, double bottom) {
 	bottomBorderLine = bottom;
 
 	temporaryTopBorder = topBorderLine;
-	temporaryBottomBorder = temporaryBottomBorder;
+	temporaryBottomBorder = bottomBorderLine;
 
 	screenWidth = sf::VideoMode::getDesktopMode().width;
 	screenHeight = sf::VideoMode::getDesktopMode().height;
 
-	goalStartHeight = 0.34615384615*screenHeight;
-	goalEndHeight = 0.57692307692*screenHeight;
+	double middleoflines = ((bottomBorderLine-topBorderLine)/2)+topBorderLine;
+
+	goalStartHeight = middleoflines-(0.15*screenHeight);
+	goalEndHeight = middleoflines+(0.15*screenHeight);
 
 	leftGoalEndLine = 0.01822916*screenWidth;
 	rightGoalEndLine = 0.981770833*screenWidth;

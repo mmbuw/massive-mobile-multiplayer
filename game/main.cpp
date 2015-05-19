@@ -14,7 +14,7 @@ int main()
 	sf::Clock Clock;
 
 	std::cout<<"wat1"<<std::endl;
-	sf::RenderWindow window(sf::VideoMode(sf::VideoMode::getDesktopMode().width,sf::VideoMode::getDesktopMode().width,20), "MMMBall");
+	sf::RenderWindow window(sf::VideoMode(sf::VideoMode::getDesktopMode().width,sf::VideoMode::getDesktopMode().width,20), "MMMBall", sf::Style::Fullscreen);
 	window.setVerticalSyncEnabled(true);
 	
 	std::cout<<"wat2"<<std::endl;
@@ -36,6 +36,8 @@ int main()
 	//debug keyboard player
 	#if INSERT_KEYBOARD_DEBUG_PLAYER
 	    Player* debugPlayer = game->addNewPlayer("Keyboard", 29);
+
+
 		bool wPressed(false);
 		bool aPressed(false);
 		bool sPressed(false);
