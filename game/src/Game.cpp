@@ -47,18 +47,18 @@ Player* Game::addNewPlayer(std::string const& name, int number)
 	}
 
 	//set spawn position dependent on team color
-	sf::Vector2f spawnPosition(0,0);
+	sf::Vector2f spawnPosition(300,300);
 
 	if (teamColor == sf::Color(0, 0, 255))
 	{
-		spawnPosition.x = 0.06 * screenWidth_;
-		spawnPosition.y = 100 + (rand() % (screenHeight_-200));
+		//spawnPosition.x = 0.06 * screenWidth_;
+		//spawnPosition.y = 100 + (rand() % (screenHeight_-200));
 		++numPlayersBlue_;
 	}
 	else if (teamColor == sf::Color(255, 0, 0))
 	{
-		spawnPosition.x = 0.94 * screenWidth_;
-		spawnPosition.y = 100 + (rand() % (screenHeight_-200));
+		//spawnPosition.x = 0.94 * screenWidth_;
+		//spawnPosition.y = 100 + (rand() % (screenHeight_-200));
 		++numPlayersRed_;
 	}
 
@@ -371,7 +371,17 @@ void Game::applyElasticImpact(PhysicalObject* lhs, PhysicalObject* rhs, float lh
 	float lhsRadius(lhs->getRadius());
 	float rhsRadius(rhs->getRadius());
 
-	sf::Vector2f diffVec = rhsCenter - lhsCenter;
+	//if players are exactly at the same positon (e.g. during spawn), move them apart
+	sf::Vector2f diffVec;
+	if (lhsCenter == rhsCenter)
+	{
+		diffVec = sf::Vector2f(1.0, 0.0);
+	}
+	else
+	{
+		diffVec = rhsCenter - lhsCenter;
+	}
+
 	float diffLength = std::sqrt(diffVec.x*diffVec.x + diffVec.y*diffVec.y);
 
 	if (diffLength < lhsRadius + rhsRadius)
