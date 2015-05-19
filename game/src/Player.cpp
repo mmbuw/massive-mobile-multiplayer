@@ -6,6 +6,9 @@ Player::Player(int startX, int startY, sf::Color border, sf::Color center, std::
 {
 	shootCircleRadius_ = 1.5 * radius_;
 
+	setLineRestrictions();
+
+
 	shape_ = sf::CircleShape(radius_);
 	shape_.setFillColor(centerColor_);
 	shape_.setOutlineThickness(-5);
@@ -33,6 +36,14 @@ Player::Player(int startX, int startY, sf::Color border, sf::Color center, std::
 	nameText_.setString(name_);
 	nameText_.setCharacterSize(30);
 }
+
+
+void Player::setLineRestrictions() {
+
+	 screenWidth = sf::VideoMode::getDesktopMode().width;
+	 screenHeight = sf::VideoMode::getDesktopMode().height * 0.92307692307; //because the field actually ends at the score line
+}
+
 
 /* virtual */ void Player::render(sf::RenderWindow* window) const 
 {
@@ -77,22 +88,25 @@ Player::Player(int startX, int startY, sf::Color border, sf::Color center, std::
 
 /* virtual */ void Player::clampPosition()
 {
+
+
+
 	if (posX_ < 0)
 	{
 		setPosition(0, posY_);
 	}
-	else if (posX_ > 1920)
+	else if (posX_ > screenWidth)
 	{
-		setPosition(1920, posY_);
+		setPosition(screenWidth, posY_);
 	}
 
 	if (posY_ < 0)
 	{
 		setPosition(posX_, 0);
 	}
-	else if (posY_ > 1200)
+	else if (posY_ > screenHeight)
 	{
-		setPosition(posX_, 1200);
+		setPosition(posX_, screenHeight);
 	}
 }
 

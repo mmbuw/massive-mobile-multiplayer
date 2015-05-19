@@ -103,6 +103,11 @@ void Ball::resetToStart()
 	setPosition(startX_, startY_);
 	setVelocity(0, 0);
 	setColor(sf::Color(255,255,255,255));
+	inLeftGoal_ = false;
+	inRightGoal_ = false;
+	topBorderLine = temporaryTopBorder;
+	bottomBorderLine = temporaryBottomBorder;
+
 }
 
 void Ball::changeAbsorptionVelocity(bool swapX, bool swapY)
@@ -135,6 +140,9 @@ void Ball::setAllLines(double left, double right, double top, double bottom) {
 	rightBorderLine = right;
 	topBorderLine = top;
 	bottomBorderLine = bottom;
+
+	temporaryTopBorder = topBorderLine;
+	temporaryBottomBorder = temporaryBottomBorder;
 
 	screenWidth = sf::VideoMode::getDesktopMode().width;
 	screenHeight = sf::VideoMode::getDesktopMode().height;

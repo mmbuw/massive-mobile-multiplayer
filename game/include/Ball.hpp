@@ -34,6 +34,8 @@ class Ball : public PhysicalObject
 
 		double leftBorderLine;
 		double rightBorderLine;
+		double temporaryTopBorder;
+		double temporaryBottomBorder;
 		double topBorderLine;
 		double bottomBorderLine;
 

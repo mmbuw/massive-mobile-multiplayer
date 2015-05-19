@@ -31,10 +31,13 @@ class Player : public PhysicalObject
 		void shoot();
 		bool inShootSequence() const;
 		void resetToStart();
+		void setLineRestrictions();
 		sf::Color const getTeamColor();
 
 
 	private:
+
+
 		sf::Color borderColor_;
 		sf::Color centerColor_;
 
@@ -51,6 +54,10 @@ class Player : public PhysicalObject
 		sf::Text numberText_;
 		sf::Text nameText_;
 		sf::Font font_;
+
+		int screenWidth;
+		int screenHeight;
+		
 };
 
 #endif //PLAYER_HPP

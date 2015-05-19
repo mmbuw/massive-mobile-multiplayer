@@ -120,13 +120,10 @@ int Game::getScreenHeight(){
 void Game::createField()
 {
 	createGreen();
-	std::cout<<"wat game 1"<<std::endl;
 	createFieldLines();
-	std::cout<<"wat game 2"<<std::endl;
 	sf::Vector2f fieldCenter = centerCircle_.getPosition();
 	createBall(fieldCenter.x, fieldCenter.y);
 		 ball->setAllLines(leftLineAt,rightLineAt,topLineAt,bottomLineAt);
-	std::cout<<"wat game 3"<<std::endl;
 	createGoals();
 	createScoreLine();
 	createFpsDisplay();
@@ -138,7 +135,6 @@ void Game::calculateLinePoistions(){
 	 bottomLineAt = screenHeight_*0.86888f;
 	 rightLineAt = screenWidth_*0.925312f;
 	 centerLineAt = ((rightLineAt-leftLineAt)/2)+leftLineAt;
-	 std::cout<<"wat";
 
 
 }
