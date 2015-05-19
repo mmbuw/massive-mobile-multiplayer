@@ -1,11 +1,10 @@
 #include "Game.hpp"
 
-Game::Game() : ballWasInLeftGoal_(false), ballWasInRightGoal_(false), 
+Game::Game(int screenWidth, int screenHeight) : ballWasInLeftGoal_(false),
+               screenWidth_(screenWidth), screenHeight_(screenHeight), ballWasInRightGoal_(false), 
 			   framesToReset_(-1), pointsBlueTeam_(0), pointsRedTeam_(0),
 			   numPlayersRed_(0), numPlayersBlue_(0)
-{
-	ball = new Ball();
-}
+{}
 
 Game::~Game()
 {
@@ -52,16 +51,14 @@ Player* Game::addNewPlayer(std::string const& name, int number)
 
 	if (teamColor == sf::Color(0, 0, 255))
 	{
-		spawnPosition.x = 480;
-		spawnPosition.y = 600;
+		spawnPosition.x = 0.06 * screenWidth_;
+		spawnPosition.y = 100 + (rand() % (screenHeight_-200));
 		++numPlayersBlue_;
 	}
 	else if (teamColor == sf::Color(255, 0, 0))
 	{
-
-		spawnPosition.x = 480;
-		spawnPosition.y = 300;
-
+		spawnPosition.x = 0.94 * screenWidth_;
+		spawnPosition.y = 100 + (rand() % (screenHeight_-200));
 		++numPlayersRed_;
 	}
 
@@ -111,14 +108,6 @@ void Game::renderBall(sf::RenderWindow* window)
 	ball->render(window);
 }
 
-void Game::setScreenWidth(int in){
-	screenWidth_ = in;
-}
-
-void Game::setScreenHeight(int in){
-	screenHeight_ = in;
-}
-
 
 int Game::getScreenWidth(){
 	return screenWidth_;
@@ -132,6 +121,8 @@ void Game::createField()
 {
 	createGreen();
 	createFieldLines();
+	sf::Vector2f fieldCenter = centerCircle_.getPosition();
+	createBall(fieldCenter.x, fieldCenter.y);
 	createGoals();
 	createScoreLine();
 	createFpsDisplay();
@@ -216,12 +207,11 @@ void Game::createFieldLines(){
 	kickoffPoint.setOrigin(kickoffPoint.getRadius(), kickoffPoint.getRadius());
 	kickoffPoint.setPosition(centerCirclePosX,centerCirclePosY);
 	centerPoint_ = kickoffPoint;
+}
 
-
-
-	ball->setPosition(centerCirclePosX,centerCirclePosY);
-
-
+void Game::createBall(int startX, int startY)
+{
+	ball = new Ball(startX, startY);
 }
 
 void Game::createGreen(){
@@ -436,13 +426,8 @@ void Game::checkForGoal()
 	{
 		if (framesToReset_ == 0)
 		{
-			ball->resetToCenter();
-			
-			for (std::set<Player*>::iterator it = players.begin(); it != players.end(); ++it)
-			{
-				(*it)->resetToStart();
-			}
-
+			ball->resetToStart();
+			resetPlayers();
 			framesToReset_ = -1;
 		}
 		else
@@ -453,8 +438,49 @@ void Game::checkForGoal()
 	}
 }
 
+void Game::resetPlayers()
+{
+	int currentBluePlayer(0);
+	int currentRedPlayer(0);
 
+	float redSectorSize(180.0/numPlayersRed_);
+	float blueSectorSize(180.0/numPlayersBlue_);
 
+	float radiusFromCenter(screenWidth_/5.0);
+
+	for (std::set<Player*>::iterator it = players.begin(); it != players.end(); ++it)
+	{
+		sf::Color teamColor = (*it)->getTeamColor();
+		float angleDegrees;
+		int xDirectionFactor;
+
+		if (teamColor == sf::Color(255, 0, 0))
+		{
+			angleDegrees = 90.0 - redSectorSize/2.0 - currentRedPlayer * redSectorSize;
+			xDirectionFactor = 1;
+			++currentRedPlayer;
+		}
+		else if (teamColor == sf::Color(0, 0, 255))
+		{
+			angleDegrees = 90.0 - blueSectorSize/2.0 - currentBluePlayer * blueSectorSize;
+			xDirectionFactor = -1;
+			++currentBluePlayer;
+		}
+
+		float vecFromCenterX = xDirectionFactor * std::cos(angleDegrees * M_PI / 180.0);
+		float vecFromCenterY = std::sqrt(1 - vecFromCenterX*vecFromCenterX);
+
+		if (angleDegrees < 0)
+			vecFromCenterY = -vecFromCenterY;
+
+		sf::Vector2f center = centerPoint_.getPosition();
+
+		(*it)->setPosition(center.x + radiusFromCenter * vecFromCenterX,
+			               center.y + radiusFromCenter * vecFromCenterY);
+
+	}
+
+}
 
 
 void Game::createScoreLine()

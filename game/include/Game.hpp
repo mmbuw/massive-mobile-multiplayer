@@ -6,6 +6,7 @@
 #include <iostream>
 #include <string>
 #include <set>
+#include <cmath>
 
 #include "Player.hpp"
 #include "Ball.hpp"
@@ -16,10 +17,8 @@ class Game
 {
 	
 	public:
-		Game();
+		Game(int screenWidth, int screenHeight);
 		~Game();
-
-
 
 		Player* addNewPlayer(std::string const& name, int number);
 		void removePlayer(Player* playerToRemove);
@@ -38,6 +37,7 @@ class Game
 		void applyElasticImpact(PhysicalObject* lhs, PhysicalObject* rhs, float lhsAbsorption, float rhsAbsorption);
 
 		void checkForGoal();
+		void resetPlayers();
 		void createField();
 
 		int getScreenWidth();
@@ -67,6 +67,7 @@ class Game
 
 		//internal graphical methods
 		void createFieldLines();
+		void createBall(int startX, int startY);
 		void createGreen();
 		void createGoals();
 		void createScoreLine();

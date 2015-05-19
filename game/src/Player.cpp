@@ -1,7 +1,7 @@
 #include "Player.hpp"
 
 Player::Player(int startX, int startY, sf::Color border, sf::Color center, std::string const& name, int number) :
-	PhysicalObject(10.2, startX, startY, 50.0), borderColor_(border), centerColor_(center), 
+	PhysicalObject(10.2, startX, startY, 35.0), borderColor_(border), centerColor_(center), 
 	blockShootFrames_(0), startX_(startX), startY_(startY), name_(name), shirtNumber_(number)
 {
 	shootCircleRadius_ = 1.5 * radius_;
@@ -27,7 +27,7 @@ Player::Player(int startX, int startY, sf::Color border, sf::Color center, std::
 
 	numberText_.setFont(font_);
 	numberText_.setString(std::to_string(shirtNumber_));
-	numberText_.setCharacterSize(50);
+	numberText_.setCharacterSize(30);
 
 	nameText_.setFont(font_);
 	nameText_.setString(name_);
@@ -51,11 +51,11 @@ Player::Player(int startX, int startY, sf::Color border, sf::Color center, std::
 
 	if (shirtNumber_ > 9)
 	{
-		numberText_.setPosition(posX_-35, posY_-35);
+		numberText_.setPosition(posX_-20, posY_-20);
 	}
 	else
 	{
-		numberText_.setPosition(posX_-23, posY_-35);
+		numberText_.setPosition(posX_-8, posY_-20);
 	}
 
 	if (inShootSequence())

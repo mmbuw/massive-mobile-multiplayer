@@ -27,14 +27,14 @@ void PlayerConnection::createEventDevice()
 	}
 
 	//define allowed event types
-	ioctl(uinputHandle_, UI_SET_EVBIT, EV_REL);
+	ioctl(uinputHandle_, UI_SET_EVBIT, EV_ABS);
 	ioctl(uinputHandle_, UI_SET_EVBIT, EV_KEY);
 	ioctl(uinputHandle_, UI_SET_EVBIT, EV_LED);
 	ioctl(uinputHandle_, UI_SET_EVBIT, EV_SYN);
 
 	//define allowed events
-	ioctl(uinputHandle_, UI_SET_RELBIT, REL_X);
-	ioctl(uinputHandle_, UI_SET_RELBIT, REL_Y);
+	ioctl(uinputHandle_, UI_SET_ABSBIT, ABS_X);
+	ioctl(uinputHandle_, UI_SET_ABSBIT, ABS_Y);
 	ioctl(uinputHandle_, UI_SET_KEYBIT, BTN_A);
 	ioctl(uinputHandle_, UI_SET_LEDBIT, LED_MISC);
 	ioctl(uinputHandle_, UI_SET_LEDBIT, LED_COMPOSE);
@@ -47,10 +47,10 @@ void PlayerConnection::createEventDevice()
 	memset(&eventDevice_, 0, sizeof(eventDevice_));
 	snprintf(eventDevice_.name, UINPUT_MAX_NAME_SIZE, deviceName.c_str());
 
-	eventDevice_.absmin[REL_X] = -1000;
-	eventDevice_.absmax[REL_X] = 1000;
-	eventDevice_.absmin[REL_Y] = -1000;
-	eventDevice_.absmax[REL_Y] = 1000;
+	eventDevice_.absmin[ABS_X] = -1000;
+	eventDevice_.absmax[ABS_X] = 1000;
+	eventDevice_.absmin[ABS_Y] = -1000;
+	eventDevice_.absmax[ABS_Y] = 1000;
 
 	/* set event device properly */
 	eventDevice_.id.bustype = BUS_VIRTUAL;
@@ -114,7 +114,7 @@ void PlayerConnection::injectKeyEvent(int eventCode) const
 	}
 }
 
-void PlayerConnection::injectRelEvent(int xCoord, int yCoord) const
+void PlayerConnection::injectAbsEvent(int xCoord, int yCoord) const
 {
 
 	if (uinputHandle_ != -1)
@@ -122,24 +122,13 @@ void PlayerConnection::injectRelEvent(int xCoord, int yCoord) const
 		struct input_event eventHandle[2];
 		memset(&eventHandle, 0, sizeof(eventHandle));
 
-		eventHandle[0].type = EV_REL;
-		eventHandle[0].code = REL_X;
+		eventHandle[0].type = EV_ABS;
+		eventHandle[0].code = ABS_X;
+		eventHandle[0].value = xCoord;
 
-		//Strangely, the event interface does not accept 0 values
-		//that's why they are set to -1 here
-
-		if (xCoord != 0)
-			eventHandle[0].value = xCoord;
-		else
-			eventHandle[0].value = -1;
-
-		eventHandle[1].type = EV_REL;
-		eventHandle[1].code = REL_Y;
-
-		if (yCoord != 0)
-			eventHandle[1].value = yCoord;
-		else
-			eventHandle[1].value = -1;
+		eventHandle[1].type = EV_ABS;
+		eventHandle[1].code = ABS_Y;
+		eventHandle[1].value = yCoord;
 
 		write(uinputHandle_, &eventHandle, sizeof(eventHandle));
 

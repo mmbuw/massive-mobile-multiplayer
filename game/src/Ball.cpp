@@ -1,15 +1,17 @@
 #include "Ball.hpp"
 
-Ball::Ball() : PhysicalObject(1.0, 960, 600, 30.0), inLeftGoal_(false), inRightGoal_(false)
+Ball::Ball(int startX, int startY) : PhysicalObject(1.0, startX, startY, 25.0),
+               inLeftGoal_(false), inRightGoal_(false),
+			   startX_(startX), startY_(startY)
 {
 	shape_ = sf::CircleShape(radius_);
 	shape_.setFillColor(sf::Color(255,255,255,255));
 	shape_.setOutlineThickness(-3);
 	shape_.setOutlineColor(sf::Color(0,0,0,255));
 	shape_.setOrigin(radius_, radius_);
-	shape_.setPosition(posX_, posY_);
 
-	
+	shape_.setPosition(posX_, posY_);	
+
 }
 
 /* virtual */ Ball::~Ball() {}
@@ -106,9 +108,9 @@ void Ball::setColor(sf::Color color)
 	shape_.setFillColor(color);
 }
 
-void Ball::resetToCenter()
+void Ball::resetToStart()
 {
-	setPosition(960, 600);
+	setPosition(startX_, startY_);
 	setVelocity(0, 0);
 	setColor(sf::Color(255,255,255,255));
 }

@@ -11,14 +11,14 @@
 class Ball : public PhysicalObject 
 {
 	public:
-		Ball();
+		Ball(int startX, int startY);
 
 		/* virtual */ ~Ball();
 		/* virtual */ void clampPosition();
 		
 		void setColor(sf::Color color);
 
-		void resetToCenter();
+		void resetToStart();
 		void changeAbsorptionVelocity(bool swapX, bool swapY);
 		bool isInLeftGoal() const;
 		bool isInRightGoal() const;
@@ -29,6 +29,7 @@ class Ball : public PhysicalObject
 		bool inLeftGoal_;
 		bool inRightGoal_;
 
+<<<<<<< HEAD
 		double screenWidth;
 		double screenHeight;
 
@@ -46,6 +47,12 @@ class Ball : public PhysicalObject
 	
 
 
+=======
+		int startX_;
+		int startY_;
+
+		
+>>>>>>> 1bee4c66a95c35e2edd0c50e7ba9fb21483e67f9
 };
 
 #endif //BALL_HPP
