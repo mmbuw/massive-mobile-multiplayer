@@ -8,6 +8,8 @@ Ball::Ball() : PhysicalObject(1.0, 960, 600, 30.0), inLeftGoal_(false), inRightG
 	shape_.setOutlineColor(sf::Color(0,0,0,255));
 	shape_.setOrigin(radius_, radius_);
 	shape_.setPosition(posX_, posY_);
+
+	
 }
 
 /* virtual */ Ball::~Ball() {}

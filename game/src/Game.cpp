@@ -217,7 +217,7 @@ void Game::createFieldLines(){
 	kickoffPoint.setPosition(centerCirclePosX,centerCirclePosY);
 	centerPoint_ = kickoffPoint;
 
-	
+
 
 	ball->setPosition(centerCirclePosX,centerCirclePosY);
 
@@ -460,8 +460,8 @@ void Game::checkForGoal()
 void Game::createScoreLine()
 {
 	//sf::RectangleShape scoreLine_ = sf::RectangleShape(0,1200,1920,1350,sf::Color(0,0,0));
-	scoreLine_ = sf::RectangleShape(sf::Vector2f(1920,150));
-	scoreLine_.setPosition(0,1200);
+	scoreLine_ = sf::RectangleShape(sf::Vector2f(screenWidth_,0.1153846*screenHeight_));
+	scoreLine_.setPosition(0,0.92307692307*screenHeight_);
 	scoreLine_.setFillColor(sf::Color(0,0,0));
 
 	if (!font_.loadFromFile("resources/font.ttf"))
@@ -472,13 +472,13 @@ void Game::createScoreLine()
 	score_.setFont(font_);
 	score_.setString("Blue   "+std::to_string(pointsBlueTeam_)+":"+std::to_string(pointsRedTeam_)+"   Red");
 	score_.setCharacterSize(80);
-	score_.move(685.f,1200.f);
+	score_.move(0.35677083*screenWidth_,0.92307692307*screenHeight_);
 
 	blueBox_ = sf::CircleShape(35);
-	blueBox_.setPosition(600,1250);
+	blueBox_.setPosition(0.30612244898*screenWidth_,0.93*screenHeight_);
 	blueBox_.setFillColor(sf::Color(0,0,255));
 	redBox_ = sf::CircleShape(35);
-	redBox_.setPosition(1300,1250);
+	redBox_.setPosition(0.66326530612*screenWidth_,0.93*screenHeight_);
 	redBox_.setFillColor(sf::Color(255,0,0));
 }
 

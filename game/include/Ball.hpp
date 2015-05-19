@@ -22,10 +22,30 @@ class Ball : public PhysicalObject
 		void changeAbsorptionVelocity(bool swapX, bool swapY);
 		bool isInLeftGoal() const;
 		bool isInRightGoal() const;
+
+		void setAllLines(double left, double right, double top, double bottom);
 	
 	private:
 		bool inLeftGoal_;
 		bool inRightGoal_;
+
+		double screenWidth;
+		double screenHeight;
+
+		double leftLineAt;
+		double rightLineAt;
+		double topLineAt;
+		double bottomLineAt;
+		double backNetLeft;
+		double backNetRight;
+		double goalStartHeight;
+		double goalEndHeight;
+
+		double leftGoalEndLine;	
+		double rightGoalEndLine;
+	
+
+
 };
 
 #endif //BALL_HPP
