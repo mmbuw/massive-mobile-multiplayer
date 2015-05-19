@@ -13,14 +13,18 @@ int main()
 	srand (time(NULL));
 	sf::Clock Clock;
 
-
+	std::cout<<"wat1"<<std::endl;
 	sf::RenderWindow window(sf::VideoMode(sf::VideoMode::getDesktopMode().width,sf::VideoMode::getDesktopMode().width,20), "MMMBall");
 	window.setVerticalSyncEnabled(true);
 	
+	std::cout<<"wat2"<<std::endl;
 	Game* game = new Game(sf::VideoMode::getDesktopMode().width,
 		                  sf::VideoMode::getDesktopMode().height);
+
+	std::cout<<"wat3"<<std::endl;
 	game->createField();
 	
+	std::cout<<"wat4"<<std::endl;
 	// MMM Input device recognizer and grabber
 	InputHandler inputHandler(game);
 

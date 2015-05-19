@@ -18,16 +18,6 @@ Ball::Ball(int startX, int startY) : PhysicalObject(1.0, startX, startY, 25.0),
 
 /* virtual */ void Ball::clampPosition()
 {
-	int leftBorderLine(105);
-	int rightBorderLine(1820);
-	int topBorderLine(26);
-	int bottomBorderLine(1180);
-
-	int goalStartHeight(450);
-	int goalEndHeight(750);
-
-	int leftGoalEndLine(35);
-	int rightGoalEndLine(1885);
 
 	// if the ball was in a goal last frame, clamp upper and lower
 	// border to goal lines
@@ -137,4 +127,22 @@ bool Ball::isInLeftGoal() const
 bool Ball::isInRightGoal() const
 {
 	return inRightGoal_;
+}
+
+void Ball::setAllLines(double left, double right, double top, double bottom) {
+
+	leftBorderLine = left;
+	rightBorderLine = right;
+	topBorderLine = top;
+	bottomBorderLine = bottom;
+
+	screenWidth = sf::VideoMode::getDesktopMode().width;
+	screenHeight = sf::VideoMode::getDesktopMode().height;
+
+	goalStartHeight = 0.34615384615*screenHeight;
+	goalEndHeight = 0.57692307692*screenHeight;
+
+	leftGoalEndLine = 0.01822916*screenWidth;
+	rightGoalEndLine = 0.981770833*screenWidth;
+
 }

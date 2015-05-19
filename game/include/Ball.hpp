@@ -29,30 +29,27 @@ class Ball : public PhysicalObject
 		bool inLeftGoal_;
 		bool inRightGoal_;
 
-<<<<<<< HEAD
 		double screenWidth;
 		double screenHeight;
 
-		double leftLineAt;
-		double rightLineAt;
-		double topLineAt;
-		double bottomLineAt;
-		double backNetLeft;
-		double backNetRight;
+		double leftBorderLine;
+		double rightBorderLine;
+		double topBorderLine;
+		double bottomBorderLine;
+
 		double goalStartHeight;
 		double goalEndHeight;
+
 
 		double leftGoalEndLine;	
 		double rightGoalEndLine;
 	
 
 
-=======
 		int startX_;
 		int startY_;
 
 		
->>>>>>> 1bee4c66a95c35e2edd0c50e7ba9fb21483e67f9
 };
 
 #endif //BALL_HPP
