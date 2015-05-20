@@ -153,6 +153,6 @@ void Ball::setAllLines(double left, double right, double top, double bottom) {
 	goalEndHeight = middleoflines+(0.15*screenHeight);
 
 	leftGoalEndLine = 0.01822916*screenWidth;
-	rightGoalEndLine = 0.981770833*screenWidth;
+	rightGoalEndLine = 0.96145832*screenWidth;
 
 }

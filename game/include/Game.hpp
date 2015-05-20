@@ -59,7 +59,13 @@ class Game
 		sf::CircleShape centerCircle_;
 		sf::CircleShape centerPoint_;
 		sf::RectangleShape scoreLine_;
+	
+		sf::Text blue_;
+		sf::Text red_;
 		sf::Text score_;
+
+
+
 		sf::Text fpsString_;
 		sf::Font font_;
 		sf::CircleShape blueBox_;

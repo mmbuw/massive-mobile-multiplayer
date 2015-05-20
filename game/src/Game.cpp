@@ -280,11 +280,15 @@ void Game::renderGoals(sf::RenderWindow* window)
 
 void Game::renderScoreLine(sf::RenderWindow* window) 
 {
-	score_.setString("Blue   "+std::to_string(pointsBlueTeam_)+":"+std::to_string(pointsRedTeam_)+"   Red");
+	score_.setString(std::to_string(pointsBlueTeam_)+":"+std::to_string(pointsRedTeam_));
+	blue_.setString("Blue");
+	red_.setString("Red");
 	window->draw(scoreLine_);
 	window->draw(blueBox_);
 	window->draw(redBox_);
 	window->draw(score_);
+	window->draw(blue_);
+	window->draw(red_);
 }
 
 void Game::renderFpsDisplay(sf::RenderWindow* window, float value)
@@ -507,21 +511,37 @@ void Game::createScoreLine()
 	scoreLine_.setPosition(0,0.92307692307*screenHeight_);
 	scoreLine_.setFillColor(sf::Color(0,0,0));
 
+	sf::Font font2;
+
 	if (!font_.loadFromFile("resources/font.ttf"))
 	{
 		std::cout << "[Game.cpp] Error loading font." << std::endl;
 	}
 
-	score_.setFont(font_);
-	score_.setString("Blue   "+std::to_string(pointsBlueTeam_)+":"+std::to_string(pointsRedTeam_)+"   Red");
-	score_.setCharacterSize(80);
-	score_.move(0.35677083*screenWidth_,0.92307692307*screenHeight_);
 
-	blueBox_ = sf::CircleShape(35);
-	blueBox_.setPosition(0.30612244898*screenWidth_,0.93*screenHeight_);
+	score_.setFont(font_);
+	blue_.setFont(font_);
+	red_.setFont(font_);
+
+	score_.setString(std::to_string(pointsBlueTeam_)+":"+std::to_string(pointsRedTeam_));
+	blue_.setString("Blue");
+	red_.setString("Red");
+
+
+	score_.setCharacterSize(screenHeight_*0.06153846153);
+	blue_.setCharacterSize(screenHeight_*0.06153846153);
+	red_.setCharacterSize(screenHeight_*0.06153846153);
+
+
+	blue_.move(0.3*screenWidth_,0.92307692307*screenHeight_);
+	red_.move(0.6*screenWidth_,0.92307692307*screenHeight_);
+	score_.move(0.45*screenWidth_,0.92307692307*screenHeight_);
+
+	blueBox_ = sf::CircleShape(0.02692307692*screenHeight_);
+	blueBox_.setPosition(0.20*screenWidth_,0.93*screenHeight_);
 	blueBox_.setFillColor(sf::Color(0,0,255));
-	redBox_ = sf::CircleShape(35);
-	redBox_.setPosition(0.66326530612*screenWidth_,0.93*screenHeight_);
+	redBox_ = sf::CircleShape(0.02692307692*screenHeight_);
+	redBox_.setPosition(0.7*screenWidth_,0.93*screenHeight_);
 	redBox_.setFillColor(sf::Color(255,0,0));
 }
 
