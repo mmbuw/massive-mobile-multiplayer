@@ -35,26 +35,23 @@ window.addEventListener("orientationchange", hideAddressBar );
 function checkName(input) {1429792994379
 
 	var textArray = [
-    'TimDONG',
-    'BATMAN',    
-    'SuperHARTMANN',
-    'BERND',    
+    'Emrakul',
+    'Kozilek',    
+    'Ulamog',
+    'Liliana',    
     'Gybrush',
     'Donald',    
-    'Lobel',
-    'SteveHobs',    
-    'PeterPan',
+    'Jace',
+    'Gideon',    
     'Elvis',    
-    'SiegeRhino',
-    'Error',
-    'anao',    
-    'HAKAN',
-    'DeadCat',    
-    'BUG',
-    'xxx',
-    '(x,x)',
-    'reallyDEADcat',
-    'psphillip'
+    'Siege Rhino',
+    'Ballack',    
+    'Schneider',
+    'Völler',
+    'Jeremy',
+    'Rahn',
+    'Gerrad',
+    'Keane'   
 	];
 
 

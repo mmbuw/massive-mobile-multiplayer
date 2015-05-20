@@ -2,17 +2,28 @@
 	<head>
 		<meta charset="ISO-8859-1"> 
 		<link rel="stylesheet" type="text/css" href="./style.css">
+		<title>MMM Ball</title>
 		<script src="./js/jquery.min.js"></script>
 		<script src="./js/setup.js"></script>
 	</head>
+
 	<body>
-	<div class="form-page">
-		<p>Wilkommen bei MMMBalls</p>
-		<form>
-			<input type="text" name="playername" id="input-name" placeholder="Spielername">
-			</br>	
-			<button onclick="playerSetup(); return false;">Anmelden</button>
-		</form>
-	</div>
+	<section class="headerimage" align=center>
+		<img src="res/mmmball.png">
+	</section>
+		<section class="login cf">
+				<!--<div class="form-page"><br><br>-->
+				<form name="login">
+					<ul><h1>Login</h1>
+						<li>
+							<label for="playername">Player Name</label>
+							<input type="text" name="playername" id="input-name" placeholder=""></p>
+						</li><br>
+						<li>
+							<button onclick="playerSetup(); return false;">Sign In</button>
+						</li>
+					</ul>
+				</form>
+		</section>
 	</body>
 </html>
