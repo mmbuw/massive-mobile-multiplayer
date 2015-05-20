@@ -340,8 +340,12 @@ void Game::applyIntersectionPhysics()
 void Game::applyShootingForce(Player* player)
 {
 	// apply shooting forces
-	sf::Vector2f shootDir( ball->getPosX() - player->getPosX(), ball->getPosY() - player->getPosY() );
-	float scaleFactor(0.2);
+	sf::Vector2f currentBallPos = sf::Vector2f(ball->getPosX(), ball->getPosY());
+	sf::Vector2f shootDir( currentBallPos.x - player->getPosX(), currentBallPos.y - player->getPosY() );
+	float scaleFactor(std::max(ball->computeCurrentSpeed() * 0.01 + 0.2, 0.2));
+
+	// tear ball away from collision
+	ball->setPosition(currentBallPos.x + 0.1 * shootDir.x, currentBallPos.y + 0.1 * shootDir.y);
 	ball->setVelocity(scaleFactor * shootDir.x, scaleFactor * shootDir.y);
 }
 
