@@ -429,6 +429,7 @@ void Game::checkForGoal()
 		goalTextOne_.setString("Red scores");
 		goalTextOne_.setColor(sf::Color(255, 0, 0));
 		goalTextTwo_.setColor(sf::Color(255, 0, 0));
+		celebratingTeam_ = sf::Color(255,0,0);
 	}
 	else if (ball->isInRightGoal() && ballWasInRightGoal_ == false && inGoalAnimation_ == false)
 	{
@@ -446,6 +447,7 @@ void Game::checkForGoal()
 		goalTextOne_.setString("Blue scores");
 		goalTextOne_.setColor(sf::Color(0, 0, 255));
 		goalTextTwo_.setColor(sf::Color(0, 0, 255));
+		celebratingTeam_ = sf::Color(0,0,255);
 	}
 	else if (ball->isInLeftGoal() == false && ballWasInLeftGoal_ == true)
 	{
@@ -455,8 +457,6 @@ void Game::checkForGoal()
 	{
 		ballWasInRightGoal_ = false;
 	}
-
-	goalTextTwo_.setString("TEST");
 
 	//perform goal animation
 	if (inGoalAnimation_)
@@ -487,7 +487,7 @@ void Game::checkForGoal()
 			sf::Vector2f currentTextPos = lerp(lerpStart, lerpEnd, timeStep);
 			goalTextOne_.setPosition(currentTextPos);
 
-			if (ballWasInLeftGoal_)
+			if (celebratingTeam_ == sf::Color(255,0,0))
 			{
 				if (timeStep < 0.5)
 					goalTextTwo_.setString(std::to_string(pointsRedTeam_-1));

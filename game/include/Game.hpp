@@ -102,6 +102,7 @@ class Game
 
 		Clock::time_point goalAnimationStartTime_;
 		bool inGoalAnimation_;
+		sf::Color celebratingTeam_;
 		int goalAnimationDurationSec_;
 
 		int pointsBlueTeam_;
