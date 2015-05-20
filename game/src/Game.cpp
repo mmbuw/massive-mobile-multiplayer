@@ -245,21 +245,19 @@ void Game::createGoals()
 	double middleoflines = ((bottomLineAt-topLineAt)/2)+topLineAt;
 	double goalsStartAt = middleoflines - (0.2*(middleoflines));
 
-
 	goalLeft_ = sf::RectangleShape(sf::Vector2f(0.03385416*screenWidth_,0.3*screenHeight_));
 	goalLeft_.setPosition(0.01822916*screenWidth_,middleoflines-(0.15*screenHeight_));
 	goalLeft_.setFillColor(sf::Color(0,0,0,0));
 	goalLeft_.setOutlineThickness(5);
 	goalLeft_.setOutlineColor(sf::Color(255,255,255));
 
-
-
-
 	goalRight_ = sf::RectangleShape(sf::Vector2f(0.03385416*screenWidth_,0.3*screenHeight_));
 	goalRight_.setPosition(0.92760416*screenWidth_,middleoflines-(0.15*screenHeight_));
 	goalRight_.setFillColor(sf::Color(0,0,0,0));
 	goalRight_.setOutlineThickness(5);
 	goalRight_.setOutlineColor(sf::Color(255,255,255));
+
+
 }
 
 void Game::renderSidelines(sf::RenderWindow* window) 
@@ -283,12 +281,14 @@ void Game::renderScoreLine(sf::RenderWindow* window)
 	score_.setString(std::to_string(pointsBlueTeam_)+":"+std::to_string(pointsRedTeam_));
 	blue_.setString("Blue");
 	red_.setString("Red");
+
 	window->draw(scoreLine_);
 	window->draw(blueBox_);
 	window->draw(redBox_);
 	window->draw(score_);
 	window->draw(blue_);
 	window->draw(red_);
+	window->draw(goalTextOne_);
 }
 
 void Game::renderFpsDisplay(sf::RenderWindow* window, float value)
@@ -416,10 +416,13 @@ void Game::checkForGoal()
 		inGoalAnimation_ = true;
 		ball->setColor(sf::Color(0,0,0));
 
-		std::cout << std::endl;
-		std::cout << "The left team scored a goal!" << std::endl;
-		std::cout << "Current standings: Left " << pointsBlueTeam_ << " : " << pointsRedTeam_ << " Right" << std::endl;
-		std::cout << std::endl;
+		//std::cout << std::endl;
+		//std::cout << "The red team scored a goal!" << std::endl;
+		//std::cout << "Current standings: Left " << pointsBlueTeam_ << " : " << pointsRedTeam_ << " Right" << std::endl;
+		//std::cout << std::endl;
+
+		goalTextOne_.setString("Red scores");
+		goalTextOne_.setColor(sf::Color(255, 0, 0));
 	}
 	else if (ball->isInRightGoal() && ballWasInRightGoal_ == false && inGoalAnimation_ == false)
 	{
@@ -429,10 +432,13 @@ void Game::checkForGoal()
 		inGoalAnimation_ = true;
 		ball->setColor(sf::Color(0,0,0));
 
-		std::cout << std::endl;
-		std::cout << "The left team scored a goal!" << std::endl;
-		std::cout << "Current standings: Left " << pointsBlueTeam_ << " : " << pointsRedTeam_ << " Right" << std::endl;
-		std::cout << std::endl;
+		//std::cout << std::endl;
+		//std::cout << "The blue team scored a goal!" << std::endl;
+		//std::cout << "Current standings: Left " << pointsBlueTeam_ << " : " << pointsRedTeam_ << " Right" << std::endl;
+		//std::cout << std::endl;
+
+		goalTextOne_.setString("Blue scores");
+		goalTextOne_.setColor(sf::Color(0, 0, 255));
 	}
 	else if (ball->isInLeftGoal() == false && ballWasInLeftGoal_ == true)
 	{
@@ -455,9 +461,19 @@ void Game::checkForGoal()
 			ball->resetToStart();
 			resetPlayers();
 			inGoalAnimation_ = false;
+			goalTextOne_.setString("");
 		}
 		else
 		{
+			float timeStep = elapsedMilliseconds / ((goalAnimationDurationSec_-1)*1000.0);
+
+			sf::FloatRect textRect = goalTextOne_.getGlobalBounds();
+			float textWidth = textRect.width;
+			float textHeight = textRect.height;
+
+			sf::Vector2f currentTextPos = lerp(sf::Vector2f(-textWidth, screenHeight_*0.4 - textHeight/2.0), sf::Vector2f(screenWidth_*0.5 - textWidth/2.0, screenHeight_*0.4 - textHeight/2.0), timeStep);
+			goalTextOne_.setPosition(currentTextPos);
+
 			ball->setColor(sf::Color(rand() % 256, rand() % 256, rand() % 256));
 		}
 	}
@@ -517,17 +533,16 @@ void Game::createScoreLine()
 	scoreLine_.setPosition(0,0.92307692307*screenHeight_);
 	scoreLine_.setFillColor(sf::Color(0,0,0));
 
-	sf::Font font2;
-
+	//create text
 	if (!font_.loadFromFile("resources/font.ttf"))
 	{
 		std::cout << "[Game.cpp] Error loading font." << std::endl;
 	}
 
-
 	score_.setFont(font_);
 	blue_.setFont(font_);
 	red_.setFont(font_);
+	goalTextOne_.setFont(font_);
 
 	score_.setString(std::to_string(pointsBlueTeam_)+":"+std::to_string(pointsRedTeam_));
 	blue_.setString("Blue");
@@ -537,11 +552,13 @@ void Game::createScoreLine()
 	score_.setCharacterSize(screenHeight_*0.06153846153);
 	blue_.setCharacterSize(screenHeight_*0.06153846153);
 	red_.setCharacterSize(screenHeight_*0.06153846153);
+	goalTextOne_.setCharacterSize(screenHeight_*0.1);
 
 
 	blue_.move(0.3*screenWidth_,0.92307692307*screenHeight_);
 	red_.move(0.6*screenWidth_,0.92307692307*screenHeight_);
 	score_.move(0.45*screenWidth_,0.92307692307*screenHeight_);
+
 
 	blueBox_ = sf::CircleShape(0.02692307692*screenHeight_);
 	blueBox_.setPosition(0.20*screenWidth_,0.93*screenHeight_);
@@ -561,4 +578,19 @@ void Game::createFpsDisplay()
 	fpsString_.setFont(font_);
 	fpsString_.setCharacterSize(30);
 	fpsString_.move(100.0f,0.0f);
+}
+
+sf::Vector2f const Game::lerp(sf::Vector2f const& start, sf::Vector2f const& end, float timeStep) const
+{
+	float factor;
+
+	if (timeStep < 0.0)
+		factor = 0.0;
+	if (timeStep > 1.0)
+		factor = 1.0;
+	else
+		factor = timeStep;
+
+	sf::Vector2f diffVec = end - start;
+	return sf::Vector2f(start.x + factor * diffVec.x, start.y + factor * diffVec.y);
 }

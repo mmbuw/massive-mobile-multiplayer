@@ -48,6 +48,8 @@ class Game
 		void setScreenWidth(int in);
 		void setScreenHeight(int in);
 
+		sf::Vector2f const lerp(sf::Vector2f const& start, sf::Vector2f const& end, float timeStep) const;
+
 	private:
 
 
@@ -67,12 +69,12 @@ class Game
 		sf::Text red_;
 		sf::Text score_;
 
-
-
 		sf::Text fpsString_;
 		sf::Font font_;
 		sf::CircleShape blueBox_;
 		sf::CircleShape redBox_;
+
+		sf::Text goalTextOne_;
 
 		//internal graphical methods
 		void createFieldLines();
