@@ -32,12 +32,18 @@ int main()
 
 	//debug keyboard player
 	#if INSERT_KEYBOARD_DEBUG_PLAYER
-	    Player* debugPlayer = game->addNewPlayer("Keyboard", 29);
+	    Player* debugPlayer = game->addNewPlayer("WASD", 29);
+	    Player* debugPlayer2 = game->addNewPlayer("IJKL", 42);
 
 		bool wPressed(false);
 		bool aPressed(false);
 		bool sPressed(false);
 		bool dPressed(false);
+
+		bool iPressed(false);
+		bool jPressed(false);
+		bool kPressed(false);
+		bool lPressed(false);
 	#endif
 
 	while (window.isOpen()) 
@@ -88,10 +94,52 @@ int main()
 				dPressed = false;
 			}
 
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::I) && iPressed == false)
+			{
+				iPressed = true;
+			}
+			else if (sf::Keyboard::isKeyPressed(sf::Keyboard::I) == false && iPressed == true)
+			{
+				iPressed = false;
+			}
+
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::J) && jPressed == false)
+			{
+				jPressed = true;
+			}
+			else if (sf::Keyboard::isKeyPressed(sf::Keyboard::J) == false && jPressed == true)
+			{
+				jPressed = false;
+			}
+
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::K) && kPressed == false)
+			{
+				kPressed = true;
+			}
+			else if (sf::Keyboard::isKeyPressed(sf::Keyboard::K) == false && kPressed == true)
+			{
+				kPressed = false;
+			}
+
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::L) && lPressed == false)
+			{
+				lPressed = true;
+			}
+			else if (sf::Keyboard::isKeyPressed(sf::Keyboard::L) == false && lPressed == true)
+			{
+				lPressed = false;
+			}
+
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::V))
 			{
 				debugPlayer->shoot();
 			}
+
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::N))
+			{
+				debugPlayer2->shoot();
+			}
+
 
 
 			if (wPressed)
@@ -102,6 +150,16 @@ int main()
 				debugPlayer->moveDown();
 			if (dPressed)
 				debugPlayer->moveRight();
+
+			if (iPressed)
+				debugPlayer2->moveUp();
+			if (jPressed)
+				debugPlayer2->moveLeft();
+			if (kPressed)
+				debugPlayer2->moveDown();
+			if (lPressed)
+				debugPlayer2->moveRight();
+
 		#endif
 
 		// input handling
