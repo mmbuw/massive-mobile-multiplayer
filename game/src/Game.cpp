@@ -489,6 +489,7 @@ void Game::resetPlayers()
 
 		(*it)->setPosition(center.x + radiusFromCenter * vecFromCenterX,
 			               center.y + radiusFromCenter * vecFromCenterY);
+		(*it)->setVelocity(0.0, 0.0);
 
 	}
 
