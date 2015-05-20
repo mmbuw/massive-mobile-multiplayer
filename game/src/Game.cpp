@@ -342,7 +342,7 @@ void Game::applyShootingForce(Player* player)
 	// apply shooting forces
 	sf::Vector2f currentBallPos = sf::Vector2f(ball->getPosX(), ball->getPosY());
 	sf::Vector2f shootDir( currentBallPos.x - player->getPosX(), currentBallPos.y - player->getPosY() );
-	float scaleFactor(std::max(ball->computeCurrentSpeed() * 0.01 + 0.2, 0.2));
+	float scaleFactor(std::max(ball->computeCurrentSpeed() * 0.001 + 0.2, 0.2));
 
 	// tear ball away from collision
 	ball->setPosition(currentBallPos.x + 0.1 * shootDir.x, currentBallPos.y + 0.1 * shootDir.y);
