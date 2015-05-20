@@ -2,8 +2,8 @@
 
 Game::Game(int screenWidth, int screenHeight) : ballWasInLeftGoal_(false),
                screenWidth_(screenWidth), screenHeight_(screenHeight), ballWasInRightGoal_(false), 
-			   framesToReset_(-1), pointsBlueTeam_(0), pointsRedTeam_(0),
-			   numPlayersRed_(0), numPlayersBlue_(0)
+			   goalAnimationDurationSec_(3), pointsBlueTeam_(0), pointsRedTeam_(0),
+			   numPlayersRed_(0), numPlayersBlue_(0), inGoalAnimation_(false)
 {}
 
 Game::~Game()
@@ -408,11 +408,12 @@ void Game::applyElasticImpact(PhysicalObject* lhs, PhysicalObject* rhs, float lh
 
 void Game::checkForGoal()
 {
-	if (ball->isInLeftGoal() && ballWasInLeftGoal_ == false && framesToReset_ == -1)
+	if (ball->isInLeftGoal() && ballWasInLeftGoal_ == false && inGoalAnimation_ == false)
 	{
 		++pointsRedTeam_;
 		ballWasInLeftGoal_ = true;
-		framesToReset_ = 100;
+		goalAnimationStartTime_ = Clock::now();
+		inGoalAnimation_ = true;
 		ball->setColor(sf::Color(0,0,0));
 
 		std::cout << std::endl;
@@ -420,11 +421,12 @@ void Game::checkForGoal()
 		std::cout << "Current standings: Left " << pointsBlueTeam_ << " : " << pointsRedTeam_ << " Right" << std::endl;
 		std::cout << std::endl;
 	}
-	else if (ball->isInRightGoal() && ballWasInRightGoal_ == false && framesToReset_ == -1)
+	else if (ball->isInRightGoal() && ballWasInRightGoal_ == false && inGoalAnimation_ == false)
 	{
 		++pointsBlueTeam_;
 		ballWasInRightGoal_ = true;
-		framesToReset_ = 100;
+		goalAnimationStartTime_ = Clock::now();
+		inGoalAnimation_ = true;
 		ball->setColor(sf::Color(0,0,0));
 
 		std::cout << std::endl;
@@ -441,21 +443,25 @@ void Game::checkForGoal()
 		ballWasInRightGoal_ = false;
 	}
 
-	// count frames until ball is reset (after scoring animation)
-	if (framesToReset_ > -1)
+
+	//perform goal animation
+	if (inGoalAnimation_)
 	{
-		if (framesToReset_ == 0)
+		Clock::time_point nowTime(Clock::now());
+		int elapsedMilliseconds = (std::chrono::duration_cast<milliseconds>(nowTime - goalAnimationStartTime_)).count();
+
+		if (elapsedMilliseconds > goalAnimationDurationSec_ * 1000)
 		{
 			ball->resetToStart();
 			resetPlayers();
-			framesToReset_ = -1;
+			inGoalAnimation_ = false;
 		}
 		else
 		{
 			ball->setColor(sf::Color(rand() % 256, rand() % 256, rand() % 256));
-			--framesToReset_;
 		}
 	}
+
 }
 
 void Game::resetPlayers()

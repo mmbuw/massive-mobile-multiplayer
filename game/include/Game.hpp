@@ -7,11 +7,14 @@
 #include <string>
 #include <set>
 #include <cmath>
+#include <chrono>
 
 #include "Player.hpp"
 #include "Ball.hpp"
 #include "PhysicalObject.hpp"
 
+typedef std::chrono::high_resolution_clock Clock;
+typedef std::chrono::milliseconds milliseconds;
 
 class Game
 {
@@ -94,7 +97,10 @@ class Game
 
 		bool ballWasInLeftGoal_;
 		bool ballWasInRightGoal_;
-		int framesToReset_;
+
+		Clock::time_point goalAnimationStartTime_;
+		bool inGoalAnimation_;
+		int goalAnimationDurationSec_;
 
 		int pointsBlueTeam_;
 		int pointsRedTeam_;
