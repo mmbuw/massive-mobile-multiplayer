@@ -69,6 +69,7 @@ class Game
 
 		sf::Text fpsString_;
 		sf::Font font_;
+		sf::Font scoreFont_;
 		sf::CircleShape blueBox_;
 		sf::CircleShape redBox_;
 

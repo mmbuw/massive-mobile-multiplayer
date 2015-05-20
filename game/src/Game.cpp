@@ -577,11 +577,16 @@ void Game::createScoreLine()
 		std::cout << "[Game.cpp] Error loading font." << std::endl;
 	}
 
+	if (!scoreFont_.loadFromFile("resources/masters.otf"))
+	{
+		std::cout << "[Game.cpp] Error loading score font." << std::endl;
+	}
+
 	score_.setFont(font_);
 	blue_.setFont(font_);
 	red_.setFont(font_);
-	goalTextOne_.setFont(font_);
-	goalTextTwo_.setFont(font_);
+	goalTextOne_.setFont(scoreFont_);
+	goalTextTwo_.setFont(scoreFont_);
 
 	score_.setString(std::to_string(pointsBlueTeam_)+":"+std::to_string(pointsRedTeam_));
 	blue_.setString("Blue");
@@ -591,8 +596,8 @@ void Game::createScoreLine()
 	score_.setCharacterSize(screenHeight_*0.06153846153);
 	blue_.setCharacterSize(screenHeight_*0.06153846153);
 	red_.setCharacterSize(screenHeight_*0.06153846153);
-	goalTextOne_.setCharacterSize(screenHeight_*0.1);
-	goalTextTwo_.setCharacterSize(screenHeight_*0.1);
+	goalTextOne_.setCharacterSize(screenHeight_*0.15);
+	goalTextTwo_.setCharacterSize(screenHeight_*0.15);
 
 
 	blue_.move(0.3*screenWidth_,0.92307692307*screenHeight_);
