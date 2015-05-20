@@ -48,8 +48,6 @@ class Game
 		void setScreenWidth(int in);
 		void setScreenHeight(int in);
 
-		sf::Vector2f const lerp(sf::Vector2f const& start, sf::Vector2f const& end, float timeStep) const;
-
 	private:
 
 
@@ -75,6 +73,7 @@ class Game
 		sf::CircleShape redBox_;
 
 		sf::Text goalTextOne_;
+		sf::Text goalTextTwo_;
 
 		//internal graphical methods
 		void createFieldLines();
@@ -110,5 +109,8 @@ class Game
 		int numPlayersRed_;
 		int numPlayersBlue_;
 };
+
+sf::Vector2f lerp(sf::Vector2f const& start, sf::Vector2f const& end, float timeStep);
+float mapTimeStep(float inputTimeStep);
 
 #endif //GAME_HPP

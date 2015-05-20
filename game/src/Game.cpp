@@ -288,7 +288,12 @@ void Game::renderScoreLine(sf::RenderWindow* window)
 	window->draw(score_);
 	window->draw(blue_);
 	window->draw(red_);
-	window->draw(goalTextOne_);
+
+	if (inGoalAnimation_)
+	{
+		window->draw(goalTextOne_);
+		window->draw(goalTextTwo_);
+	}
 }
 
 void Game::renderFpsDisplay(sf::RenderWindow* window, float value)
@@ -423,6 +428,7 @@ void Game::checkForGoal()
 
 		goalTextOne_.setString("Red scores");
 		goalTextOne_.setColor(sf::Color(255, 0, 0));
+		goalTextTwo_.setColor(sf::Color(255, 0, 0));
 	}
 	else if (ball->isInRightGoal() && ballWasInRightGoal_ == false && inGoalAnimation_ == false)
 	{
@@ -439,6 +445,7 @@ void Game::checkForGoal()
 
 		goalTextOne_.setString("Blue scores");
 		goalTextOne_.setColor(sf::Color(0, 0, 255));
+		goalTextTwo_.setColor(sf::Color(0, 0, 255));
 	}
 	else if (ball->isInLeftGoal() == false && ballWasInLeftGoal_ == true)
 	{
@@ -449,6 +456,7 @@ void Game::checkForGoal()
 		ballWasInRightGoal_ = false;
 	}
 
+	goalTextTwo_.setString("TEST");
 
 	//perform goal animation
 	if (inGoalAnimation_)
@@ -462,18 +470,48 @@ void Game::checkForGoal()
 			resetPlayers();
 			inGoalAnimation_ = false;
 			goalTextOne_.setString("");
+			goalTextTwo_.setString("");
 		}
 		else
 		{
+			//perform text animation
 			float timeStep = elapsedMilliseconds / ((goalAnimationDurationSec_-1)*1000.0);
+			timeStep = mapTimeStep(timeStep);
 
 			sf::FloatRect textRect = goalTextOne_.getGlobalBounds();
 			float textWidth = textRect.width;
 			float textHeight = textRect.height;
 
-			sf::Vector2f currentTextPos = lerp(sf::Vector2f(-textWidth, screenHeight_*0.4 - textHeight/2.0), sf::Vector2f(screenWidth_*0.5 - textWidth/2.0, screenHeight_*0.4 - textHeight/2.0), timeStep);
+			sf::Vector2f lerpStart(sf::Vector2f(-textWidth, screenHeight_*0.3 - textHeight/2.0));
+			sf::Vector2f lerpEnd(sf::Vector2f(screenWidth_, screenHeight_*0.3 - textHeight/2.0));
+			sf::Vector2f currentTextPos = lerp(lerpStart, lerpEnd, timeStep);
 			goalTextOne_.setPosition(currentTextPos);
 
+			if (ballWasInLeftGoal_)
+			{
+				if (timeStep < 0.5)
+					goalTextTwo_.setString(std::to_string(pointsRedTeam_-1));
+				else
+					goalTextTwo_.setString(std::to_string(pointsRedTeam_));
+			}
+			else
+			{
+				if (timeStep < 0.5)
+					goalTextTwo_.setString(std::to_string(pointsBlueTeam_-1));
+				else
+					goalTextTwo_.setString(std::to_string(pointsBlueTeam_));
+			}
+
+			textRect = goalTextTwo_.getGlobalBounds();
+			textWidth = textRect.width;
+			textHeight = textRect.height;
+
+			lerpStart = sf::Vector2f(screenWidth_, screenHeight_*0.5 - textHeight/2.0);
+			lerpEnd = sf::Vector2f(-textWidth, screenHeight_*0.5 - textHeight/2.0);
+			currentTextPos = lerp(lerpStart, lerpEnd, timeStep);
+			goalTextTwo_.setPosition(currentTextPos);
+
+			//perform blinking ball animation
 			ball->setColor(sf::Color(rand() % 256, rand() % 256, rand() % 256));
 		}
 	}
@@ -543,6 +581,7 @@ void Game::createScoreLine()
 	blue_.setFont(font_);
 	red_.setFont(font_);
 	goalTextOne_.setFont(font_);
+	goalTextTwo_.setFont(font_);
 
 	score_.setString(std::to_string(pointsBlueTeam_)+":"+std::to_string(pointsRedTeam_));
 	blue_.setString("Blue");
@@ -553,6 +592,7 @@ void Game::createScoreLine()
 	blue_.setCharacterSize(screenHeight_*0.06153846153);
 	red_.setCharacterSize(screenHeight_*0.06153846153);
 	goalTextOne_.setCharacterSize(screenHeight_*0.1);
+	goalTextTwo_.setCharacterSize(screenHeight_*0.1);
 
 
 	blue_.move(0.3*screenWidth_,0.92307692307*screenHeight_);
@@ -580,7 +620,7 @@ void Game::createFpsDisplay()
 	fpsString_.move(100.0f,0.0f);
 }
 
-sf::Vector2f const Game::lerp(sf::Vector2f const& start, sf::Vector2f const& end, float timeStep) const
+sf::Vector2f lerp(sf::Vector2f const& start, sf::Vector2f const& end, float timeStep)
 {
 	float factor;
 
@@ -593,4 +633,14 @@ sf::Vector2f const Game::lerp(sf::Vector2f const& start, sf::Vector2f const& end
 
 	sf::Vector2f diffVec = end - start;
 	return sf::Vector2f(start.x + factor * diffVec.x, start.y + factor * diffVec.y);
+}
+
+/*float mapTimeStep(float inputTimeStep)
+{
+	return std::pow(inputTimeStep-1, 3) + 1;
+}*/
+
+float mapTimeStep(float inputTimeStep)
+{
+	return 0.5 * (std::pow(2*inputTimeStep-1, 3) + 1);
 }
