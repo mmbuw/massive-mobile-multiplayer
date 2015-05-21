@@ -468,6 +468,12 @@ void Game::applyElasticImpact(PhysicalObject* lhs, PhysicalObject* rhs, float lh
 	}
 }
 
+void Game::resetScore()
+{
+	pointsBlueTeam_ = 0;
+	pointsRedTeam_ = 0;
+}
+
 void Game::checkForGoal()
 {
 	if (ball->isInLeftGoal() && ballWasInLeftGoal_ == false && inGoalAnimation_ == false)
@@ -678,8 +684,9 @@ void Game::createFpsDisplay()
 	}
 
 	fpsString_.setFont(font_);
-	fpsString_.setCharacterSize(30);
-	fpsString_.move(100.0f,0.0f);
+	fpsString_.setCharacterSize(screenHeight_*0.03);
+
+	fpsString_.move(0.85*screenWidth_,0.94*screenHeight_);
 }
 
 sf::Vector2f const lerp(sf::Vector2f const& start, sf::Vector2f const& end, float timeStep)
