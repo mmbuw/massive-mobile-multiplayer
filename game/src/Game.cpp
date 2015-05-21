@@ -582,12 +582,12 @@ void Game::createScoreLine()
 	scoreLine_.setFillColor(sf::Color(0,0,0));
 
 	//create text
-	if (!font_.loadFromFile("resources/font.ttf"))
+	if (!font_.loadFromFile("resources/blox.ttf"))
 	{
 		std::cout << "[Game.cpp] Error loading font." << std::endl;
 	}
 
-	if (!scoreFont_.loadFromFile("resources/masters.otf"))
+	if (!scoreFont_.loadFromFile("resources/blox.ttf"))
 	{
 		std::cout << "[Game.cpp] Error loading score font." << std::endl;
 	}
