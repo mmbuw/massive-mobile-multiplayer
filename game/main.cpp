@@ -180,6 +180,7 @@ int main()
 		game->renderPlayers(&window);
 		game->renderBall(&window);
 		game->renderScoreLine(&window);
+		game->renderTime(&window);
 		
 		frameCounterMod = (frameCounterMod + 1) % 5;
 		

@@ -34,6 +34,7 @@ class Game
 		void renderGoals(sf::RenderWindow* window);
 		void renderScoreLine(sf::RenderWindow* window);
 		void renderFpsDisplay(sf::RenderWindow* window, float value);
+		void renderTime(sf::RenderWindow* window);
 
 		void updatePhysicalObjects();
 		void applyIntersectionPhysics(); 
@@ -45,6 +46,8 @@ class Game
 		void resetPlayers();
 		void createField();
 
+
+
 		int getScreenWidth();
 		int getScreenHeight();
 		void setScreenWidth(int in);
@@ -55,6 +58,8 @@ class Game
 
 		int screenWidth_;
 		int screenHeight_;
+
+		sf::Clock clock_;
 
 		//graphical objects
 		std::vector<sf::ConvexShape> lines_;
@@ -71,6 +76,7 @@ class Game
 
 		sf::Text fpsString_;
 		sf::Font font_;
+		sf::Text time_;
 		sf::Font scoreFont_;
 		sf::CircleShape blueBox_;
 		sf::CircleShape redBox_;
@@ -85,6 +91,7 @@ class Game
 		void createGoals();
 		void createScoreLine();
 		void createFpsDisplay();
+		void initTime();
 
 		void calculateLinePoistions();
 
