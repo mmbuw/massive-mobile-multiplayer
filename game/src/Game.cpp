@@ -2,7 +2,7 @@
 
 Game::Game(int screenWidth, int screenHeight) : ballWasInLeftGoal_(false),
                screenWidth_(screenWidth), screenHeight_(screenHeight), ballWasInRightGoal_(false), 
-			   goalAnimationDurationSec_(3), pointsBlueTeam_(0), pointsRedTeam_(0),
+			   goalAnimationDurationSec_(4), pointsBlueTeam_(0), pointsRedTeam_(0),
 			   numPlayersRed_(0), numPlayersBlue_(0), inGoalAnimation_(false)
 {}
 
@@ -170,10 +170,10 @@ void Game::createFieldLines(){
 
 	sf::ConvexShape bottomSideLine;
 	bottomSideLine.setPointCount(4);
-	bottomSideLine.setPoint(0, sf::Vector2f(rightLineAt, bottomLineAt+5));
+	bottomSideLine.setPoint(0, sf::Vector2f(rightLineAt+5, bottomLineAt+5));
 	bottomSideLine.setPoint(1, sf::Vector2f(leftLineAt, bottomLineAt+5));
 	bottomSideLine.setPoint(2, sf::Vector2f(leftLineAt, bottomLineAt));
-	bottomSideLine.setPoint(3, sf::Vector2f(rightLineAt, bottomLineAt));
+	bottomSideLine.setPoint(3, sf::Vector2f(rightLineAt+5, bottomLineAt));
 	lines_.push_back(bottomSideLine);
 
 
@@ -252,7 +252,7 @@ void Game::createGoals()
 	goalLeft_.setOutlineColor(sf::Color(255,255,255));
 
 	goalRight_ = sf::RectangleShape(sf::Vector2f(0.03385416*screenWidth_,0.3*screenHeight_));
-	goalRight_.setPosition(0.92760416*screenWidth_,middleoflines-(0.15*screenHeight_));
+	goalRight_.setPosition(0.92791616666*screenWidth_,middleoflines-(0.15*screenHeight_));
 	goalRight_.setFillColor(sf::Color(0,0,0,0));
 	goalRight_.setOutlineThickness(5);
 	goalRight_.setOutlineColor(sf::Color(255,255,255));
