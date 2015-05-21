@@ -230,7 +230,7 @@ void Game::createFieldLines(){
 	centerCirclePosX = centerCirclePosX+leftLineAt;
 
 
-	sf::CircleShape kickoffCircle = sf::CircleShape(185);
+	sf::CircleShape kickoffCircle = sf::CircleShape(0.096354166*screenWidth_);
 	kickoffCircle.setFillColor(sf::Color(255,255,255,0));
 	kickoffCircle.setOutlineThickness(5);
 	kickoffCircle.setOutlineColor(sf::Color(255,255,255));
