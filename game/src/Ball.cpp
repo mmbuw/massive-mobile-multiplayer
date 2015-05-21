@@ -112,7 +112,7 @@ void Ball::resetToStart()
 
 void Ball::changeAbsorptionVelocity(bool swapX, bool swapY)
 {
-	float borderAbsorptionCoefficient(0.7);
+	float borderAbsorptionCoefficient(0.5);
 
 	if (swapX)
 		velX_ = -velX_;

@@ -37,7 +37,7 @@ class Game
 		void updatePhysicalObjects();
 		void applyIntersectionPhysics(); 
 		void applyShootingForce(Player* player);
-		void applyElasticImpact(PhysicalObject* lhs, PhysicalObject* rhs, float lhsAbsorption, float rhsAbsorption);
+		void applyElasticImpact(PhysicalObject* lhs, PhysicalObject* rhs, float lhsAbsorption, float rhsAbsorption, bool equal);
 
 		void checkForGoal();
 		void resetPlayers();
@@ -112,7 +112,7 @@ class Game
 		int numPlayersBlue_;
 };
 
-sf::Vector2f lerp(sf::Vector2f const& start, sf::Vector2f const& end, float timeStep);
+sf::Vector2f const lerp(sf::Vector2f const& start, sf::Vector2f const& end, float timeStep);
 float mapTimeStep(float inputTimeStep);
 
 #endif //GAME_HPP
