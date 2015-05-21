@@ -342,6 +342,7 @@ void Game::applyIntersectionPhysics()
 		if (currentPlayer->intersectsCircle(ball->getPosX(), ball->getPosY(), ball->getRadius(), false))
 		{
 			applyElasticImpact(ball, currentPlayer, 0.1 * currentPlayer->computeCurrentSpeed(), 1.0, false);
+			ball->setLastPlayerTouch(currentPlayer);
 		}
 
 		// check if player collides with other player
