@@ -1,5 +1,3 @@
-window.scrollTo(0,1);
-
 window.addEventListener('load', function(){
 		//global vars
 		var timer = setTimeout(endGame, 30000);
@@ -25,15 +23,12 @@ window.addEventListener('load', function(){
 		// Nach dem öffnen des Sockets den Status anzeigen
 		socket.onopen = function() 	
 		{ 
-			console.log('Socket Status: '+socket.readyState+' (open)');
 			socket.send('NAME '+localStorage.getItem('playername')+'$');
-			console.log(socket.readyState);	
 		}
 		//recive from server
 		socket.onmessage = function(evt)
 		{
 			window.localStorage.setItem("team", evt.data);
-			console.log(evt.data);
 
 			//set colorbase by socketinput/teamident
 			if(localStorage.getItem('team').indexOf("RED") > -1) {
@@ -66,16 +61,12 @@ window.addEventListener('load', function(){
 	       	//sentd to server
 	       	socket.send('VAL A$');
 
-	       	//console debug
-	       	console.log('pushbutton-start');
 	    }, false)
 	 
 	    button.addEventListener('touchend', function(e){
 	    	button.style.backgroundColor = colorbase;
 	       	e.preventDefault();
 
-	       	//console debug
-	       	console.log('pushbutton-end');
 	    }, false)
 
 		//##################################################################################
@@ -139,13 +130,21 @@ window.addEventListener('load', function(){
 	    	context.closePath();
 	    	context.stroke();
 
+			context.beginPath();
+	    	context.arc(currx, curry, 50, 0, 2 * Math.PI, false);
+	    	context.fillStyle = 'black';
+		    context.fill();
+		    context.lineWidth = 5;
+	    	context.closePath();
+	    	context.stroke();
+			
 	    	//calc movement
 	    	diffx = currx - startx;
 	    	diffy = curry - starty;
 
 	    	//set circle to new position
-	        circle.style.top = centerY - circle.offsetHeight/2 + diffy;
- 			circle.style.left = centerX - circle.offsetWidth/2 + diffx;
+	        //circle.style.top = centerY - circle.offsetHeight/2 + diffy;
+ 			//circle.style.left = centerX - circle.offsetWidth/2 + diffx;
 
 	       	e.preventDefault();
 
@@ -155,9 +154,6 @@ window.addEventListener('load', function(){
 
 	       	//sent to server
 	       	socket.send('VAL '+ diffx + ' ' + diffy +'$');
-
-	       	//console debug
-	    	console.log('start: '+(diffx)+'/'+(diffy));
 	 
 
 	    }, false)
@@ -175,9 +171,17 @@ window.addEventListener('load', function(){
 	       	e.preventDefault();
 
 			socket.send('VAL '+ 0 + ' ' + 0 +'$');
-			console.log(socket.readyState);
 	   	}, false)
 
+
+	    $(window).resize(function() {
+	    	canvas.width =  wrapper.offsetWidth;
+ 			canvas.height = wrapper.offsetHeight;
+	    	centerX = canvas.width /2;
+ 			centerY = canvas.height /2;
+	    	circle.style.top = centerY - circle.offsetHeight/2;
+ 			circle.style.left = centerX -circle.offsetWidth/2;
+		});
 
 
 
@@ -200,14 +204,8 @@ window.addEventListener('load', function(){
 //##################################################################################
 //helper functions
 
-function sleepFor( sleepDuration ){
-    var now = new Date().getTime();
-    while(new Date().getTime() < now + sleepDuration){ /* do nothing */ } 
-}
-
 //delete marker in string
 function clearMarker(input){
-	
 	return input.replace('$','');
 }
 
