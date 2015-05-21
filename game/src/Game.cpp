@@ -684,8 +684,9 @@ void Game::createFpsDisplay()
 	}
 
 	fpsString_.setFont(font_);
-	fpsString_.setCharacterSize(30);
-	fpsString_.move(100.0f,0.0f);
+	fpsString_.setCharacterSize(screenHeight_*0.03);
+
+	fpsString_.move(0.85*screenWidth_,0.94*screenHeight_);
 }
 
 sf::Vector2f const lerp(sf::Vector2f const& start, sf::Vector2f const& end, float timeStep)
