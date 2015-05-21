@@ -433,6 +433,12 @@ void Game::applyElasticImpact(PhysicalObject* lhs, PhysicalObject* rhs, float lh
 	}
 }
 
+void Game::resetScore()
+{
+	pointsBlueTeam_ = 0;
+	pointsRedTeam_ = 0;
+}
+
 void Game::checkForGoal()
 {
 	if (ball->isInLeftGoal() && ballWasInLeftGoal_ == false && inGoalAnimation_ == false)
