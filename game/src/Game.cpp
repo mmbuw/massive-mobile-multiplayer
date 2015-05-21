@@ -330,7 +330,7 @@ void Game::applyIntersectionPhysics()
 		//check if player collides with ball
 		if (currentPlayer->intersectsCircle(ball->getPosX(), ball->getPosY(), ball->getRadius(), false))
 		{
-			applyElasticImpact(ball, currentPlayer, 0.1 * currentPlayer->computeCurrentSpeed(), 1.0);
+			applyElasticImpact(ball, currentPlayer, 0.1 * currentPlayer->computeCurrentSpeed(), 1.0, false);
 		}
 
 		// check if player collides with other player
@@ -340,7 +340,7 @@ void Game::applyIntersectionPhysics()
 
 			if (currentPlayer->intersectsCircle(otherPlayer->getPosX(), otherPlayer->getPosY(), otherPlayer->getRadius(), false))
 			{
-				applyElasticImpact( currentPlayer, otherPlayer, 1.0, 1.0);
+				applyElasticImpact( currentPlayer, otherPlayer, 1.0, 1.0, true);
 			}
 		}
 	}
@@ -358,7 +358,8 @@ void Game::applyShootingForce(Player* player)
 	ball->setVelocity(scaleFactor * shootDir.x, scaleFactor * shootDir.y);
 }
 
-void Game::applyElasticImpact(PhysicalObject* lhs, PhysicalObject* rhs, float lhsAbsorption, float rhsAbsorption)
+//If equal is false: when checking for collision with ball, lhs must be the ball as it is controlled by the player (rhs)
+void Game::applyElasticImpact(PhysicalObject* lhs, PhysicalObject* rhs, float lhsAbsorption, float rhsAbsorption, bool equal)
 {
 	//elastic impact computation
 	float lhsMass = lhs->getMass();
@@ -408,6 +409,15 @@ void Game::applyElasticImpact(PhysicalObject* lhs, PhysicalObject* rhs, float lh
 
 		lhs->setPosition(newBallPosition.x, newBallPosition.y);
 		rhs->setPosition(newPlayerPosition.x, newPlayerPosition.y);
+
+		if ( !equal && rhs->computeCurrentSpeed() > lhs->computeCurrentSpeed())
+		{
+			sf::Vector2f newDirection(rhs->getVelX() - diffVec.x, rhs->getVelY() - diffVec.y);
+			float magnitude = std::sqrt(newDirection.x*newDirection.x + newDirection.y*newDirection.y);
+			newDirection = newDirection / magnitude;
+			newDirection = newDirection * rhs->computeCurrentSpeed();
+			lhs->setVelocity(newDirection.x, newDirection.y);
+		}
 	}
 }
 
@@ -625,7 +635,7 @@ void Game::createFpsDisplay()
 	fpsString_.move(100.0f,0.0f);
 }
 
-sf::Vector2f lerp(sf::Vector2f const& start, sf::Vector2f const& end, float timeStep)
+sf::Vector2f const lerp(sf::Vector2f const& start, sf::Vector2f const& end, float timeStep)
 {
 	float factor;
 
@@ -639,11 +649,6 @@ sf::Vector2f lerp(sf::Vector2f const& start, sf::Vector2f const& end, float time
 	sf::Vector2f diffVec = end - start;
 	return sf::Vector2f(start.x + factor * diffVec.x, start.y + factor * diffVec.y);
 }
-
-/*float mapTimeStep(float inputTimeStep)
-{
-	return std::pow(inputTimeStep-1, 3) + 1;
-}*/
 
 float mapTimeStep(float inputTimeStep)
 {
