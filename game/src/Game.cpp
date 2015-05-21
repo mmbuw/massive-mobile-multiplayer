@@ -119,8 +119,9 @@ int Game::getScreenHeight(){
 
 void Game::createField()
 {
-	createGreen();
+	
 	createFieldLines();
+	createGreen();
 	sf::Vector2f fieldCenter = centerCircle_.getPosition();
 	createBall(fieldCenter.x, fieldCenter.y);
 		 ball->setAllLines(leftLineAt,rightLineAt,topLineAt,bottomLineAt);
@@ -217,26 +218,35 @@ void Game::createBall(int startX, int startY)
 }
 
 void Game::createGreen(){
-	int pos = 0;
+	int pos = centerLineAt;
 	int increment = screenWidth_/10;
-	for (int i = 0; i < 10; ++i)
-	{
-		sf::Color currentGreen;	
+	sf::Color lightGreen = sf::Color(50,200,50);
+	sf::Color darkGreen = sf::Color(75,220,75);
 
-		if (i%2 == 0)
-		{
-			currentGreen = sf::Color(50,200,50);						
-		}
-		else
-		{
-			currentGreen = sf::Color(75,220,75);
+
+
+	sf::RectangleShape rect(sf::Vector2f(increment, screenHeight_));
+
+	for (int i = 0; i < 7; ++i){
+		rect.setPosition(pos+increment*i,0);
+		if (i%2 == 0){
+			rect.setFillColor(darkGreen);
+		}else {
+			rect.setFillColor(lightGreen);
 		}
 
-		sf::RectangleShape rect(sf::Vector2f(pos+increment, screenHeight_));
-		rect.setFillColor(currentGreen);
-		rect.setPosition(pos, 0);
 		field_.push_back(rect);
-		pos+=increment;
+	}
+
+	for (int i = 1; i < 6; ++i){
+		rect.setPosition(pos-increment*i,0);
+		if (i%2 == 0){
+			rect.setFillColor(darkGreen);
+		}else {
+			rect.setFillColor(lightGreen);
+		}
+
+		field_.push_back(rect);
 	}
 }
 
