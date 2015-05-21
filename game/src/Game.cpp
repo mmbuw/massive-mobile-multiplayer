@@ -2,7 +2,7 @@
 
 Game::Game(int screenWidth, int screenHeight) : ballWasInLeftGoal_(false),
                screenWidth_(screenWidth), screenHeight_(screenHeight), ballWasInRightGoal_(false), 
-			   goalAnimationDurationSec_(3), pointsBlueTeam_(0), pointsRedTeam_(0),
+			   goalAnimationDurationSec_(4), pointsBlueTeam_(0), pointsRedTeam_(0),
 			   numPlayersRed_(0), numPlayersBlue_(0), inGoalAnimation_(false)
 {}
 
@@ -248,13 +248,13 @@ void Game::createGoals()
 	goalLeft_ = sf::RectangleShape(sf::Vector2f(0.03385416*screenWidth_,0.3*screenHeight_));
 	goalLeft_.setPosition(0.01822916*screenWidth_,middleoflines-(0.15*screenHeight_));
 	goalLeft_.setFillColor(sf::Color(0,0,0,0));
-	goalLeft_.setOutlineThickness(5);
+	goalLeft_.setOutlineThickness(-5);
 	goalLeft_.setOutlineColor(sf::Color(255,255,255));
 
 	goalRight_ = sf::RectangleShape(sf::Vector2f(0.03385416*screenWidth_,0.3*screenHeight_));
-	goalRight_.setPosition(0.92760416*screenWidth_,middleoflines-(0.15*screenHeight_));
+	goalRight_.setPosition(0.925312f*screenWidth_,middleoflines-(0.15*screenHeight_));
 	goalRight_.setFillColor(sf::Color(0,0,0,0));
-	goalRight_.setOutlineThickness(5);
+	goalRight_.setOutlineThickness(-5);
 	goalRight_.setOutlineColor(sf::Color(255,255,255));
 
 
