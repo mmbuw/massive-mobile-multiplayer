@@ -39,6 +39,7 @@ class Game
 		void applyIntersectionPhysics(); 
 		void applyShootingForce(Player* player);
 		void applyElasticImpact(PhysicalObject* lhs, PhysicalObject* rhs, float lhsAbsorption, float rhsAbsorption, bool equal);
+		void resetScore();
 
 		void checkForGoal();
 		void resetPlayers();
