@@ -33,6 +33,7 @@ class Player : public PhysicalObject
 		void resetToStart();
 		void setLineRestrictions();
 		sf::Color const getTeamColor();
+		std::string const getName() const;
 
 
 	private:

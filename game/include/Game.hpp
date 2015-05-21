@@ -15,6 +15,7 @@
 
 typedef std::chrono::high_resolution_clock Clock;
 typedef std::chrono::milliseconds milliseconds;
+typedef std::chrono::seconds seconds;
 
 class Game
 {
