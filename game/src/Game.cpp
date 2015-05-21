@@ -8,6 +8,8 @@ Game::Game(int screenWidth, int screenHeight) : ballWasInLeftGoal_(false),
 
 Game::~Game()
 {
+
+
 	for (std::set<Player*>::iterator it = players.begin(); it != players.end(); ++it)
 	{
 		delete (*it);
@@ -119,7 +121,7 @@ int Game::getScreenHeight(){
 
 void Game::createField()
 {
-	
+	initTime();
 	createFieldLines();
 	createGreen();
 	sf::Vector2f fieldCenter = centerCircle_.getPosition();
@@ -136,6 +138,39 @@ void Game::calculateLinePoistions(){
 	 bottomLineAt = screenHeight_*0.86888f;
 	 rightLineAt = screenWidth_*0.925312f;
 	 centerLineAt = ((rightLineAt-leftLineAt)/2)+leftLineAt;
+
+
+}
+
+void Game::initTime() {
+	
+	if (!font_.loadFromFile("resources/font.ttf"))
+	{
+		std::cout << "[Game.cpp] Error loading font." << std::endl;
+	}
+	time_.setFont(font_);
+	time_.setCharacterSize(screenHeight_*0.06153846153);
+	time_.move(0.05*screenWidth_,0.92307692307*screenHeight_);
+}
+
+void Game::renderTime(sf::RenderWindow* window) {
+	sf::Time elapsed = clock_.getElapsedTime();
+	int inSeconds = elapsed.asSeconds();
+	int seconds = inSeconds%60;
+	int minutes = (inSeconds-seconds)/60;
+
+	std::string minuteString = std::to_string(minutes);
+	std::string secondString = std::to_string(seconds);
+
+	if (minutes < 10){
+		minuteString = std::to_string(0)+minuteString;
+	}
+	if (seconds < 10){
+		secondString = std::to_string(0)+secondString;
+	}
+
+	time_.setString(minuteString+":"+secondString);
+	window->draw(time_);
 
 
 }
@@ -592,7 +627,7 @@ void Game::createScoreLine()
 	scoreLine_.setFillColor(sf::Color(0,0,0));
 
 	//create text
-	if (!font_.loadFromFile("resources/blox.ttf"))
+	if (!font_.loadFromFile("resources/font.ttf"))
 	{
 		std::cout << "[Game.cpp] Error loading font." << std::endl;
 	}
