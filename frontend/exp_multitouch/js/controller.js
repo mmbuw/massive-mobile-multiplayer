@@ -138,6 +138,8 @@ window.addEventListener('load', function(){
 	    	context.closePath();
 	    	context.stroke();
 			
+			circle.style.display ="none";
+
 	    	//calc movement
 	    	diffx = currx - startx;
 	    	diffy = curry - starty;
@@ -164,15 +166,18 @@ window.addEventListener('load', function(){
 	    	circle.style.backgroundColor = colorbase;
 	    	//set circle to start
 	        circle.style.top = centerY - circle.offsetHeight/2;
- 			circle.style.left = centerX -circle.offsetWidth/2;
+ 			circle.style.left = centerX - circle.offsetWidth/2;
 
  			//clear canvas
  			context.clearRect(0, 0, canvas.width, canvas.height);
 	       	e.preventDefault();
+	       	circle.style.display ="";
 
 			socket.send('VAL '+ 0 + ' ' + 0 +'$');
 	   	}, false)
 
+		//##################################################################################
+		//resize windows
 
 	    $(window).resize(function() {
 	    	canvas.width =  wrapper.offsetWidth;
