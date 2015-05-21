@@ -32,7 +32,7 @@ Ball::Ball(int startX, int startY) : PhysicalObject(1.0, startX, startY, 25.0),
 	if (posX_ < leftBorderLine + radius_) // left border
 	{
 		// left goal
-		if (posY_ > goalStartHeight && posY_ < goalEndHeight)
+		if (posY_ >= goalStartHeight && posY_ <= goalEndHeight)
 		{
 			if (posX_ < leftGoalEndLine + radius_)
 			{
@@ -54,7 +54,7 @@ Ball::Ball(int startX, int startY) : PhysicalObject(1.0, startX, startY, 25.0),
 	else if (posX_ > rightBorderLine - radius_) // right border
 	{
 		// right goal
-		if (posY_ > goalStartHeight && posY_ < goalEndHeight)
+		if (posY_ >= goalStartHeight && posY_ <= goalEndHeight)
 		{
 			if (posX_ > rightGoalEndLine - radius_)
 			{
