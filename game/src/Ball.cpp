@@ -2,7 +2,7 @@
 
 Ball::Ball(int startX, int startY) : PhysicalObject(1.0, startX, startY, 25.0),
                inLeftGoal_(false), inRightGoal_(false),
-			   startX_(startX), startY_(startY)
+			   startX_(startX), startY_(startY), lastPlayerTouch_(nullptr)
 {
 	shape_ = sf::CircleShape(radius_);
 	shape_.setFillColor(sf::Color(255,255,255,255));
@@ -107,7 +107,7 @@ void Ball::resetToStart()
 	inRightGoal_ = false;
 	topBorderLine = temporaryTopBorder;
 	bottomBorderLine = temporaryBottomBorder;
-
+	lastPlayerTouch_ = nullptr;
 }
 
 void Ball::changeAbsorptionVelocity(bool swapX, bool swapY)
@@ -132,6 +132,19 @@ bool Ball::isInLeftGoal() const
 bool Ball::isInRightGoal() const
 {
 	return inRightGoal_;
+}
+
+void Ball::setLastPlayerTouch(Player* player)
+{
+	lastPlayerTouch_ = player;
+}
+
+std::string const Ball::getLastPlayerTouchName() const
+{
+	if (lastPlayerTouch_ != nullptr)
+		return lastPlayerTouch_->getName(); 
+
+	return "";
 }
 
 void Ball::setAllLines(double left, double right, double top, double bottom) {

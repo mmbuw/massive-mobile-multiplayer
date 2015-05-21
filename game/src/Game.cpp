@@ -370,12 +370,14 @@ void Game::applyIntersectionPhysics()
 		if (currentPlayer->intersectsCircle(ball->getPosX(), ball->getPosY(), ball->getRadius(), true) && currentPlayer->inShootSequence())
 		{
 			applyShootingForce(currentPlayer);
+			ball->setLastPlayerTouch(currentPlayer);
 		}
 
 		//check if player collides with ball
 		if (currentPlayer->intersectsCircle(ball->getPosX(), ball->getPosY(), ball->getRadius(), false))
 		{
 			applyElasticImpact(ball, currentPlayer, 0.1 * currentPlayer->computeCurrentSpeed(), 1.0, false);
+			ball->setLastPlayerTouch(currentPlayer);
 		}
 
 		// check if player collides with other player
@@ -481,7 +483,7 @@ void Game::checkForGoal()
 		//std::cout << "Current standings: Left " << pointsBlueTeam_ << " : " << pointsRedTeam_ << " Right" << std::endl;
 		//std::cout << std::endl;
 
-		goalTextOne_.setString("Red scores");
+		goalTextOne_.setString(ball->getLastPlayerTouchName() + " scores");
 		goalTextOne_.setColor(sf::Color(255, 0, 0));
 		goalTextTwo_.setColor(sf::Color(255, 0, 0));
 		celebratingTeam_ = sf::Color(255,0,0);
@@ -499,7 +501,7 @@ void Game::checkForGoal()
 		//std::cout << "Current standings: Left " << pointsBlueTeam_ << " : " << pointsRedTeam_ << " Right" << std::endl;
 		//std::cout << std::endl;
 
-		goalTextOne_.setString("Blue scores");
+		goalTextOne_.setString(ball->getLastPlayerTouchName() + " scores");
 		goalTextOne_.setColor(sf::Color(0, 0, 255));
 		goalTextTwo_.setColor(sf::Color(0, 0, 255));
 		celebratingTeam_ = sf::Color(0,0,255);

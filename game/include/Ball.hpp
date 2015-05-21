@@ -5,8 +5,10 @@
 #include <SFML/Graphics.hpp>
 #include <string>
 
-
 #include "PhysicalObject.hpp"
+#include "Player.hpp"
+
+class Player;
 
 class Ball : public PhysicalObject 
 {
@@ -22,6 +24,8 @@ class Ball : public PhysicalObject
 		void changeAbsorptionVelocity(bool swapX, bool swapY);
 		bool isInLeftGoal() const;
 		bool isInRightGoal() const;
+		void setLastPlayerTouch(Player* player);
+		std::string const getLastPlayerTouchName() const;
 
 		void setAllLines(double left, double right, double top, double bottom);
 	
@@ -46,7 +50,7 @@ class Ball : public PhysicalObject
 		double leftGoalEndLine;	
 		double rightGoalEndLine;
 	
-
+		Player* lastPlayerTouch_;
 
 		int startX_;
 		int startY_;

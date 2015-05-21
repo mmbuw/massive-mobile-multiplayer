@@ -180,3 +180,8 @@ sf::Color const Player::getTeamColor()
 {
 	return centerColor_;
 }
+
+std::string const Player::getName() const
+{
+	return name_;
+}
