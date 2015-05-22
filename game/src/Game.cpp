@@ -459,11 +459,15 @@ void Game::applyElasticImpact(PhysicalObject* lhs, PhysicalObject* rhs, float lh
 
 		if ( !equal && rhs->computeCurrentSpeed() > lhs->computeCurrentSpeed())
 		{
-			sf::Vector2f newDirection(lhs->getVelX() + rhs->getVelX() - 2*diffVec.x, lhs->getVelY() + rhs->getVelY() - 2*diffVec.y);
-			float magnitude = std::sqrt(newDirection.x*newDirection.x + newDirection.y*newDirection.y);
-			newDirection = newDirection / magnitude;
-			newDirection = (newDirection * rhs->computeCurrentSpeed());
-			lhs->setVelocity(newDirection.x, newDirection.y);
+			sf::Vector2f newDirection(lhs->getVelX(), lhs->getVelY());
+			float magnitude = lhs->computeCurrentSpeed();
+			
+			if (magnitude != 0.0)
+			{
+				newDirection = newDirection / lhs->computeCurrentSpeed();
+				newDirection = (newDirection * rhs->computeCurrentSpeed());
+				lhs->setVelocity(newDirection.x, newDirection.y);
+			}
 		}
 	}
 }
