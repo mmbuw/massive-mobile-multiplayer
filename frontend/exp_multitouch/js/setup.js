@@ -86,6 +86,7 @@ function checkName(input) {
                   .replace(/ý|ÿ/g, "y")
                   .replace(/Ž/g, "Z")
                   .replace(/ž/, "z")
+                  .replace(/ß/, "s")
                   .replace(/\$/g, "z");
 
     //slice to size

@@ -123,7 +123,7 @@ window.addEventListener('load', function(){
 	    	context.lineWidth = 4;
 	    	context.shadowColor = "transparent";
 	    	
-	    	//draw line from center tu crrent position
+	    	//draw line from center to crrent position
 	    	context.beginPath();
  			context.moveTo(centerX,centerY);
 	    	context.lineTo(currx, curry);
@@ -164,9 +164,6 @@ window.addEventListener('load', function(){
  	  	//touchend and reset joystick
 	    circle.addEventListener('touchend', function(e){
 	    	circle.style.backgroundColor = colorbase;
-	    	//set circle to start
-	        circle.style.top = centerY - circle.offsetHeight/2;
- 			circle.style.left = centerX - circle.offsetWidth/2;
 
  			//clear canvas
  			context.clearRect(0, 0, canvas.width, canvas.height);
@@ -185,7 +182,7 @@ window.addEventListener('load', function(){
 	    	centerX = canvas.width /2;
  			centerY = canvas.height /2;
 	    	circle.style.top = centerY - circle.offsetHeight/2;
- 			circle.style.left = centerX -circle.offsetWidth/2;
+ 			circle.style.left = centerX - circle.offsetWidth/2;
 		});
 
 
