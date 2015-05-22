@@ -165,5 +165,19 @@ body {
 }
 
 .headerimage {
+	width: 50%;
+	margin: 15px auto 0px auto;
+}
+
+.headerimage img {
 	width: 100%;
+	margin: 15px auto 0px auto;
+}
+
+.textbox {
+	width: 50%;
+	margin: 15px auto 0px auto;
+	padding: 15px;
+	border: 1px solid #ccc;
+	text-align: center;
 }
