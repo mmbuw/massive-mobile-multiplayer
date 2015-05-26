@@ -2,8 +2,8 @@
 
 Game::Game(int screenWidth, int screenHeight) : ballWasInLeftGoal_(false),
                screenWidth_(screenWidth), screenHeight_(screenHeight), ballWasInRightGoal_(false), 
-			   goalAnimationDurationSec_(4), pointsBlueTeam_(0), pointsRedTeam_(0),
-			   numPlayersRed_(0), numPlayersBlue_(0), inGoalAnimation_(false)
+			   pointsBlueTeam_(0), pointsRedTeam_(0),
+			   numPlayersRed_(0), numPlayersBlue_(0), inGoalAnimation_(false), inEndAnimation_(false)
 {}
 
 Game::~Game()
@@ -142,8 +142,8 @@ void Game::calculateLinePoistions(){
 
 }
 
-void Game::initTime() {
-	
+void Game::initTime() 
+{	
 	if (!font_.loadFromFile("resources/font.ttf"))
 	{
 		std::cout << "[Game.cpp] Error loading font." << std::endl;
@@ -153,11 +153,60 @@ void Game::initTime() {
 	time_.move(0.05*screenWidth_,0.92307692307*screenHeight_);
 }
 
-void Game::renderTime(sf::RenderWindow* window) {
+void Game::renderTime(sf::RenderWindow* window) 
+{
 	sf::Time elapsed = clock_.getElapsedTime();
 	int inSeconds = elapsed.asSeconds();
-	int seconds = inSeconds%60;
-	int minutes = (inSeconds-seconds)/60;
+	int remainingSeconds = (GAME_DURATION_MINUTES * 60) - inSeconds;
+
+	if (remainingSeconds <= 0 && inEndAnimation_ == false && inGoalAnimation_ == false)
+	{
+		//prepare game end animation
+		inEndAnimation_ = true;
+		endAnimationStartTime_ = Clock::now();
+
+		if (pointsRedTeam_ > pointsBlueTeam_)
+		{
+			goalTextOne_.setColor(sf::Color(255,0,0));
+			goalTextOne_.setString("red wins");
+			goalTextTwo_.setColor(sf::Color(255,0,0));
+
+		}
+		else if (pointsBlueTeam_ > pointsRedTeam_)
+		{
+			goalTextOne_.setColor(sf::Color(0,0,255));
+			goalTextOne_.setString("blue wins");
+			goalTextTwo_.setColor(sf::Color(0,0,255));
+		}
+		else
+		{
+			goalTextOne_.setColor(sf::Color(0,0,0));
+			goalTextOne_.setString("draw");
+			goalTextTwo_.setColor(sf::Color(0,0,0));
+		}
+
+		goalTextTwo_.setString(std::to_string(pointsBlueTeam_) + " to " + std::to_string(pointsRedTeam_));
+		
+		sf::FloatRect textRect = goalTextOne_.getGlobalBounds();
+		float textWidth = textRect.width;
+		float textHeight = textRect.height;
+
+		sf::Vector2f lerpStart(sf::Vector2f(-textWidth, screenHeight_*0.3 - textHeight/2.0));
+
+		goalTextOne_.setPosition(screenWidth_/2 - textWidth/2, screenHeight_*0.3 - textHeight/2.0);
+		
+		textRect = goalTextTwo_.getGlobalBounds();
+		textWidth = textRect.width;
+		textHeight = textRect.height;
+
+		goalTextTwo_.setPosition(screenWidth_/2 - textWidth/2, screenHeight_*0.5 - textHeight/2.0);
+	}
+
+	if (remainingSeconds < 0)
+		remainingSeconds = 0;
+
+	int seconds = remainingSeconds%60;
+	int minutes = (remainingSeconds-seconds)/60;
 
 	std::string minuteString = std::to_string(minutes);
 	std::string secondString = std::to_string(seconds);
@@ -170,12 +219,26 @@ void Game::renderTime(sf::RenderWindow* window) {
 	}
 
 	time_.setString(minuteString+":"+secondString);
+
+	if (remainingSeconds <= 10)
+	{
+		time_.setColor(sf::Color(255, 0 , 0));
+	}
+	else
+	{
+		time_.setColor(sf::Color(255, 255, 255));
+	}
+
+	if (inEndAnimation_)
+		performEndOfGameAnimation();
+
 	window->draw(time_);
 
 
 }
 
-void Game::createFieldLines(){
+void Game::createFieldLines()
+{
 	calculateLinePoistions();
 	sf::ConvexShape leftGoalLine;
 
@@ -252,7 +315,8 @@ void Game::createBall(int startX, int startY)
 	ball = new Ball(startX, startY);
 }
 
-void Game::createGreen(){
+void Game::createGreen()
+{
 	int pos = centerLineAt;
 	int increment = screenWidth_/10;
 	sf::Color lightGreen = sf::Color(50,200,50);
@@ -334,7 +398,7 @@ void Game::renderScoreLine(sf::RenderWindow* window)
 	window->draw(blue_);
 	window->draw(red_);
 
-	if (inGoalAnimation_)
+	if (inGoalAnimation_ || inEndAnimation_)
 	{
 		window->draw(goalTextOne_);
 		window->draw(goalTextTwo_);
@@ -472,6 +536,21 @@ void Game::applyElasticImpact(PhysicalObject* lhs, PhysicalObject* rhs, float lh
 	}
 }
 
+void Game::performEndOfGameAnimation()
+{
+	Clock::time_point nowTime(Clock::now());
+	int elapsedMilliseconds = (std::chrono::duration_cast<milliseconds>(nowTime - endAnimationStartTime_)).count();
+	
+	if (elapsedMilliseconds > END_ANIMATION_DURATION_SEC * 1000)
+	{
+		ball->resetToStart();
+		resetPlayers();
+		resetScore();
+		clock_.restart();
+		inEndAnimation_ = false;
+	}
+}
+
 void Game::resetScore()
 {
 	pointsBlueTeam_ = 0;
@@ -480,7 +559,7 @@ void Game::resetScore()
 
 void Game::checkForGoal()
 {
-	if (ball->isInLeftGoal() && ballWasInLeftGoal_ == false && inGoalAnimation_ == false)
+	if (ball->isInLeftGoal() && ballWasInLeftGoal_ == false && inGoalAnimation_ == false && inEndAnimation_ == false)
 	{
 		++pointsRedTeam_;
 		ballWasInLeftGoal_ = true;
@@ -498,7 +577,7 @@ void Game::checkForGoal()
 		goalTextTwo_.setColor(sf::Color(255, 0, 0));
 		celebratingTeam_ = sf::Color(255,0,0);
 	}
-	else if (ball->isInRightGoal() && ballWasInRightGoal_ == false && inGoalAnimation_ == false)
+	else if (ball->isInRightGoal() && ballWasInRightGoal_ == false && inGoalAnimation_ == false && inEndAnimation_ == false)
 	{
 		++pointsBlueTeam_;
 		ballWasInRightGoal_ = true;
@@ -531,7 +610,7 @@ void Game::checkForGoal()
 		Clock::time_point nowTime(Clock::now());
 		int elapsedMilliseconds = (std::chrono::duration_cast<milliseconds>(nowTime - goalAnimationStartTime_)).count();
 
-		if (elapsedMilliseconds > goalAnimationDurationSec_ * 1000)
+		if (elapsedMilliseconds > GOAL_ANIMATION_DURATION_SEC * 1000)
 		{
 			ball->resetToStart();
 			resetPlayers();
@@ -542,7 +621,7 @@ void Game::checkForGoal()
 		else
 		{
 			//perform text animation
-			float timeStep = elapsedMilliseconds / ((goalAnimationDurationSec_-1)*1000.0);
+			float timeStep = elapsedMilliseconds / ((GOAL_ANIMATION_DURATION_SEC-1)*1000.0);
 			timeStep = mapTimeStep(timeStep);
 
 			sf::FloatRect textRect = goalTextOne_.getGlobalBounds();

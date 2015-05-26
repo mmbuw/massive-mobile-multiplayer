@@ -17,6 +17,10 @@ typedef std::chrono::high_resolution_clock Clock;
 typedef std::chrono::milliseconds milliseconds;
 typedef std::chrono::seconds seconds;
 
+#define GAME_DURATION_MINUTES 0.25
+#define GOAL_ANIMATION_DURATION_SEC 4
+#define END_ANIMATION_DURATION_SEC 8
+
 class Game
 {
 	
@@ -40,13 +44,13 @@ class Game
 		void applyIntersectionPhysics(); 
 		void applyShootingForce(Player* player);
 		void applyElasticImpact(PhysicalObject* lhs, PhysicalObject* rhs, float lhsAbsorption, float rhsAbsorption, bool equal);
+		
+		void performEndOfGameAnimation();
 		void resetScore();
 
 		void checkForGoal();
 		void resetPlayers();
 		void createField();
-
-
 
 		int getScreenWidth();
 		int getScreenHeight();
@@ -54,7 +58,6 @@ class Game
 		void setScreenHeight(int in);
 
 	private:
-
 
 		int screenWidth_;
 		int screenHeight_;
@@ -110,9 +113,10 @@ class Game
 		bool ballWasInRightGoal_;
 
 		Clock::time_point goalAnimationStartTime_;
+		Clock::time_point endAnimationStartTime_;
 		bool inGoalAnimation_;
+		bool inEndAnimation_;
 		sf::Color celebratingTeam_;
-		int goalAnimationDurationSec_;
 
 		int pointsBlueTeam_;
 		int pointsRedTeam_;
