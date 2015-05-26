@@ -6,7 +6,7 @@
 #include <iostream>
 #include <cmath>
 
-#define MAX_SPEED 10.0
+#define MAX_SPEED 6.0
 
 class PhysicalObject
 {	
