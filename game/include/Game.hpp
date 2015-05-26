@@ -19,7 +19,7 @@ typedef std::chrono::seconds seconds;
 
 #define GAME_DURATION_MINUTES 0.25
 #define GOAL_ANIMATION_DURATION_SEC 4
-#define END_ANIMATION_DURATION_SEC 8
+#define END_ANIMATION_DURATION_SEC 4
 
 class Game
 {

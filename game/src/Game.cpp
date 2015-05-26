@@ -186,20 +186,6 @@ void Game::renderTime(sf::RenderWindow* window)
 		}
 
 		goalTextTwo_.setString(std::to_string(pointsBlueTeam_) + " to " + std::to_string(pointsRedTeam_));
-		
-		sf::FloatRect textRect = goalTextOne_.getGlobalBounds();
-		float textWidth = textRect.width;
-		float textHeight = textRect.height;
-
-		sf::Vector2f lerpStart(sf::Vector2f(-textWidth, screenHeight_*0.3 - textHeight/2.0));
-
-		goalTextOne_.setPosition(screenWidth_/2 - textWidth/2, screenHeight_*0.3 - textHeight/2.0);
-		
-		textRect = goalTextTwo_.getGlobalBounds();
-		textWidth = textRect.width;
-		textHeight = textRect.height;
-
-		goalTextTwo_.setPosition(screenWidth_/2 - textWidth/2, screenHeight_*0.5 - textHeight/2.0);
 	}
 
 	if (remainingSeconds < 0)
@@ -548,6 +534,29 @@ void Game::performEndOfGameAnimation()
 		resetScore();
 		clock_.restart();
 		inEndAnimation_ = false;
+	}
+	else
+	{
+		float timeStep = elapsedMilliseconds / ((END_ANIMATION_DURATION_SEC)*1000.0);
+		timeStep = mapTimeStep(timeStep);
+
+		sf::FloatRect textRect = goalTextOne_.getGlobalBounds();
+		float textWidth = textRect.width;
+		float textHeight = textRect.height;
+
+		sf::Vector2f lerpStart(sf::Vector2f(-textWidth, screenHeight_*0.3 - textHeight/2.0));
+		sf::Vector2f lerpEnd(sf::Vector2f(screenWidth_, screenHeight_*0.3 - textHeight/2.0));
+		sf::Vector2f currentTextPos = lerp(lerpStart, lerpEnd, timeStep);
+		goalTextOne_.setPosition(currentTextPos);
+
+		textRect = goalTextTwo_.getGlobalBounds();
+		textWidth = textRect.width;
+		textHeight = textRect.height;
+
+		lerpStart = sf::Vector2f(screenWidth_, screenHeight_*0.5 - textHeight/2.0);
+		lerpEnd = sf::Vector2f(-textWidth, screenHeight_*0.5 - textHeight/2.0);
+		currentTextPos = lerp(lerpStart, lerpEnd, timeStep);
+		goalTextTwo_.setPosition(currentTextPos);
 	}
 }
 
