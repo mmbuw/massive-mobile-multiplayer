@@ -17,7 +17,7 @@ typedef std::chrono::high_resolution_clock Clock;
 typedef std::chrono::milliseconds milliseconds;
 typedef std::chrono::seconds seconds;
 
-#define GAME_DURATION_MINUTES 0.25
+#define GAME_DURATION_MINUTES 3
 #define GOAL_ANIMATION_DURATION_SEC 4
 #define END_ANIMATION_DURATION_SEC 4
 
