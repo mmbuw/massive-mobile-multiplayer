@@ -208,11 +208,11 @@ void Game::renderTime(sf::RenderWindow* window)
 
 	if (remainingSeconds <= 10)
 	{
-		time_.setColor(sf::Color(255, 0 , 0));
+		time_.setColor(sf::Color(255,255,0));
 	}
 	else
 	{
-		time_.setColor(sf::Color(255, 255, 255));
+		time_.setColor(sf::Color(255,255,255));
 	}
 
 	if (inEndAnimation_)
