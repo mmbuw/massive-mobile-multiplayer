@@ -685,6 +685,15 @@ void Game::resetPlayers()
 
 	float radiusFromCenter(screenWidth_/5.0);
 
+	float newPlayerRadius;
+	//new size when the field gets full
+	if (numPlayersRed_ + numPlayersBlue_ < 5)
+		newPlayerRadius = 35.0;
+	else if (numPlayersRed_ + numPlayersBlue_ < 9)
+		newPlayerRadius = 30.0;
+	else
+		newPlayerRadius = 25.0;
+
 	for (std::set<Player*>::iterator it = players.begin(); it != players.end(); ++it)
 	{
 		sf::Color teamColor = (*it)->getTeamColor();
@@ -715,7 +724,7 @@ void Game::resetPlayers()
 		(*it)->setPosition(center.x + radiusFromCenter * vecFromCenterX,
 			               center.y + radiusFromCenter * vecFromCenterY);
 		(*it)->setVelocity(0.0, 0.0);
-
+		(*it)->setRadius(newPlayerRadius);
 	}
 
 }

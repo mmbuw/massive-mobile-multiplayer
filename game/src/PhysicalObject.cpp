@@ -46,6 +46,15 @@ PhysicalObject::PhysicalObject(float mass, float posX, float posY, float radius)
 	shape_.setPosition(sf::Vector2f(posX_, posY_));
 }
 
+/* virtual */ void PhysicalObject::setRadius(float newRadius)
+{
+	radius_ = newRadius;
+	shape_.setOrigin(0, 0);
+	shape_.setRadius(newRadius);
+	shape_.setOrigin(newRadius, newRadius);
+}
+
+
 sf::CircleShape const PhysicalObject::getShape() const
 {
 	return shape_;

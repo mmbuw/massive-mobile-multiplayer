@@ -19,6 +19,7 @@ class PhysicalObject
 		virtual void frameUpdate();
 		virtual void setPosition(float x, float y);
 		virtual void clampPosition() = 0;
+		virtual void setRadius(float newRadius);
 
 		sf::CircleShape const getShape() const;
 		float getPosX() const;

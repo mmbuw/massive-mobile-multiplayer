@@ -4,10 +4,9 @@ Player::Player(int startX, int startY, sf::Color border, sf::Color center, std::
 	PhysicalObject(10.2, startX, startY, 35.0), borderColor_(border), centerColor_(center), 
 	blockShootFrames_(0), startX_(startX), startY_(startY), name_(name), shirtNumber_(number)
 {
-	shootCircleRadius_ = 1.5 * radius_;
+	shootCircleRadius_ = computeShootCircleRadius();
 
 	setLineRestrictions();
-
 
 	shape_ = sf::CircleShape(radius_);
 	shape_.setFillColor(centerColor_);
@@ -34,14 +33,7 @@ Player::Player(int startX, int startY, sf::Color border, sf::Color center, std::
 
 	nameText_.setFont(font_);
 	nameText_.setString(name_);
-	nameText_.setCharacterSize(30);
-}
-
-
-void Player::setLineRestrictions() {
-
-	 screenWidth = sf::VideoMode::getDesktopMode().width;
-	 screenHeight = sf::VideoMode::getDesktopMode().height * 0.92307692307; //because the field actually ends at the score line
+	nameText_.setCharacterSize(6.0/7.0 * radius_);
 }
 
 
@@ -58,15 +50,15 @@ void Player::setLineRestrictions() {
 {
 	PhysicalObject::frameUpdate();
 
-	nameText_.setPosition(posX_-((name_.size()/2)*20), posY_+50);
+	nameText_.setPosition(posX_-((name_.size()/2)*20), posY_ + (50.0/35.0*radius_));
 
 	if (shirtNumber_ > 9)
 	{
-		numberText_.setPosition(posX_-20, posY_-20);
+		numberText_.setPosition(posX_- (4.0/7.0*radius_), posY_ - (4.0/7.0*radius_));
 	}
 	else
 	{
-		numberText_.setPosition(posX_-8, posY_-20);
+		numberText_.setPosition(posX_- (8.0/35.0*radius_), posY_-(4.0/7.0*radius_));
 	}
 
 	if (inShootSequence())
@@ -89,8 +81,6 @@ void Player::setLineRestrictions() {
 /* virtual */ void Player::clampPosition()
 {
 
-
-
 	if (posX_ < 0)
 	{
 		setPosition(0, posY_);
@@ -108,6 +98,16 @@ void Player::setLineRestrictions() {
 	{
 		setPosition(posX_, screenHeight);
 	}
+}
+
+/* virtual */ void Player::setRadius(float newRadius)
+{
+	PhysicalObject::setRadius(newRadius);
+	shootCircleRadius_ = computeShootCircleRadius();
+	shootCircle_.setOrigin(0, 0);
+	shootCircle_.setRadius(shootCircleRadius_);
+	shootCircle_.setOrigin(shootCircleRadius_, shootCircleRadius_);
+	numberText_.setCharacterSize(6.0/7.0 * radius_);
 }
 
 void Player::moveUp() 
@@ -174,6 +174,17 @@ void Player::resetToStart()
 {
 	setPosition(startX_, startY_);
 	setVelocity(0.0, 0.0);
+}
+
+void Player::setLineRestrictions() 
+{
+	 screenWidth = sf::VideoMode::getDesktopMode().width;
+	 screenHeight = sf::VideoMode::getDesktopMode().height * 0.92307692307; //because the field actually ends at the score line
+}
+
+float Player::computeShootCircleRadius() const
+{
+	return radius_ * 1.5;
 }
 
 sf::Color const Player::getTeamColor()
