@@ -11,7 +11,7 @@
 
 #include "Player.hpp"
 #include "Ball.hpp"
-#include "PhysicalObject.hpp"
+#include "PhysicalCircle.hpp"
 
 typedef std::chrono::high_resolution_clock Clock;
 typedef std::chrono::milliseconds milliseconds;
@@ -28,9 +28,11 @@ class Game
 		Game(int screenWidth, int screenHeight);
 		~Game();
 
+		//player management
 		Player* addNewPlayer(std::string const& name, int number);
 		void removePlayer(Player* playerToRemove);
 	
+		//render methods
 		void renderBackground(sf::RenderWindow* window);
 		void renderPlayers(sf::RenderWindow* window);		
 		void renderBall(sf::RenderWindow* window);
@@ -40,28 +42,28 @@ class Game
 		void renderFpsDisplay(sf::RenderWindow* window, float value);
 		void renderTime(sf::RenderWindow* window);
 
-		void updatePhysicalObjects();
+		//physics methods
+		void updatePhysicalCircles();
 		void applyIntersectionPhysics(); 
 		void applyShootingForce(Player* player);
-		void applyElasticImpact(PhysicalObject* lhs, PhysicalObject* rhs, float lhsAbsorption, float rhsAbsorption, bool equal);
+		void applyElasticImpact(PhysicalCircle* lhs, PhysicalCircle* rhs, float lhsAbsorption, float rhsAbsorption, bool equal);
 		
+		//game logic methods
 		void performEndOfGameAnimation();
 		void resetScore();
-
 		void checkForGoal();
 		void resetPlayers();
 		void createField();
 
+		//getter
 		int getScreenWidth();
 		int getScreenHeight();
-		void setScreenWidth(int in);
-		void setScreenHeight(int in);
 
 	private:
 
+		//helpers
 		int screenWidth_;
 		int screenHeight_;
-
 		sf::Clock clock_;
 
 		//graphical objects
@@ -72,18 +74,15 @@ class Game
 		sf::CircleShape centerCircle_;
 		sf::CircleShape centerPoint_;
 		sf::RectangleShape scoreLine_;
-	
 		sf::Text blue_;
 		sf::Text red_;
 		sf::Text score_;
-
 		sf::Text fpsString_;
 		sf::Font font_;
 		sf::Text time_;
 		sf::Font scoreFont_;
 		sf::CircleShape blueBox_;
 		sf::CircleShape redBox_;
-
 		sf::Text goalTextOne_;
 		sf::Text goalTextTwo_;
 
@@ -94,21 +93,19 @@ class Game
 		void createGoals();
 		void createScoreLine();
 		void createFpsDisplay();
+		void calculateLinePoistions();
 		void initTime();
 
-		void calculateLinePoistions();
-
-		double leftLineAt;
-		double rightLineAt;
-		double topLineAt;
-		double bottomLineAt;
-		double centerLineAt;
+		//line locations
+		double leftLineAt_;
+		double rightLineAt_;
+		double topLineAt_;
+		double bottomLineAt_;
+		double centerLineAt_;
 
 		//game logic objects
-		std::set<Player*> players;
-
-		Ball* ball;
-
+		std::set<Player*> players_;
+		Ball* ball_;
 		bool ballWasInLeftGoal_;
 		bool ballWasInRightGoal_;
 

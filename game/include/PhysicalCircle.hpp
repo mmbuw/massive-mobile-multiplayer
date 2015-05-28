@@ -1,5 +1,5 @@
-#ifndef PHYSICAL_OBJECT_HPP
-#define PHYSICAL_OBJECT_HPP
+#ifndef PHYSICAL_CIRCLE_HPP
+#define PHYSICAL_CIRCLE_HPP
 
 #include <SFML/System.hpp>
 #include <SFML/Graphics.hpp>
@@ -8,11 +8,11 @@
 
 #define MAX_SPEED 6.0
 
-class PhysicalObject
+class PhysicalCircle
 {	
 	public:
-		PhysicalObject(float mass, float posX, float posY, float radius);
-		virtual ~PhysicalObject();
+		PhysicalCircle(float mass, float posX, float posY, float radius);
+		virtual ~PhysicalCircle();
 		
 		virtual void render(sf::RenderWindow* window) const;
 		virtual void frameFrictionUpdate();
@@ -28,10 +28,10 @@ class PhysicalObject
 		float getVelY() const;
 		float getMass() const;
 		float getRadius() const;
-		float computeCurrentSpeed() const;
 
 		void setVelocity(float x, float y);
 		void addVelocityOffset(float x, float y);
+		float computeCurrentSpeed() const;
 
 	protected:
 		sf::CircleShape shape_;
@@ -46,4 +46,4 @@ class PhysicalObject
 		float radius_;
 };
 
-#endif //PHYSICAL_OBJECT_HPP
+#endif //PHYSICAL_CIRCLE_HPP

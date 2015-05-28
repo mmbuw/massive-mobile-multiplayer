@@ -1,7 +1,7 @@
 #include "Player.hpp"
 
 Player::Player(int startX, int startY, sf::Color border, sf::Color center, std::string const& name, int number) :
-	PhysicalObject(10.2, startX, startY, 35.0), borderColor_(border), centerColor_(center), 
+	PhysicalCircle(10.2, startX, startY, 35.0), borderColor_(border), centerColor_(center), 
 	blockShootFrames_(0), startX_(startX), startY_(startY), name_(name), shirtNumber_(number)
 {
 	shootCircleRadius_ = computeShootCircleRadius();
@@ -39,7 +39,7 @@ Player::Player(int startX, int startY, sf::Color border, sf::Color center, std::
 
 /* virtual */ void Player::render(sf::RenderWindow* window) const 
 {
-	PhysicalObject::render(window);
+	PhysicalCircle::render(window);
 	
 	window->draw(shootCircle_);
 	window->draw(nameText_);
@@ -48,7 +48,7 @@ Player::Player(int startX, int startY, sf::Color border, sf::Color center, std::
 
 /* virtual */ void Player::frameUpdate()
 {
-	PhysicalObject::frameUpdate();
+	PhysicalCircle::frameUpdate();
 
 	nameText_.setPosition(posX_-((name_.size()/2)*20), posY_ + (50.0/35.0*radius_));
 
@@ -74,13 +74,12 @@ Player::Player(int startX, int startY, sf::Color border, sf::Color center, std::
 
 /* virtual */ void Player::setPosition(float x, float y)
 {
-	PhysicalObject::setPosition(x,y);
+	PhysicalCircle::setPosition(x,y);
 	shootCircle_.setPosition(sf::Vector2f(x,y));
 }
 
 /* virtual */ void Player::clampPosition()
 {
-
 	if (posX_ < 0)
 	{
 		setPosition(0, posY_);
@@ -102,7 +101,7 @@ Player::Player(int startX, int startY, sf::Color border, sf::Color center, std::
 
 /* virtual */ void Player::setRadius(float newRadius)
 {
-	PhysicalObject::setRadius(newRadius);
+	PhysicalCircle::setRadius(newRadius);
 	shootCircleRadius_ = computeShootCircleRadius();
 	shootCircle_.setOrigin(0, 0);
 	shootCircle_.setRadius(shootCircleRadius_);
@@ -178,8 +177,8 @@ void Player::resetToStart()
 
 void Player::setLineRestrictions() 
 {
-	 screenWidth = sf::VideoMode::getDesktopMode().width;
-	 screenHeight = sf::VideoMode::getDesktopMode().height * 0.92307692307; //because the field actually ends at the score line
+	screenWidth = sf::VideoMode::getDesktopMode().width;
+	screenHeight = sf::VideoMode::getDesktopMode().height * 0.92307692307; //because the field actually ends at the score line
 }
 
 float Player::computeShootCircleRadius() const

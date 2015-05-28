@@ -168,7 +168,7 @@ int main()
 		
 
 		// application logic
-		game->updatePhysicalObjects();
+		game->updatePhysicalCircles();
 		game->applyIntersectionPhysics();
 		game->checkForGoal();
 

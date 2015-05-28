@@ -1,16 +1,16 @@
-#include "PhysicalObject.hpp"
+#include "PhysicalCircle.hpp"
 
-PhysicalObject::PhysicalObject(float mass, float posX, float posY, float radius) : 
+PhysicalCircle::PhysicalCircle(float mass, float posX, float posY, float radius) : 
 	mass_(mass), posX_(posX), posY_(posY), velX_(0.0), velY_(0.0), radius_(radius) {}
 
-/* virtual */ PhysicalObject::~PhysicalObject() {}
+/* virtual */ PhysicalCircle::~PhysicalCircle() {}
 
-/* virtual */ void PhysicalObject::render(sf::RenderWindow* window) const 
+/* virtual */ void PhysicalCircle::render(sf::RenderWindow* window) const 
 {
 	window->draw(shape_);
 }
 
-/* virtual */ void PhysicalObject::frameFrictionUpdate()
+/* virtual */ void PhysicalCircle::frameFrictionUpdate()
 {
 	float frictionDecrement(0.25);
 
@@ -33,20 +33,20 @@ PhysicalObject::PhysicalObject(float mass, float posX, float posY, float radius)
 	clampPosition();
 }
 
-/* virtual */ void PhysicalObject::frameUpdate()
+/* virtual */ void PhysicalCircle::frameUpdate()
 {
 	frameFrictionUpdate();
 	setPosition(posX_ + velX_, posY_ + velY_);
 }
 
-/* virtual */ void PhysicalObject::setPosition(float x, float y)
+/* virtual */ void PhysicalCircle::setPosition(float x, float y)
 {
 	posX_ = x;
 	posY_ = y;
 	shape_.setPosition(sf::Vector2f(posX_, posY_));
 }
 
-/* virtual */ void PhysicalObject::setRadius(float newRadius)
+/* virtual */ void PhysicalCircle::setRadius(float newRadius)
 {
 	radius_ = newRadius;
 	shape_.setOrigin(0, 0);
@@ -55,48 +55,48 @@ PhysicalObject::PhysicalObject(float mass, float posX, float posY, float radius)
 }
 
 
-sf::CircleShape const PhysicalObject::getShape() const
+sf::CircleShape const PhysicalCircle::getShape() const
 {
 	return shape_;
 }
 
-float PhysicalObject::getPosX() const
+float PhysicalCircle::getPosX() const
 {
 	return posX_;
 }
 
-float PhysicalObject::getPosY() const
+float PhysicalCircle::getPosY() const
 {
 	return posY_;
 }
 
-float PhysicalObject::getVelX() const
+float PhysicalCircle::getVelX() const
 {
 	return velX_;
 }
 
-float PhysicalObject::getVelY() const
+float PhysicalCircle::getVelY() const
 {
 	return velY_;
 }
 
-float PhysicalObject::getMass() const
+float PhysicalCircle::getMass() const
 {
 	return mass_;
 }
 
-float PhysicalObject::getRadius() const
+float PhysicalCircle::getRadius() const
 {
 	return radius_;
 }
 
-void PhysicalObject::setVelocity(float x, float y)
+void PhysicalCircle::setVelocity(float x, float y)
 {
 	velX_ = x;
 	velY_ = y;
 }
 
-void PhysicalObject::addVelocityOffset(float x, float y)
+void PhysicalCircle::addVelocityOffset(float x, float y)
 {
 	velX_ += x;
 	velY_ += y;
@@ -113,7 +113,7 @@ void PhysicalObject::addVelocityOffset(float x, float y)
 
 }
 
-float PhysicalObject::computeCurrentSpeed() const
+float PhysicalCircle::computeCurrentSpeed() const
 {
 	return std::sqrt(velX_*velX_ + velY_*velY_);
 }

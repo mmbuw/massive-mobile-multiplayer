@@ -8,10 +8,10 @@
 #include <stdlib.h>
 
 #include "Ball.hpp"
-#include "PhysicalObject.hpp"
+#include "PhysicalCircle.hpp"
 
 
-class Player : public PhysicalObject
+class Player : public PhysicalCircle
 {
 
 	public:
@@ -39,8 +39,7 @@ class Player : public PhysicalObject
 
 
 	private:
-
-
+		
 		sf::Color borderColor_;
 		sf::Color centerColor_;
 
