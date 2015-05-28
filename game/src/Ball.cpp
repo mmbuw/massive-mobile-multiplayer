@@ -16,6 +16,30 @@ Ball::Ball(int startX, int startY) : PhysicalObject(1.0, startX, startY, 25.0),
 
 /* virtual */ Ball::~Ball() {}
 
+bool Ball::handleCornerRebound(sf::Vector2f const& corner)
+{
+	/* source for physical corner rebounds: */
+	/* http://math.stackexchange.com/questions/428546/collision-between-a-circle-and-a-rectangle */
+
+	sf::Vector2f center(posX_, posY_);
+	sf::Vector2f vecToCircle( center - corner );
+
+	float distToCorner = std::sqrt(vecToCircle.x*vecToCircle.x + vecToCircle.y*vecToCircle.y);
+
+	if (distToCorner < radius_)
+	{
+		float q = - (2*(velX_*(vecToCircle.x)+velY_*(vecToCircle.y))) / (radius_*radius_);
+		velX_ = velX_ + q * vecToCircle.x;
+		velY_ = velY_ + q * vecToCircle.y;
+		vecToCircle = vecToCircle / distToCorner;
+		setPosition(corner.x + radius_ * vecToCircle.x, corner.y + radius_ * vecToCircle.y);
+		return true;
+	}
+	
+	return false;
+}
+
+
 /* virtual */ void Ball::clampPosition()
 {
 
@@ -27,12 +51,32 @@ Ball::Ball(int startX, int startY) : PhysicalObject(1.0, startX, startY, 25.0),
 		bottomBorderLine = goalEndHeight;
 	}
 
+	/* corner clamps */
+	//left goal top corner
+	bool leftTop = handleCornerRebound(sf::Vector2f(leftBorderLine, goalStartHeight));
+
+	//left goal bottom corner
+	bool leftBottom = handleCornerRebound(sf::Vector2f(leftBorderLine, goalEndHeight));
+
+	//right goal top corner
+	bool rightTop = handleCornerRebound(sf::Vector2f(rightBorderLine, goalStartHeight));
+	
+	//right goal bottom corner
+	bool rightBottom = handleCornerRebound(sf::Vector2f(rightBorderLine, goalEndHeight));
+
+	//if a corner clamp was performed, stop checking from here on
+	if (leftTop || leftBottom || rightTop || rightBottom)
+	{
+		return;
+	}
+
+
 	/* X position clamp */
 
 	if (posX_ < leftBorderLine + radius_) // left border
 	{
 		// left goal
-		if (posY_ >= goalStartHeight && posY_ <= goalEndHeight)
+		if (posY_ >= goalStartHeight-radius_ && posY_ <= goalEndHeight+radius_)
 		{
 			if (posX_ < leftGoalEndLine + radius_)
 			{
@@ -54,7 +98,7 @@ Ball::Ball(int startX, int startY) : PhysicalObject(1.0, startX, startY, 25.0),
 	else if (posX_ > rightBorderLine - radius_) // right border
 	{
 		// right goal
-		if (posY_ >= goalStartHeight && posY_ <= goalEndHeight)
+		if (posY_ >= goalStartHeight-radius_ && posY_ <= goalEndHeight+radius_)
 		{
 			if (posX_ > rightGoalEndLine - radius_)
 			{
@@ -76,7 +120,6 @@ Ball::Ball(int startX, int startY) : PhysicalObject(1.0, startX, startY, 25.0),
 		inLeftGoal_ = false;
 		inRightGoal_ = false;
 	}
-
 
 	/* Y position clamp */
 

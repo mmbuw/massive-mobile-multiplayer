@@ -18,6 +18,7 @@ class Ball : public PhysicalObject
 		/* virtual */ ~Ball();
 		/* virtual */ void clampPosition();
 		
+		bool handleCornerRebound(sf::Vector2f const& corner);
 		void setColor(sf::Color color);
 
 		void resetToStart();
