@@ -514,9 +514,11 @@ void Game::applyElasticImpact(PhysicalObject* lhs, PhysicalObject* rhs, float lh
 			
 			if (magnitude != 0.0)
 			{
+				//factor how strong balls bounce off the player when she just pushes the ball
+				float pushBoostFactor(2.0);
 				newDirection = newDirection / lhs->computeCurrentSpeed();
 				newDirection = (newDirection * rhs->computeCurrentSpeed());
-				lhs->setVelocity(newDirection.x, newDirection.y);
+				lhs->setVelocity(newDirection.x * pushBoostFactor, newDirection.y * pushBoostFactor);
 			}
 		}
 	}
