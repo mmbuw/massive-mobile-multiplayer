@@ -497,27 +497,33 @@ void Game::applyElasticImpact(PhysicalObject* lhs, PhysicalObject* rhs, float lh
 
 	if (diffLength < lhsRadius + rhsRadius)
 	{
-		float incrementAtEachVectorEnd( (lhsRadius+rhsRadius-diffLength) / 2.0 );
-		diffVec = diffVec / diffLength;
-		diffVec = diffVec * (incrementAtEachVectorEnd);
-
-		sf::Vector2f newBallPosition(lhsCenter - diffVec);
-		sf::Vector2f newPlayerPosition(rhsCenter + diffVec);
-
-		lhs->setPosition(newBallPosition.x, newBallPosition.y);
-		rhs->setPosition(newPlayerPosition.x, newPlayerPosition.y);
-
-		if ( !equal && rhs->computeCurrentSpeed() > lhs->computeCurrentSpeed())
+		//used for player-player collision
+		if (equal)
 		{
-			sf::Vector2f newDirection(lhs->getVelX(), lhs->getVelY());
+			float incrementAtEachVectorEnd( (lhsRadius+rhsRadius-diffLength) / 2.0 );
+			diffVec = diffVec / diffLength;
+			diffVec = diffVec * (incrementAtEachVectorEnd);
+			sf::Vector2f newLhsPosition(lhsCenter - diffVec);
+			sf::Vector2f newRhsPosition(rhsCenter + diffVec);
+			lhs->setPosition(newLhsPosition.x, newLhsPosition.y);
+			rhs->setPosition(newRhsPosition.x, newRhsPosition.y);
+		}
+		//used for ball-player collision
+		else
+		{
+			diffVec = diffVec / diffLength;
+			diffVec = diffVec * (lhsRadius+rhsRadius);
+			sf::Vector2f newLhsPosition(rhsCenter - diffVec);
+			lhs->setPosition(newLhsPosition.x, newLhsPosition.y);
+
+			sf::Vector2f newDirection = -diffVec;
 			float magnitude = lhs->computeCurrentSpeed();
 			
 			if (magnitude != 0.0)
 			{
 				//factor how strong balls bounce off the player when she just pushes the ball
-				float pushBoostFactor(2.0);
-				newDirection = newDirection / lhs->computeCurrentSpeed();
-				newDirection = (newDirection * rhs->computeCurrentSpeed());
+				float pushBoostFactor(0.03);
+				newDirection = newDirection * rhs->computeCurrentSpeed();
 				lhs->setVelocity(newDirection.x * pushBoostFactor, newDirection.y * pushBoostFactor);
 			}
 		}
