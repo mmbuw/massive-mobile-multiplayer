@@ -65,6 +65,7 @@ Player* Game::addNewPlayer(std::string const& name, int number)
 	}
 
 	Player* newPlayer = new Player(spawnPosition.x, spawnPosition.y, sf::Color(0,0,0), teamColor, name, number);
+	newPlayer->setRadius(getPlayerRadius());
 	players_.insert(newPlayer);
 	return newPlayer;
 }
@@ -222,6 +223,17 @@ void Game::renderTime(sf::RenderWindow* window)
 		performEndOfGameAnimation();
 
 	window->draw(time_);
+}
+
+float Game::getPlayerRadius() const
+{
+	//new size when the field gets full
+	if (numPlayersRed_ + numPlayersBlue_ < 5)
+		return 35.0;
+	else if (numPlayersRed_ + numPlayersBlue_ < 9)
+		return 30.0;
+	else
+		return 25.0;
 }
 
 void Game::updatePhysicalCircles()
@@ -511,14 +523,7 @@ void Game::resetPlayers()
 
 	float radiusFromCenter(screenWidth_/5.0);
 
-	float newPlayerRadius;
-	//new size when the field gets full
-	if (numPlayersRed_ + numPlayersBlue_ < 5)
-		newPlayerRadius = 35.0;
-	else if (numPlayersRed_ + numPlayersBlue_ < 9)
-		newPlayerRadius = 30.0;
-	else
-		newPlayerRadius = 25.0;
+	float newPlayerRadius = getPlayerRadius();
 
 	for (std::set<Player*>::iterator it = players_.begin(); it != players_.end(); ++it)
 	{

@@ -41,6 +41,7 @@ class Game
 		void renderScoreLine(sf::RenderWindow* window);
 		void renderFpsDisplay(sf::RenderWindow* window, float value);
 		void renderTime(sf::RenderWindow* window);
+		float getPlayerRadius() const;
 
 		//physics methods
 		void updatePhysicalCircles();
