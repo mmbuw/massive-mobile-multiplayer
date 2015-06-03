@@ -1,7 +1,7 @@
 #include "PhysicalCircle.hpp"
 
-PhysicalCircle::PhysicalCircle(float mass, float posX, float posY, float radius) : 
-	mass_(mass), posX_(posX), posY_(posY), velX_(0.0), velY_(0.0), radius_(radius) {}
+PhysicalCircle::PhysicalCircle(float mass, float posX, float posY, float radius, float frictionCoefficient) : 
+	mass_(mass), posX_(posX), posY_(posY), velX_(0.0), velY_(0.0), radius_(radius), frictionCoefficient_(frictionCoefficient) {}
 
 /* virtual */ PhysicalCircle::~PhysicalCircle() {}
 
@@ -12,7 +12,7 @@ PhysicalCircle::PhysicalCircle(float mass, float posX, float posY, float radius)
 
 /* virtual */ void PhysicalCircle::frameFrictionUpdate()
 {
-	float frictionDecrement(0.25);
+	float frictionDecrement = frictionCoefficient_;
 
 	float currentSpeed = computeCurrentSpeed();
 

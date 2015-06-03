@@ -1,6 +1,6 @@
 #include "Ball.hpp"
 
-Ball::Ball(int startX, int startY) : PhysicalCircle(1.0, startX, startY, 25.0),
+Ball::Ball(int startX, int startY) : PhysicalCircle(1.0, startX, startY, 25.0, 0.25),
                inLeftGoal_(false), inRightGoal_(false),
 			   startX_(startX), startY_(startY), lastPlayerTouch_(nullptr)
 {

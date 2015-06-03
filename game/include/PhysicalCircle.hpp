@@ -11,7 +11,7 @@
 class PhysicalCircle
 {	
 	public:
-		PhysicalCircle(float mass, float posX, float posY, float radius);
+		PhysicalCircle(float mass, float posX, float posY, float radius, float frictionCoefficient);
 		virtual ~PhysicalCircle();
 		
 		virtual void render(sf::RenderWindow* window) const;
@@ -44,6 +44,7 @@ class PhysicalCircle
 
 		float mass_;
 		float radius_;
+		float frictionCoefficient_;
 };
 
 #endif //PHYSICAL_CIRCLE_HPP

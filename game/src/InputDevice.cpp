@@ -87,10 +87,9 @@ void InputDevice::mapValuesAndApply()
 	{
 		double xPercentage = inputValueX_ / 1000.0;
 		double yPercentage = inputValueY_ / 1000.0;
-		double percentToVelFactor = 4.0;
+		double percentToVelFactor = 5.0;
 
-		//playerFigure_->addVelocityOffset(xPercentage * percentToVelFactor, yPercentage * percentToVelFactor);
-		playerFigure_->setVelocity(xPercentage * percentToVelFactor, yPercentage * percentToVelFactor);
+		playerFigure_->addVelocityOffset(xPercentage * percentToVelFactor, yPercentage * percentToVelFactor);
 	}
 
 	if (inputButtonA_)
