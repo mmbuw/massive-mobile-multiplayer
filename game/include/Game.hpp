@@ -66,6 +66,7 @@ class Game
 		int screenWidth_;
 		int screenHeight_;
 		sf::Clock clock_;
+		bool goalAnimationScoreUpdateDone_;
 
 		//graphical objects
 		std::vector<sf::ConvexShape> lines_;

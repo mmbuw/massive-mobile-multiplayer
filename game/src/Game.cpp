@@ -2,7 +2,7 @@
 
 Game::Game(int screenWidth, int screenHeight) : ballWasInLeftGoal_(false),
                screenWidth_(screenWidth), screenHeight_(screenHeight), ballWasInRightGoal_(false), 
-			   pointsBlueTeam_(0), pointsRedTeam_(0),
+			   pointsBlueTeam_(0), pointsRedTeam_(0), goalAnimationScoreUpdateDone_(false),
 			   numPlayersRed_(0), numPlayersBlue_(0), inGoalAnimation_(false), inEndAnimation_(false)
 {}
 
@@ -429,6 +429,9 @@ void Game::checkForGoal()
 		goalTextOne_.setColor(sf::Color(255, 0, 0));
 		goalTextTwo_.setColor(sf::Color(255, 0, 0));
 		celebratingTeam_ = sf::Color(255,0,0);
+
+		goalTextTwo_.setString(std::to_string(pointsRedTeam_-1));
+		goalAnimationScoreUpdateDone_ = false;
 	}
 	else if (ball_->isInRightGoal() && ballWasInRightGoal_ == false && inGoalAnimation_ == false && inEndAnimation_ == false)
 	{
@@ -442,6 +445,9 @@ void Game::checkForGoal()
 		goalTextOne_.setColor(sf::Color(0, 0, 255));
 		goalTextTwo_.setColor(sf::Color(0, 0, 255));
 		celebratingTeam_ = sf::Color(0,0,255);
+
+		goalTextTwo_.setString(std::to_string(pointsBlueTeam_-1));
+		goalAnimationScoreUpdateDone_ = false;
 	}
 	else if (ball_->isInLeftGoal() == false && ballWasInLeftGoal_ == true)
 	{
@@ -481,19 +487,15 @@ void Game::checkForGoal()
 			sf::Vector2f currentTextPos = lerp(lerpStart, lerpEnd, timeStep);
 			goalTextOne_.setPosition(currentTextPos);
 
-			if (celebratingTeam_ == sf::Color(255,0,0))
+			if (timeStep > 0.5 && goalAnimationScoreUpdateDone_ == false)
 			{
-				if (timeStep < 0.5)
-					goalTextTwo_.setString(std::to_string(pointsRedTeam_-1));
-				else
+				goalAnimationScoreUpdateDone_ = true;
+
+				if (celebratingTeam_ == sf::Color(255,0,0))
 					goalTextTwo_.setString(std::to_string(pointsRedTeam_));
-			}
-			else
-			{
-				if (timeStep < 0.5)
-					goalTextTwo_.setString(std::to_string(pointsBlueTeam_-1));
-				else
+				else if (celebratingTeam_ == sf::Color(0,0,255))
 					goalTextTwo_.setString(std::to_string(pointsBlueTeam_));
+
 			}
 
 			textRect = goalTextTwo_.getGlobalBounds();
