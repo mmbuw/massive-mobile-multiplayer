@@ -111,22 +111,22 @@ Player::Player(int startX, int startY, sf::Color border, sf::Color center, std::
 
 void Player::moveUp() 
 {
-	addVelocityOffset(0.0, -0.5);
+	addVelocityOffset(0.0, -5.0);
 }
 
 void Player::moveDown() 
 {
-	addVelocityOffset(0.0, 0.5);
+	addVelocityOffset(0.0, 5.0);
 }
 
 void Player::moveLeft() 
 {
-	addVelocityOffset(-0.5, 0.0);
+	addVelocityOffset(-5.0, 0.0);
 }
 
 void Player::moveRight() 
 {
-	addVelocityOffset(0.5, 0.0);
+	addVelocityOffset(5.0, 0.0);
 }
 
 bool Player::intersectsCircle(int circlePosX, int circlePosY, float cirlceRadius, bool useShootRange) const
