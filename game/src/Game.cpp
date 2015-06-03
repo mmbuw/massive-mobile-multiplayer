@@ -48,7 +48,7 @@ Player* Game::addNewPlayer(std::string const& name, int number)
 		teamColor = sf::Color(0, 0, 255);
 	}
 
-	//set spawn position dependent on team color
+	//set spawn position dependend on team color
 	sf::Vector2f spawnPosition(0,0);
 
 	if (teamColor == sf::Color(0, 0, 255))
