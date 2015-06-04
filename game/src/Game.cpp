@@ -717,7 +717,7 @@ void Game::createGoals()
 	goalLeft_.setOutlineColor(sf::Color(0,0,255));
 
 	goalRight_ = sf::RectangleShape(sf::Vector2f(0.03385416*screenWidth_,0.3*screenHeight_));
-	goalRight_.setPosition(0.92791616666*screenWidth_,middleoflines-(0.15*screenHeight_));
+	goalRight_.setPosition(rightLineAt_+5,middleoflines-(0.15*screenHeight_));
 	goalRight_.setFillColor(sf::Color(0,0,0,0));
 	goalRight_.setOutlineThickness(5);
 	goalRight_.setOutlineColor(sf::Color(255,0,0));
