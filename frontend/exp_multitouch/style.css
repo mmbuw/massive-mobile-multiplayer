@@ -112,6 +112,10 @@ body {
 	font-family: 'Droid Sans', Helvetica;
 	width: 100%;
 	height: 100%;
+	-moz-user-select: none; 
+    -khtml-user-select: none; 
+	-webkit-user-select: none; 
+	-o-user-select: none; 
 }
 
 #button {
@@ -119,6 +123,10 @@ body {
 	height: 100%;
 	float: right;
 	background-color: #ccc;
+	-moz-user-select: none; 
+    -khtml-user-select: none; 
+	-webkit-user-select: none; 
+	-o-user-select: none; 
 }
 
 #sadstick { 
@@ -130,6 +138,10 @@ body {
 	z-index:0; 
 	margin: 0;
 	padding: 0;
+	-moz-user-select: none; 
+    -khtml-user-select: none; 
+	-webkit-user-select: none; 
+	-o-user-select: none; 
 }
 
 #canvas-wrap {
@@ -137,6 +149,10 @@ body {
 	height: 100%;
 	position: relative;
 	float: left;
+	-moz-user-select: none; 
+    -khtml-user-select: none; 
+	-webkit-user-select: none; 
+	-o-user-select: none; 
 }
 
 #circle {
@@ -147,6 +163,10 @@ body {
     background: red;
 	border-radius: 50%;
 	padding: 20%;
+	-moz-user-select: none; 
+    -khtml-user-select: none; 
+	-webkit-user-select: none; 
+	-o-user-select: none; 
 }
 
 
