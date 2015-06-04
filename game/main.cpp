@@ -6,7 +6,7 @@
 #include "InputHandler.hpp"
 #include "Game.hpp"
 
-#define INSERT_KEYBOARD_DEBUG_PLAYER true
+#define INSERT_KEYBOARD_DEBUG_PLAYER false
 
 int main()
 {
@@ -168,7 +168,7 @@ int main()
 		
 
 		// application logic
-		game->updatePhysicalObjects();
+		game->updatePhysicalCircles();
 		game->applyIntersectionPhysics();
 		game->checkForGoal();
 

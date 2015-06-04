@@ -8,10 +8,10 @@
 #include <stdlib.h>
 
 #include "Ball.hpp"
-#include "PhysicalObject.hpp"
+#include "PhysicalCircle.hpp"
 
 
-class Player : public PhysicalObject
+class Player : public PhysicalCircle
 {
 
 	public:
@@ -21,6 +21,7 @@ class Player : public PhysicalObject
 		/* virtual */ void frameUpdate();
 		/* virtual */ void setPosition(float x, float y);
 		/* virtual */ void clampPosition();
+		/* virtual */ void setRadius(float newRadius);
 
 		void moveUp();
 		void moveDown();
@@ -32,13 +33,13 @@ class Player : public PhysicalObject
 		bool inShootSequence() const;
 		void resetToStart();
 		void setLineRestrictions();
+		float computeShootCircleRadius() const;
 		sf::Color const getTeamColor();
 		std::string const getName() const;
 
 
 	private:
-
-
+		
 		sf::Color borderColor_;
 		sf::Color centerColor_;
 

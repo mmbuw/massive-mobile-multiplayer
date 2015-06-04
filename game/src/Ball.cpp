@@ -1,6 +1,6 @@
 #include "Ball.hpp"
 
-Ball::Ball(int startX, int startY) : PhysicalObject(1.0, startX, startY, 25.0),
+Ball::Ball(int startX, int startY) : PhysicalCircle(1.0, startX, startY, 25.0, 0.23),
                inLeftGoal_(false), inRightGoal_(false),
 			   startX_(startX), startY_(startY), lastPlayerTouch_(nullptr)
 {
@@ -10,64 +10,84 @@ Ball::Ball(int startX, int startY) : PhysicalObject(1.0, startX, startY, 25.0),
 	shape_.setOutlineColor(sf::Color(0,0,0,255));
 	shape_.setOrigin(radius_, radius_);
 
-	shape_.setPosition(posX_, posY_);	
-
+	shape_.setPosition(posX_, posY_);
 }
+
 
 /* virtual */ Ball::~Ball() {}
 
+
 /* virtual */ void Ball::clampPosition()
 {
-
 	// if the ball was in a goal last frame, clamp upper and lower
 	// border to goal lines
 	if (inLeftGoal_ || inRightGoal_)
 	{
-		topBorderLine = goalStartHeight;
-		bottomBorderLine = goalEndHeight;
+		topBorderLine_ = goalStartHeight_;
+		bottomBorderLine_ = goalEndHeight_;
 	}
+
+	/* corner clamps */
+	//left goal top corner
+	bool leftTop = handleCornerRebound(sf::Vector2f(leftBorderLine_, goalStartHeight_));
+
+	//left goal bottom corner
+	bool leftBottom = handleCornerRebound(sf::Vector2f(leftBorderLine_, goalEndHeight_));
+
+	//right goal top corner
+	bool rightTop = handleCornerRebound(sf::Vector2f(rightBorderLine_, goalStartHeight_));
+	
+	//right goal bottom corner
+	bool rightBottom = handleCornerRebound(sf::Vector2f(rightBorderLine_, goalEndHeight_));
+
+	//if a corner clamp was performed, stop checking from here on
+	if (leftTop || leftBottom || rightTop || rightBottom)
+	{
+		return;
+	}
+
 
 	/* X position clamp */
 
-	if (posX_ < leftBorderLine + radius_) // left border
+	if (posX_ < leftBorderLine_ + radius_) // left border
 	{
 		// left goal
-		if (posY_ >= goalStartHeight && posY_ <= goalEndHeight)
+		if (posY_ >= goalStartHeight_-radius_ && posY_ <= goalEndHeight_+radius_)
 		{
-			if (posX_ < leftGoalEndLine + radius_)
+			if (posX_ < leftGoalEndLine_ + radius_)
 			{
-				setPosition(leftGoalEndLine + radius_, posY_);
+				setPosition(leftGoalEndLine_ + radius_, posY_);
 				changeAbsorptionVelocity(true, false);
 			}
 
 			//we want the ball's center to be over the goal line
-			if (posX_ <= leftBorderLine)
+			if (posX_ <= leftBorderLine_)
 				inLeftGoal_ = true;
 
 		}
 		else
 		{
-			setPosition(leftBorderLine + radius_, posY_);
+			setPosition(leftBorderLine_ + radius_, posY_);
 			changeAbsorptionVelocity(true, false);
 		}
 	}
-	else if (posX_ > rightBorderLine - radius_) // right border
+	else if (posX_ > rightBorderLine_ - radius_) // right border
 	{
 		// right goal
-		if (posY_ >= goalStartHeight && posY_ <= goalEndHeight)
+		if (posY_ >= goalStartHeight_-radius_ && posY_ <= goalEndHeight_+radius_)
 		{
-			if (posX_ > rightGoalEndLine - radius_)
+			if (posX_ > rightGoalEndLine_ - radius_)
 			{
-				setPosition(rightGoalEndLine - radius_, posY_);
+				setPosition(rightGoalEndLine_ - radius_, posY_);
 				changeAbsorptionVelocity(true, false);
 			}
 
-			if (posX_ >= rightBorderLine)
+			if (posX_ >= rightBorderLine_)
 				inRightGoal_ = true;
 		}
 		else
 		{
-			setPosition(rightBorderLine - radius_, posY_);
+			setPosition(rightBorderLine_ - radius_, posY_);
 			changeAbsorptionVelocity(true, false);
 		}
 	}
@@ -77,21 +97,45 @@ Ball::Ball(int startX, int startY) : PhysicalObject(1.0, startX, startY, 25.0),
 		inRightGoal_ = false;
 	}
 
-
 	/* Y position clamp */
 
-	if (posY_ < topBorderLine + radius_) // top border
+	if (posY_ < topBorderLine_ + radius_) // top border
 	{
-		setPosition(posX_, topBorderLine + radius_);
+		setPosition(posX_, topBorderLine_ + radius_);
 		changeAbsorptionVelocity(false, true);
 	}
-	else if(posY_ > bottomBorderLine - radius_) //bottom border
+	else if(posY_ > bottomBorderLine_ - radius_) //bottom border
 	{
-		setPosition(posX_, bottomBorderLine - radius_);
+		setPosition(posX_, bottomBorderLine_ - radius_);
 		changeAbsorptionVelocity(false, true);
 	}
 
 }
+
+
+bool Ball::handleCornerRebound(sf::Vector2f const& corner)
+{
+	/* source for physical corner rebounds: */
+	/* http://math.stackexchange.com/questions/428546/collision-between-a-circle-and-a-rectangle */
+
+	sf::Vector2f center(posX_, posY_);
+	sf::Vector2f vecToCircle( center - corner );
+
+	float distToCorner = std::sqrt(vecToCircle.x*vecToCircle.x + vecToCircle.y*vecToCircle.y);
+
+	if (distToCorner < radius_)
+	{
+		float q = - (2*(velX_*(vecToCircle.x)+velY_*(vecToCircle.y))) / (radius_*radius_);
+		velX_ = velX_ + q * vecToCircle.x;
+		velY_ = velY_ + q * vecToCircle.y;
+		vecToCircle = vecToCircle / distToCorner;
+		setPosition(corner.x + radius_ * vecToCircle.x, corner.y + radius_ * vecToCircle.y);
+		return true;
+	}
+	
+	return false;
+}
+
 
 void Ball::setColor(sf::Color color)
 {
@@ -105,8 +149,8 @@ void Ball::resetToStart()
 	setColor(sf::Color(255,255,255,255));
 	inLeftGoal_ = false;
 	inRightGoal_ = false;
-	topBorderLine = temporaryTopBorder;
-	bottomBorderLine = temporaryBottomBorder;
+	topBorderLine_ = temporaryTopBorder_;
+	bottomBorderLine_ = temporaryBottomBorder_;
 	lastPlayerTouch_ = nullptr;
 }
 
@@ -149,23 +193,23 @@ std::string const Ball::getLastPlayerTouchName() const
 
 void Ball::setAllLines(double left, double right, double top, double bottom) {
 
-	leftBorderLine = left;
-	rightBorderLine = right;
-	topBorderLine = top;
-	bottomBorderLine = bottom;
+	leftBorderLine_ = left;
+	rightBorderLine_ = right;
+	topBorderLine_ = top;
+	bottomBorderLine_ = bottom;
 
-	temporaryTopBorder = topBorderLine;
-	temporaryBottomBorder = bottomBorderLine;
+	temporaryTopBorder_ = topBorderLine_;
+	temporaryBottomBorder_ = bottomBorderLine_;
 
-	screenWidth = sf::VideoMode::getDesktopMode().width;
-	screenHeight = sf::VideoMode::getDesktopMode().height;
+	screenWidth_ = sf::VideoMode::getDesktopMode().width;
+	screenHeight_ = sf::VideoMode::getDesktopMode().height;
 
-	double middleoflines = ((bottomBorderLine-topBorderLine)/2)+topBorderLine;
+	double middleoflines = ((bottomBorderLine_-topBorderLine_)/2)+topBorderLine_;
 
-	goalStartHeight = middleoflines-(0.15*screenHeight);
-	goalEndHeight = middleoflines+(0.15*screenHeight);
+	goalStartHeight_ = middleoflines-(0.15*screenHeight_);
+	goalEndHeight_ = middleoflines+(0.15*screenHeight_);
 
-	leftGoalEndLine = 0.01822916*screenWidth;
-	rightGoalEndLine = 0.96145832*screenWidth;
+	leftGoalEndLine_ = 0.01822916*screenWidth_;
+	rightGoalEndLine_ = 0.96145832*screenWidth_;
 
 }
