@@ -13,9 +13,9 @@ window.addEventListener('load', function(){
 
 
 		//Websocket
-		//var socket = new WebSocket("ws://29.4.93.1:53000");
+		var socket = new WebSocket("ws://29.4.93.1:53000");
 
-		var socket = new WebSocket("ws://localhost:53000");
+		//var socket = new WebSocket("ws://localhost:53000");
  		
 
  		socket.onerror = function(error) {
@@ -150,10 +150,6 @@ window.addEventListener('load', function(){
 	    	//calc movement
 	    	diffx = currx - startx;
 	    	diffy = curry - starty;
-
-	    	//set circle to new position
-	        //circle.style.top = centerY - circle.offsetHeight/2 + diffy;
- 			//circle.style.left = centerX - circle.offsetWidth/2 + diffx;
 
 	       	e.preventDefault();
 

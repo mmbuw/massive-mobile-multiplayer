@@ -151,10 +151,6 @@ window.addEventListener('load', function(){
 	    	diffx = currx - startx;
 	    	diffy = curry - starty;
 
-	    	//set circle to new position
-	        //circle.style.top = centerY - circle.offsetHeight/2 + diffy;
- 			//circle.style.left = centerX - circle.offsetWidth/2 + diffx;
-
 	       	e.preventDefault();
 
 	       	//reset timer
