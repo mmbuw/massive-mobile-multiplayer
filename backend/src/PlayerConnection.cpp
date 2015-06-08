@@ -50,8 +50,6 @@ void PlayerConnection::createEventDevice()
 	eventDevice_.absmax[ABS_X] = 1000;
 	eventDevice_.absmin[ABS_Y] = -1000;
 	eventDevice_.absmax[ABS_Y] = 1000;
-	eventDevice_.absmin[ABS_Z] = -99;
-	eventDevice_.absmax[ABS_Z] = 99;
 
 	/* set event device properly */
 	eventDevice_.id.bustype = BUS_VIRTUAL;
@@ -62,7 +60,7 @@ void PlayerConnection::createEventDevice()
 	write(uinputHandle_, &eventDevice_, sizeof(eventDevice_));
 	ioctl(uinputHandle_, UI_DEV_CREATE);
 
-	//wait for LED response by game to determine team assignment
+	//wait for response by game to determine team assignment
 	struct input_event ev;
 	size_t read_result = read(uinputHandle_, &ev, sizeof(ev));
 	int eventValue = ev.value; 
