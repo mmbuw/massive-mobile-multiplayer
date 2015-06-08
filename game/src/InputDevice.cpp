@@ -10,18 +10,8 @@ InputDevice::InputDevice(int id, std::string const& name, std::string const& fil
 		std::cout << "Cannot open input device " << fileAddress_ << std::endl;
 	}
 
-	//ToDo: register player figure in game and send corresponding LED code back
-	sf::Color teamColor = playerFigure_->getTeamColor();
-
-	if (teamColor == sf::Color(0, 0, 255))
-	{
-		writeLEDToDevice(LED_MISC);
-	}
-	else if (teamColor == sf::Color(255, 0, 0))
-	{
-		writeLEDToDevice(LED_COMPOSE);
-	}
-
+	//send team information back to controller
+	writeMSCTeamToDevice();
 }
 
 int InputDevice::getDeviceId() const
@@ -39,31 +29,39 @@ int InputDevice::getDeviceFileHandle() const
 	return deviceFileHandle_;
 }
 
-void InputDevice::writeLEDToDevice(int code)
+void InputDevice::writeMSCTeamToDevice()
 {
-	// allowed LED codes by the device are LED_MISC and LED_COMPOSE
-	// LED_MISC is used to assign player to blue team, LED_COMPOSE for red team
+	//Writes the team information back to the device (Event MSC_MAX)
+	//Numbers 1 to 99 are red team numbers, 101 to 199 blue team numbers
 
 	struct input_event eventHandle;
 	memset(&eventHandle, 0, sizeof(eventHandle));
 
-	eventHandle.type = EV_LED;
-	eventHandle.code = code;
-	eventHandle.value = 1;
+	int teamOffset;
+	sf::Color teamColor = playerFigure_->getTeamColor();
+	int playerNumber = playerFigure_->getShirtNumber();
+
+	if (teamColor == sf::Color(255,0,0))
+		teamOffset = 0;
+	else if (teamColor == sf::Color(0,0,255))
+		teamOffset = 100;
+
+	int eventValue = playerNumber + teamOffset;
+
+	eventHandle.type = EV_MSC;
+	eventHandle.code = MSC_MAX;
+	eventHandle.value = eventValue;
 
 	write(deviceFileHandle_, &eventHandle, sizeof(eventHandle));
 
-	eventHandle.type = EV_LED;
-	eventHandle.code = code;
-	eventHandle.value = 0;
+	struct input_event syncEventHandle;
+	memset(&syncEventHandle, 0, sizeof(syncEventHandle));
 
-	write(deviceFileHandle_, &eventHandle, sizeof(eventHandle));
+	syncEventHandle.type = EV_SYN;
+	syncEventHandle.code = SYN_REPORT;
+	syncEventHandle.value = 1;
 
-	eventHandle.type = EV_SYN;
-	eventHandle.code = SYN_REPORT;
-	eventHandle.value = 1;
-
-	write(deviceFileHandle_, &eventHandle, sizeof(eventHandle));
+	write(deviceFileHandle_, &syncEventHandle, sizeof(syncEventHandle));
 }
 
 void InputDevice::setValueX(int value)

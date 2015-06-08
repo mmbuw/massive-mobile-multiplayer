@@ -23,7 +23,7 @@ class InputDevice
 		int getDeviceId() const;
 		Player* getPlayerInstance() const;
 		int getDeviceFileHandle() const;
-		void writeLEDToDevice(int code);
+		void writeMSCTeamToDevice();
 
 		void setValueX(int value);
 		void setValueY(int value);

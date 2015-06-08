@@ -36,6 +36,7 @@ class Player : public PhysicalCircle
 		float computeShootCircleRadius() const;
 		sf::Color const getTeamColor();
 		std::string const getName() const;
+		int getShirtNumber() const;
 
 
 	private:

@@ -29,15 +29,14 @@ void PlayerConnection::createEventDevice()
 	//define allowed event types
 	ioctl(uinputHandle_, UI_SET_EVBIT, EV_ABS);
 	ioctl(uinputHandle_, UI_SET_EVBIT, EV_KEY);
-	ioctl(uinputHandle_, UI_SET_EVBIT, EV_LED);
+	ioctl(uinputHandle_, UI_SET_EVBIT, EV_MSC);
 	ioctl(uinputHandle_, UI_SET_EVBIT, EV_SYN);
 
 	//define allowed events
 	ioctl(uinputHandle_, UI_SET_ABSBIT, ABS_X);
 	ioctl(uinputHandle_, UI_SET_ABSBIT, ABS_Y);
+	ioctl(uinputHandle_, UI_SET_MSCBIT, MSC_MAX);
 	ioctl(uinputHandle_, UI_SET_KEYBIT, BTN_A);
-	ioctl(uinputHandle_, UI_SET_LEDBIT, LED_MISC);
-	ioctl(uinputHandle_, UI_SET_LEDBIT, LED_COMPOSE);
 
 	//create event device
 	std::stringstream namingStream;
@@ -51,6 +50,8 @@ void PlayerConnection::createEventDevice()
 	eventDevice_.absmax[ABS_X] = 1000;
 	eventDevice_.absmin[ABS_Y] = -1000;
 	eventDevice_.absmax[ABS_Y] = 1000;
+	eventDevice_.absmin[ABS_Z] = -99;
+	eventDevice_.absmax[ABS_Z] = 99;
 
 	/* set event device properly */
 	eventDevice_.id.bustype = BUS_VIRTUAL;
@@ -64,16 +65,18 @@ void PlayerConnection::createEventDevice()
 	//wait for LED response by game to determine team assignment
 	struct input_event ev;
 	size_t read_result = read(uinputHandle_, &ev, sizeof(ev));
+	int eventValue = ev.value; 
 
-	if (ev.code == LED_MISC)
+	if (eventValue < 100)
 	{
-		std::cout << "--> Joins blue team" << std::endl;
-		sendViaSocket("TEAM BLUE");
-	}
-	else if (ev.code == LED_COMPOSE)
-	{
-		std::cout << "--> Joins red team" << std::endl;
+		std::cout << "--> Joins red team as number " << eventValue << std::endl;
 		sendViaSocket("TEAM RED");
+	}
+	else
+	{
+		int playerNumber = eventValue - 100;
+		std::cout << "--> Joins blue team as number " << playerNumber << std::endl;
+		sendViaSocket("TEAM BLUE");
 	}
 
 	lastInputTime_ = Clock::now();

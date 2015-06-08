@@ -196,3 +196,8 @@ std::string const Player::getName() const
 {
 	return name_;
 }
+
+int Player::getShirtNumber() const
+{
+	return shirtNumber_;
+}
