@@ -13,9 +13,9 @@ window.addEventListener('load', function(){
 
 
 		//Websocket
-		var socket = new WebSocket("ws://29.4.93.1:53000");
+		//var socket = new WebSocket("ws://29.4.93.1:53000");
 
-		//var socket = new WebSocket("ws://localhost:53000");
+		var socket = new WebSocket("ws://localhost:53000");
  		
 
  		socket.onerror = function(error) {
@@ -35,15 +35,21 @@ window.addEventListener('load', function(){
 		//recive from server
 		socket.onmessage = function(evt)
 		{
-			window.localStorage.setItem("team", evt.data);
+			var splitted_string = evt.data.split(" ");
+
+			window.localStorage.setItem("team", splitted_string[1]);
+			window.localStorage.setItem("number", splitted_string[2]);
+
+			console.log(localStorage.getItem("team"));
+			console.log(localStorage.getItem("number"));
 
 			//set colorbase by socketinput/teamident
-			if(localStorage.getItem('team').indexOf("RED") > -1) {
+			if(localStorage.getItem('team') == "RED") {
 		    	colorbase = 'red';
 		    	button.style.backgroundColor = colorbase;
 		    	circle.style.backgroundColor = colorbase;
 
-		    } else if(localStorage.getItem('team').indexOf("BLUE") > -1) {
+		    } else if(localStorage.getItem('team') == "BLUE") {
 		    	colorbase = 'blue';
 		    	button.style.backgroundColor = colorbase;
 		    	circle.style.backgroundColor = colorbase;

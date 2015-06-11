@@ -68,13 +68,13 @@ void PlayerConnection::createEventDevice()
 	if (eventValue < 100)
 	{
 		std::cout << "--> Joins red team as number " << eventValue << std::endl;
-		sendViaSocket("TEAM RED");
+		sendViaSocket("TEAM RED " + std::to_string(eventValue));
 	}
 	else
 	{
 		int playerNumber = eventValue - 100;
 		std::cout << "--> Joins blue team as number " << playerNumber << std::endl;
-		sendViaSocket("TEAM BLUE");
+		sendViaSocket("TEAM BLUE " + std::to_string(playerNumber));
 	}
 
 	lastInputTime_ = Clock::now();
