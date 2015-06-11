@@ -32,8 +32,8 @@ int main()
 
 	//debug keyboard player
 	#if INSERT_KEYBOARD_DEBUG_PLAYER
-	    Player* debugPlayer = game->addNewPlayer("WASD", 29);
-	    Player* debugPlayer2 = game->addNewPlayer("IJKL", 42);
+	    Player* debugPlayer = game->addNewPlayer("WASD");
+	    Player* debugPlayer2 = game->addNewPlayer("IJKL");
 
 		bool wPressed(false);
 		bool aPressed(false);
