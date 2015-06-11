@@ -83,7 +83,21 @@ Player* Game::addNewPlayer(std::string const& name)
 	}
 
 	Player* newPlayer = new Player(spawnPosition.x, spawnPosition.y, sf::Color(0,0,0), teamColor, name, number);
-	newPlayer->setRadius(getPlayerRadius());
+	
+	//adjust player radius to other players
+	float newRadius;
+
+	if (players_.size() > 0)
+	{
+		Player* firstPlayer = *(players_.begin());
+		newRadius = firstPlayer->getRadius();
+	}
+	else
+	{
+		newRadius = getPlayerRadius();
+	}
+			
+    newPlayer->setRadius(newRadius);
 	players_.insert(newPlayer);
 	return newPlayer;
 }
