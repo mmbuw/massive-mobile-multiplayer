@@ -18,7 +18,7 @@ Game::~Game()
 }
 
 
-Player* Game::addNewPlayer(std::string const& name, int number)
+Player* Game::addNewPlayer(std::string const& name)
 {
 	//determine team color of new player
 	//team with smaller number of players_, if equal
@@ -49,19 +49,37 @@ Player* Game::addNewPlayer(std::string const& name, int number)
 	}
 
 	//set spawn position dependend on team color
+	//get a player number
 	sf::Vector2f spawnPosition(0,0);
+	int number;
 
 	if (teamColor == sf::Color(0, 0, 255))
 	{
 		spawnPosition.x = 0.06 * screenWidth_;
 		spawnPosition.y = ((int) screenHeight_*0.1) + (rand() % (int) (screenHeight_*0.7));
 		++numPlayersBlue_;
+
+		do
+		{
+			number = (rand()%99) + 1;
+		} 
+		while (blueNumbersInUse_[number] == true);
+
+		blueNumbersInUse_[number] = true;
 	}
 	else if (teamColor == sf::Color(255, 0, 0))
 	{
 		spawnPosition.x = 0.94 * screenWidth_;
 		spawnPosition.y = ((int) screenHeight_*0.1) + (rand() % (int) (screenHeight_*0.7));
 		++numPlayersRed_;
+
+		do
+		{
+			number = (rand()%99) + 1;
+		} 
+		while (redNumbersInUse_[number] == true);
+
+		redNumbersInUse_[number] = true;
 	}
 
 	Player* newPlayer = new Player(spawnPosition.x, spawnPosition.y, sf::Color(0,0,0), teamColor, name, number);
@@ -76,10 +94,12 @@ void Game::removePlayer(Player* playerToRemove)
 	if (playerToRemove->getTeamColor() == sf::Color(255, 0, 0))
 	{
 		--numPlayersRed_;
+		redNumbersInUse_[playerToRemove->getShirtNumber()] = false;
 	}
 	else if (playerToRemove->getTeamColor() == sf::Color(0, 0, 255))
 	{
 		--numPlayersBlue_;
+		blueNumbersInUse_[playerToRemove->getShirtNumber()] = false;
 	}
 
 	std::set<Player*>::iterator deleteIterator = players_.find(playerToRemove);

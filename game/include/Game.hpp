@@ -29,7 +29,7 @@ class Game
 		~Game();
 
 		//player management
-		Player* addNewPlayer(std::string const& name, int number);
+		Player* addNewPlayer(std::string const& name);
 		void removePlayer(Player* playerToRemove);
 	
 		//render methods
@@ -67,6 +67,8 @@ class Game
 		int screenHeight_;
 		sf::Clock clock_;
 		bool goalAnimationScoreUpdateDone_;
+		std::array<bool, 99> blueNumbersInUse_;
+		std::array<bool, 99> redNumbersInUse_;
 
 		//graphical objects
 		std::vector<sf::ConvexShape> lines_;

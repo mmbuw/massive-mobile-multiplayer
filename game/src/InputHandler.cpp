@@ -209,7 +209,7 @@ void InputHandler::retrieveInputs()
 
 void InputHandler::addToDevices(int deviceID, std::string const& name, std::string const& eventString)
 {
-    Player* playerFigure = gameToHandle_->addNewPlayer(name, (rand()%99) + 1);
+    Player* playerFigure = gameToHandle_->addNewPlayer(name);
     InputDevice* newlyFoundInputDevice = new InputDevice(deviceID, name, eventString, playerFigure);
     currentInputDevicesMutex_.lock();
     currentInputDevices_.insert(std::make_pair(deviceID, newlyFoundInputDevice));
