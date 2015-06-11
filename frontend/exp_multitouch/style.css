@@ -21,6 +21,7 @@ time, mark, audio, video {
 	font-size: 100%;
 	font: inherit;
 	vertical-align: baseline;
+	background-image:res/grass.jpg;
 }
 /* HTML5 display-role reset for older browsers */
 article, aside, details, figcaption, figure, 
@@ -53,7 +54,7 @@ table {
 }
 
 html {
-	background: white;
+	background-image: url(res/grass.jpg);
 	font-size: 10pt;
 }
 
@@ -69,7 +70,7 @@ html {
 
 label {
 	display: block;
-	color: #999;
+	color: #000000;
 }
 
 .cf:before,
@@ -195,9 +196,15 @@ body {
 }
 
 .textbox {
+	
+	vertical-align: center;
 	width: 50%;
-	margin: 15px auto 0px auto;
+	margin: 50px auto;
 	padding: 15px;
-	border: 1px solid #ccc;
+	background-color: rgba(250,250,250,0.8);
+	border-radius: 2px;
+	box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.2),
+	inset 0px 1px 0px 0px rgba(250,250,250,0.5);
+	border: 1px solid rgba(0,0,0,0.3);
 	text-align: center;
 }
