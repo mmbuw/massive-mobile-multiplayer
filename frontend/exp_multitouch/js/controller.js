@@ -8,6 +8,7 @@ window.addEventListener('load', function(){
 		var wrapper = document.getElementById('canvas-wrap');
  		var canvas = document.getElementById('sadstick');
  		var circle = document.getElementById('circle');
+ 		var label = document.getElementById('numberLabel');
 
  		//##################################################################################
 
@@ -54,8 +55,9 @@ window.addEventListener('load', function(){
 		    	button.style.backgroundColor = colorbase;
 		    	circle.style.backgroundColor = colorbase;
 
-		    } 
+		    }
 
+		    label.innerHTML = localStorage.getItem("number");
 		}
 
 
