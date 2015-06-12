@@ -8,6 +8,7 @@
 #include <set>
 #include <cmath>
 #include <chrono>
+#include <array>
 
 #include "Player.hpp"
 #include "Ball.hpp"
