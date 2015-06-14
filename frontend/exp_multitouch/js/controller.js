@@ -8,7 +8,6 @@ window.addEventListener('load', function(){
 		var wrapper = document.getElementById('canvas-wrap');
  		var canvas = document.getElementById('sadstick');
  		var circle = document.getElementById('circle');
- 		var label = document.getElementById('numberLabel');
 
  		//##################################################################################
 
@@ -57,7 +56,9 @@ window.addEventListener('load', function(){
 
 		    }
 
-		    label.innerHTML = localStorage.getItem("number");
+			circle.style.border = "thick solid #000000";
+		    circle.innerHTML = '<font color="#ffffff">' + localStorage.getItem("number");
+
 		}
 
 
