@@ -204,8 +204,8 @@ int main()
 			            	else
 			            		characterAsLong = ((std::bitset<8>) receiveBuffer[i] ^= mask_3).to_ulong();
 			            
-			            	//check for end of message sign (sign .)
-			            	if (characterAsLong == (long) '.' && i != receiveSize-1)
+			            	//check for end of message sign (sign $)
+			            	if (characterAsLong == (long) '$' && i != receiveSize-1)
 			            	{
 			            		nextMessagePresent = true;
 			            		indexOfFirstMask = i + 3;
