@@ -56,8 +56,7 @@ window.addEventListener('load', function(){
 
 		    }
 
-			circle.style.border = "thick solid #000000";
-		    circle.innerHTML = '<font color="#ffffff">' + localStorage.getItem("number");
+		    circle.innerHTML = '<font class="playernumber">' + localStorage.getItem("number") + '</font>';
 
 		}
 
