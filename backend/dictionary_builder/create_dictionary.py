@@ -21,8 +21,10 @@ def start():
   output_file.write('#include <map>\n')
   output_file.write('#include <string>\n')
   output_file.write('\n')
-  output_file.write('std::map<std::string, int> event_dictionary;\n')
+  output_file.write('std::map<std::string, int> eventDictionary;\n')
   output_file.write('\n')
+  output_file.write('void fillDictionary()\n')
+  output_file.write('{\n')
 
   start_parsing_events = False
 
@@ -42,8 +44,9 @@ def start():
         splitted_line = [value for value in splitted_line if value != '']
         splitted_line = splitted_line[0:3]
 
-        output_file.write('event_dictionary["' + splitted_line[1] + '"] = ' + splitted_line[1] + ';\n')
+        output_file.write('    eventDictionary["' + splitted_line[1] + '"] = ' + splitted_line[1] + ';\n')
 
+  output_file.write('}\n')
   output_file.write('\n')
   output_file.write('#endif //EVENT_DICTIONARY_HPP')
 

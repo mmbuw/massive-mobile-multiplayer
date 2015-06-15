@@ -1,0 +1,9 @@
+type EV_KEY
+event BTN_A
+
+type EV_ABS
+event ABS_X
+event ABS_Y
+    
+type EV_MSC
+event MSC_MAX

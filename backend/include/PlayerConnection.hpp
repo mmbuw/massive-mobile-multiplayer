@@ -10,6 +10,9 @@
 #include <fcntl.h>
 #include <unistd.h>
 
+//Application
+#include "ConfigurationFileParser.hpp"
+
 //C++
 #include <iostream>
 #include <cstring>
@@ -27,8 +30,8 @@ class PlayerConnection
 		PlayerConnection(sf::TcpSocket* socket);
 		~PlayerConnection();
 
-		void injectKeyEvent(int eventCode) const;
-		void injectAbsEvent(int xCoord, int yCoord) const;
+		void injectSingleEvent(int type, int code, int value) const;
+		void injectMultiEvent(int type, std::vector<int> const& codes, std::vector<int> const& values) const;
 		void createEventDevice();
 		void unregisterEventDevice();
 		bool checkAlive() const;
@@ -41,6 +44,7 @@ class PlayerConnection
 		void setName(std::string const& name);
 
 		static int instance_count;
+		static RegisteredInputs registeredInputs;
 
 
 	private:

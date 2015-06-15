@@ -10,16 +10,33 @@
 
 //Application
 #include "PlayerConnection.hpp"
+#include "EventDictionary.hpp"
+#include "ConfigurationFileParser.hpp"
 #include "sha1.hpp"
 #include "base64.hpp"
 
 typedef std::chrono::high_resolution_clock Clock;
 typedef std::chrono::nanoseconds nanoseconds;
 
-int port(53000);
+const int port(53000);
+const std::vector<int> absEventOrder = {ABS_X, ABS_Y, ABS_Z, ABS_RX, ABS_RY, ABS_RZ};
+const std::vector<int> relEventOrder = {REL_X, REL_Y, REL_Z, REL_RX, REL_RY, REL_RZ};
 
-int main()
+int main(int argc, char* argv[])
 {
+	if (argc < 2)
+	{
+		std::cout << "[Server] Usage: ./mmm-server CONFIGURATION_FILENAME " << std::endl;
+		return EXIT_FAILURE;
+	}
+
+	//fill dictionary of event strings
+	fillDictionary();
+
+	//parse configuration file
+	PlayerConnection::registeredInputs = parseConfigurationFile(argv[1], eventDictionary);
+
+
 	bool running(true);
 	std::map<int, PlayerConnection*> currentPlayerConnections;
 	sf::SocketSelector socketSelector;
@@ -224,29 +241,7 @@ int main()
 			            //print message
 			            //std::cout << "[Client " << playerConnection->getID() << "] " << message << std::endl;
 
-			            //react on messages by injecting keystrokes
-			            if (message == "VAL A$")
-			            {
-			            	//std::cout << "Inject key input event for A" << std::endl;
-			            	playerConnection->injectKeyEvent(BTN_A);
-			            }
-			            else if (message.find("VAL") == 0)
-			            {
-			            	std::stringstream stream(message);
-			            	std::string nameString;
-			            	int x, y;
-
-			            	stream >> nameString;
-			            	stream >> x;
-			            	stream >> y;
-
-			            	if (x <= 1000 && y <= 1000 && x >= -1000 && y >= -1000)
-			            	{
-			            		playerConnection->injectAbsEvent(x, y);
-			            		//std::cout << "Inject absolute input event" << std::endl;
-			            	}
-			            }
-			            else if (message.find("NAME") == 0)
+			            if (message.find("NAME") == 0)
 			            {
 			            	int nameStartIndex = 5;
 			            	int nameEndIndex = message.find("$");
@@ -254,12 +249,65 @@ int main()
 
 			            	std::cout << "[Client " << playerConnection->getID() << "] Assigning name: " << name << std::endl;
 			            	playerConnection->setName(name);
-			            }			            
+			            }
 			            else
 			            {
-			            	//std::cout << "[Client " << playerConnection->getID() << "] Omitting invalid message: " << message << std::endl;
-			            	nextMessagePresent = false;
-			            }
+			            	//parse message formats: EVENT_TYPE EVENT_CODE VALUE
+			            	//                       [EV_ABS | EV_REL] VALUE1 VALUE2 VALUE3 ...
+
+				            std::stringstream messageStream(message);
+				            std::string typeString;
+				            std::string codeString;
+				            std::vector<int> values;
+				            int temp;
+
+				            messageStream >> typeString;
+				            messageStream >> codeString;
+				            
+				            while (messageStream >> temp)
+				            {
+				            	values.push_back(temp);
+				            }
+
+				            //execute action depending on the number of values received
+				            if (values.size() == 1)
+				            {
+				            	//single value event
+				            	playerConnection->injectSingleEvent(eventDictionary[typeString],
+					            	                                eventDictionary[codeString],
+					            	                                values[0]);
+				            }
+				            else if (typeString == "EV_ABS" || typeString == "EV_REL")
+				            {
+				            	//multiple value event
+				            	int size = values.size();
+
+				            	std::vector<int> codes;		 
+				            	for (int i = 0; i < size; ++i)
+				            	{
+				            		if (typeString == "EV_ABS")
+				            			codes.push_back(absEventOrder[i]);
+				            		else
+				            			codes.push_back(relEventOrder[i]);
+				            	}
+
+				            	playerConnection->injectMultiEvent(eventDictionary[typeString],
+				            									   codes,
+				            									   values);
+				            }
+				            else
+				            {
+				            	//illegal use of multiple values
+				            	std::cout << "[Server] Multiple values only allowed for EV_ABS and EV_REL." << std::endl;
+				            }
+
+				        }
+
+				        //else
+			            //{
+			            //	//std::cout << "[Client " << playerConnection->getID() << "] Omitting invalid message: " << message << std::endl;
+			            //	nextMessagePresent = false;
+			            //}
 
 				    } while (nextMessagePresent);
 

@@ -1,6 +1,7 @@
 #include "PlayerConnection.hpp"
 
 int PlayerConnection::instance_count = 0;
+RegisteredInputs PlayerConnection::registeredInputs = RegisteredInputs();
 
 PlayerConnection::PlayerConnection(sf::TcpSocket* socket) : 
   socket_(socket), name_(""), uinputHandle_(-1)
@@ -27,16 +28,16 @@ void PlayerConnection::createEventDevice()
 	}
 
 	//define allowed event types
-	ioctl(uinputHandle_, UI_SET_EVBIT, EV_ABS);
-	ioctl(uinputHandle_, UI_SET_EVBIT, EV_KEY);
-	ioctl(uinputHandle_, UI_SET_EVBIT, EV_MSC);
-	ioctl(uinputHandle_, UI_SET_EVBIT, EV_SYN);
+	for (int i = 0; i < PlayerConnection::registeredInputs.registeredTypes.size(); ++i)
+	{
+		ioctl(uinputHandle_, UI_SET_EVBIT, PlayerConnection::registeredInputs.registeredTypes[i]);
+	}
 
 	//define allowed events
-	ioctl(uinputHandle_, UI_SET_ABSBIT, ABS_X);
-	ioctl(uinputHandle_, UI_SET_ABSBIT, ABS_Y);
-	ioctl(uinputHandle_, UI_SET_MSCBIT, MSC_MAX);
-	ioctl(uinputHandle_, UI_SET_KEYBIT, BTN_A);
+	for (int i = 0; i < PlayerConnection::registeredInputs.registeredEvents.size(); ++i)
+	{
+		ioctl(uinputHandle_, PlayerConnection::registeredInputs.eventBitsToSet[i], PlayerConnection::registeredInputs.registeredEvents[i]);
+	}
 
 	//create event device
 	std::stringstream namingStream;
@@ -46,22 +47,21 @@ void PlayerConnection::createEventDevice()
 	memset(&eventDevice_, 0, sizeof(eventDevice_));
 	snprintf(eventDevice_.name, UINPUT_MAX_NAME_SIZE, deviceName.c_str());
 
+	/* set event device properly */
+	eventDevice_.id.bustype = BUS_VIRTUAL;
+	eventDevice_.id.version = 1;
+
 	eventDevice_.absmin[ABS_X] = -1000;
 	eventDevice_.absmax[ABS_X] = 1000;
 	eventDevice_.absmin[ABS_Y] = -1000;
 	eventDevice_.absmax[ABS_Y] = 1000;
 
-	/* set event device properly */
-	eventDevice_.id.bustype = BUS_VIRTUAL;
-	//eventDevice_.id.vendor = 0x1234;
-	//eventDevice_.id.product = 0xfedc;
-	eventDevice_.id.version = 1;
-
 	write(uinputHandle_, &eventDevice_, sizeof(eventDevice_));
 	ioctl(uinputHandle_, UI_DEV_CREATE);
 
+
 	//wait for response by game to determine team assignment
-	struct input_event ev;
+	/*struct input_event ev;
 	size_t read_result = read(uinputHandle_, &ev, sizeof(ev));
 	int eventValue = ev.value; 
 
@@ -75,7 +75,7 @@ void PlayerConnection::createEventDevice()
 		int playerNumber = eventValue - 100;
 		std::cout << "--> Joins blue team as number " << playerNumber << std::endl;
 		sendViaSocket("TEAM BLUE " + std::to_string(playerNumber));
-	}
+	}*/
 
 	lastInputTime_ = Clock::now();
 }
@@ -86,22 +86,16 @@ PlayerConnection::~PlayerConnection()
 	unregisterEventDevice();
 }
 
-void PlayerConnection::injectKeyEvent(int eventCode) const
+void PlayerConnection::injectSingleEvent(int type, int code, int value) const
 {
 	if (uinputHandle_ != -1)
 	{
 		struct input_event eventHandle;
 		memset(&eventHandle, 0, sizeof(eventHandle));
 
-		eventHandle.type = EV_KEY;
-		eventHandle.code = eventCode;
-		eventHandle.value = 1;
-
-		write(uinputHandle_, &eventHandle, sizeof(eventHandle));
-
-		eventHandle.type = EV_KEY;
-		eventHandle.code = eventCode;
-		eventHandle.value = 0;
+		eventHandle.type = type;
+		eventHandle.code = code;
+		eventHandle.value = value;
 
 		write(uinputHandle_, &eventHandle, sizeof(eventHandle));
 
@@ -113,6 +107,38 @@ void PlayerConnection::injectKeyEvent(int eventCode) const
 
 		lastInputTime_ = Clock::now();
 	}
+}
+
+void PlayerConnection::injectMultiEvent(int type, std::vector<int> const& codes, std::vector<int> const& values) const
+{
+	if (uinputHandle_ != -1)
+	{
+		int numValues = values.size();
+
+		struct input_event eventHandle[numValues];
+		memset(&eventHandle, 0, sizeof(eventHandle));
+
+		for (int i = 0; i < values.size(); ++i)
+		{
+			eventHandle[i].type = type;
+			eventHandle[i].code = codes[i];
+			eventHandle[i].value = values[i];
+		}
+
+		write(uinputHandle_, &eventHandle, sizeof(eventHandle));
+
+		struct input_event syncEventHandle;
+		memset(&syncEventHandle, 0, sizeof(syncEventHandle));
+
+		syncEventHandle.type = EV_SYN;
+		syncEventHandle.code = SYN_REPORT;
+		syncEventHandle.value = 1;
+
+		write(uinputHandle_, &syncEventHandle, sizeof(syncEventHandle));
+
+		lastInputTime_ = Clock::now();
+	}
+
 }
 
 void PlayerConnection::injectAbsEvent(int xCoord, int yCoord) const
