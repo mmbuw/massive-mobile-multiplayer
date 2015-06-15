@@ -172,14 +172,7 @@ body {
  LandingPage
 *****************************************************************************/
 
-@media (min-width: 650px) {
-   .landingpage {
-   		max-width: 600px;
-		margin: 0px auto 0px auto;
-		border-right: 1px #333 solid;
-		border-left: 1px #333 solid;
-	}
-}
+
 
 .wrapper {
 	width: 100%;
@@ -190,7 +183,6 @@ section {
 	margin-bottom: 50px;
 	border-bottom: 1px #333 solid;
 }
-
 
 .landingpage {
 	width:  100%;
@@ -213,8 +205,6 @@ section {
 	padding-bottom: 60px;
 	text-align: center;
 }
-
-
 
 /*******************
  Land, Leave Pages
