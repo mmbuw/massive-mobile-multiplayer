@@ -51,10 +51,6 @@ void PlayerConnection::createEventDevice()
 	eventDevice_.id.bustype = BUS_VIRTUAL;
 	eventDevice_.id.version = 1;
 
-	eventDevice_.absmin[ABS_X] = -1000;
-	eventDevice_.absmax[ABS_X] = 1000;
-	eventDevice_.absmin[ABS_Y] = -1000;
-	eventDevice_.absmax[ABS_Y] = 1000;
 
 	write(uinputHandle_, &eventDevice_, sizeof(eventDevice_));
 	ioctl(uinputHandle_, UI_DEV_CREATE);
@@ -124,8 +120,6 @@ void PlayerConnection::injectMultiEvent(int type, std::vector<int> const& codes,
 			eventHandle[i].code = codes[i];
 			eventHandle[i].value = values[i];
 		}
-
-		std::cout << std::endl;
 
 		write(uinputHandle_, &eventHandle, sizeof(eventHandle));
 

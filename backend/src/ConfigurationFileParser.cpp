@@ -12,8 +12,8 @@ RegisteredInputs const parseConfigurationFile(std::string filename, std::map<std
 		std::stringstream trimmer(line);
 		std::string classification;
 		std::string name;
-		std::string minimum;
-		std::string maximum;
+		int minimum;
+		int maximum;
 
 		trimmer >> classification;
 		trimmer >> name;
