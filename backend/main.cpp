@@ -241,6 +241,8 @@ int main(int argc, char* argv[])
 			            //print message
 			            //std::cout << "[Client " << playerConnection->getID() << "] " << message << std::endl;
 
+			            /* Interpretation of message */
+
 			            if (message.find("NAME") == 0)
 			            {
 			            	int nameStartIndex = 5;
@@ -298,16 +300,9 @@ int main(int argc, char* argv[])
 				            else
 				            {
 				            	//illegal use of multiple values
-				            	std::cout << "[Server] Multiple values only allowed for EV_ABS and EV_REL." << std::endl;
+				            	//std::cout << "[Server] Multiple values only allowed for EV_ABS and EV_REL." << std::endl;
 				            }
-
 				        }
-
-				        //else
-			            //{
-			            //	//std::cout << "[Client " << playerConnection->getID() << "] Omitting invalid message: " << message << std::endl;
-			            //	nextMessagePresent = false;
-			            //}
 
 				    } while (nextMessagePresent);
 

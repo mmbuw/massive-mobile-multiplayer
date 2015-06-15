@@ -74,7 +74,8 @@ window.addEventListener('load', function(){
 	       	timer = setTimeout(endGame, 30000);
 
 	       	//sentd to server
-	       	socket.send('VAL A$');
+	       	socket.send('EV_KEY BTN_A 1$');
+	       	socket.send('EV_KEY BTN_A 0$');
 
 	    }, false)
 	 
@@ -120,7 +121,7 @@ window.addEventListener('load', function(){
 
 	       	//sent to server
 	       	var navtouchstate = 1;
-			socket.send('VAL '+ 0 + ' ' + 0 +'$');
+			socket.send('EV_ABS * '+ 0 + ' ' + 0 +'$');
 
 		}, false)
 		
@@ -166,7 +167,7 @@ window.addEventListener('load', function(){
 	       	timer = setTimeout(endGame, 30000);
 
 	       	//sent to server
-	       	socket.send('VAL '+ diffx + ' ' + diffy +'$');	 
+	       	socket.send('EV_ABS * '+ diffx + ' ' + diffy +'$');	 
 
 	    }, false)
 	    
@@ -180,7 +181,7 @@ window.addEventListener('load', function(){
 	       	e.preventDefault();
 	       	circle.style.display ="";
 
-			socket.send('VAL '+ 0 + ' ' + 0 +'$');
+			socket.send('EV_ABS * '+ 0 + ' ' + 0 +'$');
 	   	}, false)
 
 
@@ -192,7 +193,7 @@ window.addEventListener('load', function(){
  			context.clearRect(0, 0, canvas.width, canvas.height);
 	       	circle.style.display ="";
 
-			socket.send('VAL '+ 0 + ' ' + 0 +'$');
+			socket.send('EV_ABS * '+ 0 + ' ' + 0 +'$');
 			console.log("reset")
 			clearTimeout(touchresettimer);
 	       	touchresettimer = setTimeout(touchreset, 20000);

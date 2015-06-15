@@ -61,7 +61,7 @@ void PlayerConnection::createEventDevice()
 
 
 	//wait for response by game to determine team assignment
-	/*struct input_event ev;
+	struct input_event ev;
 	size_t read_result = read(uinputHandle_, &ev, sizeof(ev));
 	int eventValue = ev.value; 
 
@@ -75,7 +75,7 @@ void PlayerConnection::createEventDevice()
 		int playerNumber = eventValue - 100;
 		std::cout << "--> Joins blue team as number " << playerNumber << std::endl;
 		sendViaSocket("TEAM BLUE " + std::to_string(playerNumber));
-	}*/
+	}
 
 	lastInputTime_ = Clock::now();
 }
@@ -125,37 +125,7 @@ void PlayerConnection::injectMultiEvent(int type, std::vector<int> const& codes,
 			eventHandle[i].value = values[i];
 		}
 
-		write(uinputHandle_, &eventHandle, sizeof(eventHandle));
-
-		struct input_event syncEventHandle;
-		memset(&syncEventHandle, 0, sizeof(syncEventHandle));
-
-		syncEventHandle.type = EV_SYN;
-		syncEventHandle.code = SYN_REPORT;
-		syncEventHandle.value = 1;
-
-		write(uinputHandle_, &syncEventHandle, sizeof(syncEventHandle));
-
-		lastInputTime_ = Clock::now();
-	}
-
-}
-
-void PlayerConnection::injectAbsEvent(int xCoord, int yCoord) const
-{
-
-	if (uinputHandle_ != -1)
-	{
-		struct input_event eventHandle[2];
-		memset(&eventHandle, 0, sizeof(eventHandle));
-
-		eventHandle[0].type = EV_ABS;
-		eventHandle[0].code = ABS_X;
-		eventHandle[0].value = xCoord;
-
-		eventHandle[1].type = EV_ABS;
-		eventHandle[1].code = ABS_Y;
-		eventHandle[1].value = yCoord;
+		std::cout << std::endl;
 
 		write(uinputHandle_, &eventHandle, sizeof(eventHandle));
 
@@ -170,6 +140,7 @@ void PlayerConnection::injectAbsEvent(int xCoord, int yCoord) const
 
 		lastInputTime_ = Clock::now();
 	}
+
 }
 
 void PlayerConnection::unregisterEventDevice()
