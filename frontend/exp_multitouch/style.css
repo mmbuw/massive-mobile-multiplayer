@@ -206,18 +206,43 @@ section {
 	text-align: center;
 }
 
-/*******************
- Land, Leave Pages
-*/
+/****************************************************************************
+ Login
+*****************************************************************************/
+.loginpage p {
+	padding: 0px 60px 0px 60px;
+	font-family: Arial;
+	font-size: 5em;
+}
+.loginpage form {
+	padding: 30px 60px 0px 60px;
+}
+
+.loginpage input {
+	width: 100%;
+	padding: 25px;
+	font-size: 5em;
+	margin-bottom: 30px;
+}
+
+.loginpage button {
+	width: 100%;
+	padding: 25px;
+	font-size: 5em;
+	background-color: red;
+	color: white;
+	margin-bottom: 30px;
+	border: none;
+}
+
+/****************************************************************************
+ Misc
+*****************************************************************************/
 
 .form-page {
 	width: 300px;
 	margin: 0px auto 0px auto;
 
-}
-
-#input-mame {
-	width: 100%;
 }
 
 
