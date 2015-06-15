@@ -8,23 +8,21 @@
 	</head>
 
 	<body>
-		<div class="headerimage">
-			<img src="res/mmmball.png">
-		</div>
-		<div class="login cf">
-			<!--<div class="form-page"><br><br>-->
-			<form name="login">
-				<ul><h1>Join the game!</h1>			
-					<li>
-						<label for="playername">Your name</label>
-						<input type="text" name="playername" id="input-name" placeholder="" maxlength="13">
-					</li>
-					<br>
-					<li>
-						<button onclick="playerSetup(); return false;">Play</button>
-					</li>
-					</ul>
-			</form>
-		</div>
+
+
+	<div class="wrapper loginpage">
+			<section class="headerimage">
+				<img src="res/mmm_ball.png">
+			</section>
+			<section class="description">
+				<form name="login">
+				<h1>Join the game!</h1>			
+					<label for="playername">Your name</label>
+					<input type="text" name="playername" id="input-name" placeholder="" maxlength="13">
+					<button onclick="playerSetup(); return false;">Play</button>
+				</form>
+			</section>
+
+	</div>
 	</body>
 </html>
