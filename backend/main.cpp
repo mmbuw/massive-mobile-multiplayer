@@ -16,7 +16,6 @@
 typedef std::chrono::high_resolution_clock Clock;
 typedef std::chrono::nanoseconds nanoseconds;
 
-int tickFPS(60);
 int port(53000);
 
 int main()
