@@ -21,7 +21,6 @@ time, mark, audio, video {
 	font-size: 100%;
 	font: inherit;
 	vertical-align: baseline;
-	background-image:res/grass.jpg;
 }
 /* HTML5 display-role reset for older browsers */
 article, aside, details, figcaption, figure, 
@@ -54,7 +53,6 @@ table {
 }
 
 html {
-	background-image: url(res/grass.jpg);
 	font-size: 10pt;
 }
 
@@ -170,6 +168,53 @@ body {
 	-o-user-select: none; 
 }
 
+/****************************************************************************
+ LandingPage
+*****************************************************************************/
+
+@media (min-width: 650px) {
+   .landingpage {
+   		max-width: 600px;
+		margin: 0px auto 0px auto;
+		border-right: 1px #333 solid;
+		border-left: 1px #333 solid;
+	}
+}
+
+.wrapper {
+	width: 100%;
+}
+
+section {
+	width: 100%;
+	margin-bottom: 50px;
+	border-bottom: 1px #333 solid;
+}
+
+
+.landingpage {
+	width:  100%;
+	padding: 20px;
+	line-height: 1.2;
+}
+
+.landingpage img {
+	width: 100%;
+	margin: 0px auto 0px auto;
+}
+
+.landingpage p {
+	padding: 0px 60px 0px 60px;
+	font-family: Arial;
+	font-size: 5em;
+}
+
+.browsercheck {
+	padding-bottom: 60px;
+	text-align: center;
+}
+
+
 
 /*******************
  Land, Leave Pages
@@ -185,15 +230,6 @@ body {
 	width: 100%;
 }
 
-.headerimage {
-	width: 50%;
-	margin: 15px auto 0px auto;
-}
-
-.headerimage img {
-	width: 100%;
-	margin: 15px auto 0px auto;
-}
 
 .textbox {
 	

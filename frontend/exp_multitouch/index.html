@@ -4,27 +4,27 @@
 		<link rel="stylesheet" type="text/css" href="./style.css">
 		<title>MMM Ball</title>
 		<script src="./js/jquery.min.js"></script>
-		<script src="./js/setup.js"></script>
 	</head>
 
 	<body>
-	<div class="headerimage">
-		<img src="res/mmmball.png">
-	</div>
-	<div class="login cf">
-		<!--<div class="form-page"><br><br>-->
-		<form name="login">
-			<ul><h1>Join the game!</h1>			
-				<li>
-					<label for="playername">Your name</label>
-					<input type="text" name="playername" id="input-name" placeholder="" maxlength="13">
-				</li>
-				<br>
-				<li>
-					<button onclick="playerSetup(); return false;">Play</button>
-				</li>
-				</ul>
-				</form>
-	</div>
+		<div class="wrapper landingpage">
+
+			<section class="headerimage">
+				<img src="res/mmm_ball.png">
+			</section>
+			<section class="description">
+				<p>
+					Welcome to MMMBALL!<br>
+					Steer your avatar with your phone and lead your team to victory!
+				</p>
+				<img src="res/mmm_phone.png">
+			</section>
+			<section class="browsercheck">
+				<p onclick="playerSetup(); return false;">
+				Continue to login
+				</p>
+			</section>
+
+		</div>
 	</body>
 </html>

@@ -40,9 +40,6 @@ window.addEventListener('load', function(){
 			window.localStorage.setItem("team", splitted_string[1]);
 			window.localStorage.setItem("number", splitted_string[2]);
 
-			console.log(localStorage.getItem("team"));
-			console.log(localStorage.getItem("number"));
-
 			//set colorbase by socketinput/teamident
 			if(localStorage.getItem('team') == "RED") {
 		    	colorbase = 'red';
