@@ -252,7 +252,7 @@ int main(int argc, char* argv[])
 			            	std::cout << "[Client " << playerConnection->getID() << "] Assigning name: " << name << std::endl;
 			            	playerConnection->setName(name);
 			            }
-			            else
+			            else if (message.find("EV_") == 0)
 			            {
 			            	//parse message formats: EVENT_TYPE EVENT_CODE VALUE
 			            	//                       [EV_ABS | EV_REL] VALUE1 VALUE2 VALUE3 ...
@@ -302,6 +302,11 @@ int main(int argc, char* argv[])
 				            	//illegal use of multiple values
 				            	//std::cout << "[Server] Multiple values only allowed for EV_ABS and EV_REL." << std::endl;
 				            }
+				        }
+				        else
+				        {
+				        	//invalid message
+				        	nextMessagePresent = false;
 				        }
 
 				    } while (nextMessagePresent);
