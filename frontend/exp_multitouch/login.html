@@ -4,7 +4,8 @@
 		<link rel="stylesheet" type="text/css" href="./style.css">
 		<title>MMM Ball</title>
 		<script src="./js/jquery.min.js"></script>
-		<script src="./js/setup.js"></script>
+		<script src="./js/login-check.js"></script>
+		<script src="./js/login-play.js"></script>
 	</head>
 
 	<body>
@@ -18,7 +19,7 @@
 				<p>Choose a name and join the game!<br></p>	
 				<form name="login">
 					<input type="text" name="playername" id="input-name" maxlength="12">
-					<button onclick="playerSetup(); return false;">Play</button>
+					<button id="playbutton" onclick="playerSetup(); return false;">Play</button>
 				</form>
 			</section>
 
