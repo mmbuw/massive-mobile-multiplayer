@@ -3,14 +3,17 @@ import sys
 ## Command line parameters
 # 1 - name of input file (usually /usr/include/linux/input.h)
 # 2 - name of output file
+# 3 - name of configuration file
 
 def start():
 
   event_file_name = sys.argv[1]
   output_file_name = sys.argv[2]
+  config_file_name = sys.argv[3]
 
   event_file = open(event_file_name, 'r')
   output_file = open(output_file_name, 'w+')
+  config_file = open(config_file_name, 'r')
 
   output_file.write('//Automatically created on every build\n')
   output_file.write('\n')
@@ -21,30 +24,20 @@ def start():
   output_file.write('#include <map>\n')
   output_file.write('#include <string>\n')
   output_file.write('\n')
+  output_file.write('const std::string configuration_file("' + config_file_name + '");\n')
   output_file.write('std::map<std::string, int> eventDictionary;\n')
   output_file.write('\n')
   output_file.write('void fillDictionary()\n')
   output_file.write('{\n')
 
-  start_parsing_events = False
+  output_file.write('    eventDictionary["EV_SYN"] = EV_SYN;\n')
 
-  for line in event_file:
-
-    # start parsing the file from the point where events are listed
-    if start_parsing_events == False:
-      if "Event types" in line:
-        start_parsing_events = True
-
-    else:
-
-      if line.startswith('#define'):
-        line = line.replace('\n', '')
-        line = line.replace('\t', ' ')
-        splitted_line = line.split(' ')
-        splitted_line = [value for value in splitted_line if value != '']
-        splitted_line = splitted_line[0:3]
-
-        output_file.write('    eventDictionary["' + splitted_line[1] + '"] = ' + splitted_line[1] + ';\n')
+  for line in config_file:
+    if line.startswith("type") or line.startswith("event"):
+      line = line.replace("\n", '')
+      line = line.replace("\t", ' ')
+      splitted_line = line.split(" ")
+      output_file.write('    eventDictionary["' + splitted_line[1] + '"] = ' + splitted_line[1] + ';\n')
 
   output_file.write('}\n')
   output_file.write('\n')

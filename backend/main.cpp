@@ -22,19 +22,13 @@ const int port(53000);
 const std::vector<int> absEventOrder = {ABS_X, ABS_Y, ABS_Z, ABS_RX, ABS_RY, ABS_RZ};
 const std::vector<int> relEventOrder = {REL_X, REL_Y, REL_Z, REL_RX, REL_RY, REL_RZ};
 
-int main(int argc, char* argv[])
+int main()
 {
-	if (argc < 2)
-	{
-		std::cout << "[Server] Usage: ./mmm-server CONFIGURATION_FILENAME " << std::endl;
-		return EXIT_FAILURE;
-	}
-
 	//fill dictionary of event strings
 	fillDictionary();
 
 	//parse configuration file
-	PlayerConnection::registeredInputs = parseConfigurationFile(argv[1], eventDictionary);
+	PlayerConnection::registeredInputs = parseConfigurationFile(configuration_file, eventDictionary);
 
 
 	bool running(true);
