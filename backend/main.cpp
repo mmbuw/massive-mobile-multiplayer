@@ -52,10 +52,11 @@ int main()
 	socketSelector.add(listener);
 
 	std::cout << std::endl;
-	std::cout << "#####################################" << std::endl;
+	std::cout << "##########################################" << std::endl;
 	std::cout << "# MMM - Game Controller Server         " << std::endl;
 	std::cout << "# Startup successful (port " << port << ")"<< std::endl;
-	std::cout << "#####################################" << std::endl;
+	std::cout << "# Configuration file: " << configuration_file << std::endl;
+	std::cout << "##########################################" << std::endl;
 	std::cout << std::endl;
 
 	while (running)
