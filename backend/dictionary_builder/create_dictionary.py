@@ -1,19 +1,16 @@
 import sys
 
 ## Command line parameters
-# 1 - name of input file (usually /usr/include/linux/input.h)
+# 1 - name of configuration file
 # 2 - name of output file
-# 3 - name of configuration file
 
 def start():
 
-  event_file_name = sys.argv[1]
+  config_file_name = sys.argv[1]
   output_file_name = sys.argv[2]
-  config_file_name = sys.argv[3]
 
-  event_file = open(event_file_name, 'r')
-  output_file = open(output_file_name, 'w+')
   config_file = open(config_file_name, 'r')
+  output_file = open(output_file_name, 'w+')
 
   output_file.write('//Automatically created on every build\n')
   output_file.write('\n')
