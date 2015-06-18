@@ -1,7 +1,10 @@
-type EV_KEY
-event BTN_A
+//configuration file syntax:
+//[type | event] NAME OPTIONAL_ALIAS
 
-type EV_ABS
+type EV_KEY K
+event BTN_A A
+
+type EV_ABS V
 event ABS_X
 event ABS_Y
     

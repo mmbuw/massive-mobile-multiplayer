@@ -6,12 +6,14 @@ import sys
 
 def start():
 
+  # get filenames and load files
   config_file_name = sys.argv[1]
   output_file_name = sys.argv[2]
 
   config_file = open(config_file_name, 'r')
   output_file = open(output_file_name, 'w+')
 
+  # write static code to output file
   output_file.write('//Automatically created on every build\n')
   output_file.write('\n')
   output_file.write('#ifndef EVENT_DICTIONARY_HPP\n')
@@ -29,13 +31,20 @@ def start():
 
   output_file.write('    eventDictionary["EV_SYN"] = EV_SYN;\n')
 
+  # parse configuration file and generate dictionary entried
   for line in config_file:
     if line.startswith("type") or line.startswith("event"):
+
       line = line.replace("\n", '')
       line = line.replace("\t", ' ')
       splitted_line = line.split(" ")
       output_file.write('    eventDictionary["' + splitted_line[1] + '"] = ' + splitted_line[1] + ';\n')
 
+      # check if an alias is present
+      if len(splitted_line) > 2:
+        output_file.write('    eventDictionary["' + splitted_line[2] + '"] = ' + splitted_line[1] + ';\n')
+
+  # write static end code to output file
   output_file.write('}\n')
   output_file.write('\n')
   output_file.write('#endif //EVENT_DICTIONARY_HPP')

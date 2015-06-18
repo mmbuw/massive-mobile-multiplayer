@@ -238,7 +238,7 @@ int main()
 
 			            /* Interpretation of message */
 
-			            if (message.find("NAME") == 0)
+			            if (message.find("^NAME") == 0)
 			            {
 			            	int nameStartIndex = 5;
 			            	int nameEndIndex = message.find("$");
@@ -247,7 +247,7 @@ int main()
 			            	std::cout << "[Client " << playerConnection->getID() << "] Assigning name: " << name << std::endl;
 			            	playerConnection->setName(name);
 			            }
-			            else if (message.find("EV_") == 0)
+			            else if (message.find("^") == 0)
 			            {
 			            	//parse message formats: EVENT_TYPE EVENT_CODE VALUE
 			            	//                       [EV_ABS | EV_REL] VALUE1 VALUE2 VALUE3 ...
@@ -259,6 +259,7 @@ int main()
 				            int temp;
 
 				            messageStream >> typeString;
+				            typeString = typeString.substr(1); //remove ^ at the beginning
 				            messageStream >> codeString;
 				            
 				            while (messageStream >> temp)
@@ -266,15 +267,18 @@ int main()
 				            	values.push_back(temp);
 				            }
 
+				            int typeNumber = eventDictionary[typeString];
+
 				            //execute action depending on the number of values received
 				            if (values.size() == 1)
 				            {
 				            	//single value event
-				            	playerConnection->injectSingleEvent(eventDictionary[typeString],
+				            	playerConnection->injectSingleEvent(typeNumber,
 					            	                                eventDictionary[codeString],
 					            	                                values[0]);
 				            }
-				            else if (typeString == "EV_ABS" || typeString == "EV_REL")
+				            //multpile values only allowed for EV_ABS (no 3) and EV_REL (no 2)
+				            else if (typeNumber == 2 || typeNumber == 3)
 				            {
 				            	//multiple value event
 				            	int size = values.size();
@@ -282,7 +286,7 @@ int main()
 				            	std::vector<int> codes;		 
 				            	for (int i = 0; i < size; ++i)
 				            	{
-				            		if (typeString == "EV_ABS")
+				            		if (typeNumber == 3)
 				            			codes.push_back(absEventOrder[i]);
 				            		else
 				            			codes.push_back(relEventOrder[i]);
@@ -295,7 +299,7 @@ int main()
 				            else
 				            {
 				            	//illegal use of multiple values
-				            	//std::cout << "[Server] Multiple values only allowed for EV_ABS and EV_REL." << std::endl;
+				            	std::cout << "[Server] Multiple values only allowed for EV_ABS and EV_REL." << std::endl;
 				            }
 				        }
 				        else
