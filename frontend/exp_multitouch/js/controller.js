@@ -28,7 +28,7 @@ window.addEventListener('load', function(){
 			if(localStorage.getItem('playername') === null) {
 				endGame();
 			}
-			socket.send('^NAME '+localStorage.getItem('playername')+'$');
+			sendViaSocket(socket, 'NAME '+localStorage.getItem('playername'));
 			window.localStorage.removeItem('playername');
 
 		}
@@ -74,8 +74,8 @@ window.addEventListener('load', function(){
 	       	timer = setTimeout(endGame, 30000);
 
 	       	//sentd to server
-	       	socket.send('^K A 1$');
-	       	socket.send('^K A 0$');
+	       	sendViaSocket(socket, 'K A 1');
+	       	sendViaSocket(socket, 'K A 0');
 
 	    }, false)
 	 
@@ -121,7 +121,7 @@ window.addEventListener('load', function(){
 
 	       	//sent to server
 	       	var navtouchstate = 1;
-			socket.send('^V * '+ 0 + ' ' + 0 +'$');
+	       	sendViaSocket(socket, 'V * '+ 0 + ' ' + 0);
 
 		}, false)
 		
@@ -167,7 +167,7 @@ window.addEventListener('load', function(){
 	       	timer = setTimeout(endGame, 30000);
 
 	       	//sent to server
-	       	socket.send('^V * '+ diffx + ' ' + diffy +'$');	 
+	       	sendViaSocket(socket, 'V * '+ diffx + ' ' + diffy);
 
 	    }, false)
 	    
@@ -181,7 +181,7 @@ window.addEventListener('load', function(){
 	       	e.preventDefault();
 	       	circle.style.display ="";
 
-			socket.send('^V * '+ 0 + ' ' + 0 +'$');
+	       	sendViaSocket(socket, 'V * '+ 0 + ' ' + 0);
 	   	}, false)
 
 
@@ -193,7 +193,7 @@ window.addEventListener('load', function(){
  			context.clearRect(0, 0, canvas.width, canvas.height);
 	       	circle.style.display ="";
 
-			socket.send('^V * '+ 0 + ' ' + 0 +'$');
+	       	sendViaSocket(socket, 'V * '+ 0 + ' ' + 0);
 			console.log("reset")
 			clearTimeout(touchresettimer);
 	       	touchresettimer = setTimeout(touchreset, 20000);
@@ -222,6 +222,13 @@ window.addEventListener('load', function(){
 			}
 			//forward to controller
 			window.location.href = './leaving.html';
+		}
+
+		//send a well formatted message via the socket
+		function sendViaSocket(socket, message) {
+			console.log('BLAAA');
+			messageToSend = '^' + message + '$';
+			socket.send(messageToSend);
 		}
 
 
