@@ -226,7 +226,6 @@ window.addEventListener('load', function(){
 
 		//send a well formatted message via the socket
 		function sendViaSocket(socket, message) {
-			console.log('BLAAA');
 			messageToSend = '^' + message + '$';
 			socket.send(messageToSend);
 		}
