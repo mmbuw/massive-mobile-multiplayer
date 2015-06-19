@@ -6,25 +6,26 @@
 		<meta name="mobile-web-app-capable" content="yes">
 		<link rel="stylesheet" type="text/css" href="./style.css">
 		<title>MMM Ball</title>
+		<script src="./js/jquery.min.js"></script>
+		<script src="./js/login-check.js"></script>
+		<script src="./js/login-play.js"></script>
 	</head>
 
 	<body>
-		<div class="wrapper landingpage">
+
+
+	<div class="wrapper loginpage">
 			<section class="headerimage">
 				<img src="res/mmm_ball.png">
 			</section>
-			<section class="description">
-				<p>
-					Welcome. Play with your phone and lead your team to victory!
-				</p>
-				<img src="res/mmm_phone.png">
-			</section>
-			<section class="browsercheck">
-				<p>
-					<a href="./login.html">Continue to login</a>
-				</p>
+			<section class="form">
+				<p>Choose a name and join the game!<br></p>	
+				<form name="login">
+					<input type="text" name="playername" id="input-name" maxlength="12">
+					<button id="playbutton" onclick="playerSetup(); return false;">Play</button>
+				</form>
 			</section>
 
-		</div>
+	</div>
 	</body>
 </html>

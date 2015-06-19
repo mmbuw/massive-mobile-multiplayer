@@ -21,7 +21,6 @@ time, mark, audio, video {
 	font-size: 100%;
 	font: inherit;
 	vertical-align: baseline;
-	background-image:res/grass.jpg;
 }
 /* HTML5 display-role reset for older browsers */
 article, aside, details, figcaption, figure, 
@@ -54,7 +53,6 @@ table {
 }
 
 html {
-	background-image: url(res/grass.jpg);
 	font-size: 10pt;
 }
 
@@ -170,10 +168,102 @@ body {
 	-o-user-select: none; 
 }
 
+#mmmturn {
+	display: none;
+	width: 100%;
+	margin-top: 30%;
+}
 
-/*******************
- Land, Leave Pages
-*/
+/****************************************************************************
+ LandingPage
+*****************************************************************************/
+
+
+
+.wrapper {
+	width: 100%;
+}
+
+.landingpage section {
+	width: 100%;
+	margin-bottom: 50px;
+	border-bottom: 1px #333 solid;
+}
+
+.landingpage {
+	width:  100%;
+	padding: 20px;
+	line-height: 1.2;
+}
+
+.landingpage img {
+	width: 100%;
+	margin: 0px auto 0px auto;
+}
+
+.landingpage p {
+	padding: 0px 60px 0px 60px;
+	font-family: Arial;
+	font-size: 5em;
+}
+
+.browsercheck {
+	padding-bottom: 60px;
+	text-align: center;
+}
+
+/****************************************************************************
+ Login
+*****************************************************************************/
+
+.loginpage {
+	width:  100%;
+	padding: 20px;
+	line-height: 1.2;
+}
+
+.loginpage img {
+	width: 100%;
+	margin: 0px auto 0px auto;
+}
+
+.loginpage p {
+	padding: 0px 60px 0px 60px;
+	font-family: Arial;
+	font-size: 5em;
+}
+
+.loginpage section {
+	width: 100%;
+	margin-bottom: 50px;
+	border-bottom: 1px #333 solid;
+}
+
+.loginpage form {
+	padding: 30px 60px 0px 60px;
+}
+
+.loginpage input {
+	width: 100%;
+	padding: 25px;
+	font-size: 5em;
+	margin-bottom: 30px;
+}
+
+.loginpage button {
+	width: 100%;
+	padding: 25px;
+	font-size: 5em;
+	background-color: #333333;
+	color: white;
+	margin-bottom: 60px;
+	border: none;
+}
+
+
+/****************************************************************************
+ Misc
+*****************************************************************************/
 
 .form-page {
 	width: 300px;
@@ -181,19 +271,6 @@ body {
 
 }
 
-#input-mame {
-	width: 100%;
-}
-
-.headerimage {
-	width: 50%;
-	margin: 15px auto 0px auto;
-}
-
-.headerimage img {
-	width: 100%;
-	margin: 15px auto 0px auto;
-}
 
 .textbox {
 	

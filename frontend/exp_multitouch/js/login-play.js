@@ -1,37 +1,13 @@
 
 function playerSetup() {
-
-	//fetch stuff from dom element
 	var playername = document.getElementById('input-name').value;
-
 	playername = checkName(playername);
-	//save in session variable
-	window.localStorage.setItem("playername", playername);
-
-	//forward to controller
+	window.sessionStorage.setItem("playername", playername);
 	window.location.href = './controller.html';
-
 }
 
 
-function hideAddressBar()
-{
-  if(!window.location.hash)
-  {
-      if(document.height < window.outerHeight)
-      {
-          document.body.style.height = (window.outerHeight + 50) + 'px';
-      }
- 
-      setTimeout( function(){ window.scrollTo(0, 1); }, 50 );
-  }
-}
- 
-window.addEventListener("load", function(){ if(!window.pageYOffset){ hideAddressBar(); } } );
-window.addEventListener("orientationchange", hideAddressBar );
-
-
-//check for input and generate dumb names if no name is set
+//check for input and use preset name if no name is set
 function checkName(input) {
 
 	var textArray = [
@@ -54,15 +30,13 @@ function checkName(input) {
     'Keane'   
 	];
 
-
-	//check for input and select a dumb name if no name is set
+	//check for input and select a name if no name is set
 	if(input == '') {
 		var randomNumber = Math.floor(Math.random()*textArray.length);
 		input = textArray[randomNumber];
 	}
 
-
-    //clean umlaute
+  //clean name string
 	input = input.replace(/Â|À|Å|Ã/g, "A")
                   .replace(/â|à|å|ã/g, "a")
                   .replace(/Ä/g, "AE")
