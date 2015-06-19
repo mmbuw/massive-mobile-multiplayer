@@ -21,6 +21,7 @@ window.addEventListener('load', function(){
 
 
 		initView();
+		//initSocket();
 
 		window.addEventListener('resize', updateBasicView, false);
 
@@ -30,8 +31,6 @@ window.addEventListener('load', function(){
 		circle.addEventListener('touchstart', pushCircle, false);
 		circle.addEventListener('touchmove', moveCircle, false);
 		circle.addEventListener('touchend', releaseCircle, false);
-
-
 
 }, false)
 
@@ -93,7 +92,6 @@ function resetTimer() {
 ****************************************************************************************************************/
 function drawControllerStick(currx, curry) {
 		clearCanvas();
-		console.log(currx);
 		drawLineFromCenterTo(currx, curry);
 		drawCircleAtPos(currx,curry);
 
@@ -132,8 +130,8 @@ function clearCanvas() {
 function pushButton() {
 	colorBackground(button,"#000000");
 	resetTimer();
-	sentToSocket("A");
-
+	socketSend(socket, 'K A 1');
+	socketSend(socket, 'K A 0');
 }
 
 function releaseButton() {
@@ -150,7 +148,7 @@ function pushCircle(e) {
 	var canvasCenterY = canvas.height /2;
 	drawControllerStick(canvasCenterX,canvasCenterY);
 
-	sentToSocket(0,0);
+	socketSend(socket, 'V * '+ 0 + ' ' + 0);
 	resetTimer();
 }
 
@@ -166,13 +164,14 @@ function moveCircle(e) {
 
 	 sentToSocket(diffx,diffy);
 	 resetTimer();
+	 socketSend(socket, 'V * '+ diffx + ' ' + diffy);
 
 }
 
 function releaseCircle(e) {
 	circle.style.display = "";
 	clearCanvas();
-	sentToSocket(0,0);
+	socketSend(socket, 'V * '+ 0 + ' ' + 0);
 }
 
 /****************************************************************************************************************
@@ -210,7 +209,6 @@ function initSocket() {
 		window.sessionStorage.setItem("number", splitted_string[2]);
 
 
-		//set colorbase by socketinput/teamident
 		if(sessionStorage.getItem('team') == "RED") {
 	    	colorbase = 'red';
 	    	button.style.backgroundColor = colorbase;
@@ -221,17 +219,20 @@ function initSocket() {
 	    	button.style.backgroundColor = colorbase;
 	    	circle.style.backgroundColor = colorbase;
 	    }
-	    circle.innerHTML = '<font class="playernumber">' + sessionStorage.getItem("number") + '</font>';
-
+	    //circle.innerHTML = '<font class="playernumber">' + sessionStorage.getItem("number") + '</font>';	
 	}
 }
 
-function sentToSocket() {
-
+function socketSend(socket, message) {
+			messageToSend = '^' + message + '$';
+			//socket.send(messageToSend);
+		}
 }
 
 function closeSocket() {
-
+	if (socket.readyState == 1) {
+		socket.close();
+	}
 }
 
 
