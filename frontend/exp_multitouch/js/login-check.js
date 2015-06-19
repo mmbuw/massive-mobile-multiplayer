@@ -23,9 +23,12 @@ window.addEventListener('load', function(){
 	var isSafari = (navigator.sayswho.indexOf("Safari8") > -1);
 	var isOpera = (navigator.sayswho.indexOf("Opera 3") > -1);
 
-	//window.alert(navigator.sayswho);
+	var isOperaOnIOS = (navigator.sayswho.indexOf("Safari9537") > -1);
+	var isChromeOnIOS = (navigator.sayswho.indexOf("Safari600") > -1);
 
-	if (isChrome || isFirefox || isSafari || isOpera) {
+	window.alert(navigator.sayswho);
+
+	if (isChrome || isFirefox || isSafari || isOpera || isChromeOnIOS || isOperaOnIOS) {
 		playbutton.style.backgroundColor ="red";
 	} else {
 		playbutton.onclick=null;

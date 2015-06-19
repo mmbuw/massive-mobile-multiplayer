@@ -1,6 +1,7 @@
 /****************************************************************************************************************
   OnLoad
 ****************************************************************************************************************/
+checkLogin();
 
 window.addEventListener('load', function(){
 
@@ -19,9 +20,8 @@ window.addEventListener('load', function(){
 		starty = null;
 		socket = null;
 
-
 		initView();
-		//initSocket();
+		initSocket();
 
 		window.addEventListener('resize', updateBasicView, false);
 
@@ -127,7 +127,8 @@ function clearCanvas() {
   Touchevents
 ****************************************************************************************************************/
 
-function pushButton() {
+function pushButton(e) {
+	e.preventDefault();
 	colorBackground(button,"#000000");
 	resetTimer();
 	socketSend(socket, 'K A 1');
@@ -139,6 +140,7 @@ function releaseButton() {
 }
 
 function pushCircle(e) {
+	e.preventDefault();
 	var touchobj = e.changedTouches[0];
 	startx = parseInt(touchobj.clientX);
 	starty = parseInt(touchobj.clientX);
@@ -153,19 +155,18 @@ function pushCircle(e) {
 }
 
 function moveCircle(e) {
-	 var touchobj = e.changedTouches[0];
-	 var currx = parseInt(touchobj.clientX);
-	 var curry = parseInt(touchobj.clientY);
+	e.preventDefault();
+	var touchobj = e.changedTouches[0];
+	var currx = parseInt(touchobj.clientX);
+	var curry = parseInt(touchobj.clientY);
+	drawControllerStick(currx,curry);
 
-	 drawControllerStick(currx,curry);
+	diffx = currx - startx;
+	diffy = curry - starty;
 
-	 diffx = currx - startx;
-	 diffy = curry - starty;
-
-	 sentToSocket(diffx,diffy);
-	 resetTimer();
-	 socketSend(socket, 'V * '+ diffx + ' ' + diffy);
-
+	sentToSocket(diffx,diffy);
+	resetTimer();
+	socketSend(socket, 'V * '+ diffx + ' ' + diffy);
 }
 
 function releaseCircle(e) {
@@ -177,37 +178,24 @@ function releaseCircle(e) {
 /****************************************************************************************************************
   Socket
 ****************************************************************************************************************/
-
 function initSocket() {
-	socket = new WebSocket("ws://29.4.93.1:53000");
-	//socket = new WebSocket("ws://localhost:53000");
+	//socket = new WebSocket("ws://29.4.93.1:53000");
+	socket = new WebSocket("ws://localhost:53000");
 
-	/*
-	*
-	*/
 	socket.onerror = function(error) {
  		window.location.href = './leaving.html';
 	};
 
-	/*
-	*
-	*/
 	socket.onopen = function() { 
-		if(sessionStorage.getItem('playername') === null) {
-			logout();
-		}
-		socket.send('NAME '+sessionStorage.getItem('playername')+'$');
+		socketSend(socket, 'NAME '+sessionStorage.getItem('playername'));
 		window.sessionStorage.removeItem('playername');
 	}
 
-	/*
-	*
-	*/
 	socket.onmessage = function(evt) {
 		var splitted_string = evt.data.split(" ");
+
 		window.sessionStorage.setItem("team", splitted_string[1]);
 		window.sessionStorage.setItem("number", splitted_string[2]);
-
 
 		if(sessionStorage.getItem('team') == "RED") {
 	    	colorbase = 'red';
@@ -218,15 +206,13 @@ function initSocket() {
 	    	colorbase = 'blue';
 	    	button.style.backgroundColor = colorbase;
 	    	circle.style.backgroundColor = colorbase;
-	    }
-	    //circle.innerHTML = '<font class="playernumber">' + sessionStorage.getItem("number") + '</font>';	
+	    }	
 	}
 }
 
 function socketSend(socket, message) {
-			messageToSend = '^' + message + '$';
-			//socket.send(messageToSend);
-		}
+	messageToSend = '^' + message + '$';
+	socket.send(messageToSend);
 }
 
 function closeSocket() {
@@ -235,8 +221,18 @@ function closeSocket() {
 	}
 }
 
+/****************************************************************************************************************
+  Logout, check, forward
+****************************************************************************************************************/
+function checkLogin() {
+	if(sessionStorage.getItem('playername') === null) {
+		window.location.href = './leaving.html';
+	}
+}
 
 function logout(){
+	window.sessionStorage.removeItem('team');
+	window.sessionStorage.removeItem('number');
 	closeSocket();
 	window.location.href = './leaving.html';
 }
