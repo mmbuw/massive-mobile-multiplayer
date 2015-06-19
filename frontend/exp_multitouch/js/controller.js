@@ -20,8 +20,8 @@ window.addEventListener('load', function(){
 		starty = null;
 		socket = null;
 
-		initView();
 		initSocket();
+		initView();
 
 		window.addEventListener('resize', updateBasicView, false);
 
@@ -49,6 +49,7 @@ function isLandscape() {
 			button.style.display="none";
 			circle.style.display="none";
 			canvas.style.display="none";
+			socketSend(socket, 'V * '+ 0 + ' ' + 0);
 		} else {
 			hint.style.display="none";
 			button.style.display="";
@@ -129,14 +130,14 @@ function clearCanvas() {
 
 function pushButton(e) {
 	e.preventDefault();
-	colorBackground(button,"#000000");
+	colorBackground(button,'#000000');
 	resetTimer();
 	socketSend(socket, 'K A 1');
 	socketSend(socket, 'K A 0');
 }
 
 function releaseButton() {
-	colorBackground(button,"#333333");
+	colorBackground(button, colorbase);
 }
 
 function pushCircle(e) {
@@ -164,7 +165,6 @@ function moveCircle(e) {
 	diffx = currx - startx;
 	diffy = curry - starty;
 
-	sentToSocket(diffx,diffy);
 	resetTimer();
 	socketSend(socket, 'V * '+ diffx + ' ' + diffy);
 }
