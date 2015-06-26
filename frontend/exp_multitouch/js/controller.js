@@ -52,10 +52,12 @@ function isLandscape() {
 			socketSend(socket, 'V * '+ 0 + ' ' + 0);
 		} else {
 			hint.style.display="none";
-			button.style.display="";
-			circle.style.display="";
-			canvas.style.display="";
+			button.style.display="inline";
+			circle.style.display="block";
+			canvas.style.display="inline";
 		}
+
+		
 }
 
 function initView() {
@@ -212,7 +214,9 @@ function initSocket() {
 
 function socketSend(socket, message) {
 	messageToSend = '^' + message + '$';
-	socket.send(messageToSend);
+	if (socket.readyState == 1) {
+		socket.send(messageToSend);
+	}
 }
 
 function closeSocket() {

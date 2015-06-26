@@ -181,7 +181,7 @@ body {
 
 
 .wrapper {
-	width: 100%;
+	width: 80%;
 }
 
 .landingpage section {
@@ -191,9 +191,9 @@ body {
 }
 
 .landingpage {
-	width:  100%;
-	padding: 20px;
+	width:100%;
 	line-height: 1.2;
+	margin: 0px auto 0px auto;
 }
 
 .landingpage img {
@@ -204,7 +204,7 @@ body {
 .landingpage p {
 	padding: 0px 60px 0px 60px;
 	font-family: Arial;
-	font-size: 5em;
+	font-size: 3em;
 }
 
 .browsercheck {
@@ -218,7 +218,6 @@ body {
 
 .loginpage {
 	width:  100%;
-	padding: 20px;
 	line-height: 1.2;
 }
 
@@ -230,7 +229,7 @@ body {
 .loginpage p {
 	padding: 0px 60px 0px 60px;
 	font-family: Arial;
-	font-size: 5em;
+	font-size: 3em;
 }
 
 .loginpage section {
@@ -246,14 +245,14 @@ body {
 .loginpage input {
 	width: 100%;
 	padding: 25px;
-	font-size: 5em;
+	font-size: 3em;
 	margin-bottom: 30px;
 }
 
 .loginpage button {
 	width: 100%;
 	padding: 25px;
-	font-size: 5em;
+	font-size: 3em;
 	background-color: #333333;
 	color: white;
 	margin-bottom: 60px;
