@@ -280,9 +280,15 @@ body {
 	font-family: Arial;
 
 }
+.leavingpage .selection {
+	float: left;	
+}
 
 .leavingpage .radio-label {
+	width: 100%;
  	float: left;
+ 	padding-left: 11px;
+
 }
 
 .leavingpage .radio-button {
@@ -290,8 +296,14 @@ body {
 	height: 3em;
 }
 
-.landingpage fieldset {
-    display: block;
+.selectionset {
+	width: 100%;
+    margin: 40px auto 40px auto;
+}
+
+.selectionset p{
+	padding-top: 40px;
+	font-size: 0.5em;
 }
 
 
@@ -300,6 +312,7 @@ body {
 *****************************************************************************/
 
 .form-page {
+	clear: both;
 	width: 300px;
 	margin: 0px auto 0px auto;
 
