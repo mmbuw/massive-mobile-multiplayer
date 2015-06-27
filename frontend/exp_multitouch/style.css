@@ -259,6 +259,41 @@ body {
 	border: none;
 }
 
+/****************************************************************************
+ Leaving
+*****************************************************************************/
+
+
+.leavingpage {
+	width: 100%;
+	font-size: 5em;
+}
+
+.leavingpage section {
+	width: 100%;
+	margin-bottom: 50px;
+	border-bottom: 1px #333 solid;
+}
+
+.leavingpage p {
+	padding: 0px 60px 0px 60px;
+	font-family: Arial;
+
+}
+
+.leavingpage .radio-label {
+ 	float: left;
+}
+
+.leavingpage .radio-button {
+	width: 3em;
+	height: 3em;
+}
+
+.landingpage fieldset {
+    display: block;
+}
+
 
 /****************************************************************************
  Misc
