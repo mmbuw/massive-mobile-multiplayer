@@ -1,34 +1,24 @@
 window.addEventListener('load', function(){
 
 	var playbutton  = document.getElementById('playbutton');
+	var browser = getBrowser();
+	var supported = ["Firefox/31", "Opera/30", "Chrome/42", "Safari/8", "OPR/30"];
+	var issupported  = false;
 
-	navigator.sayswho= (function(){
-	    var ua= navigator.userAgent, tem, 
-	    M= ua.match(/(opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i) || [];
-	    if(/trident/i.test(M[1])){
-	        tem=  /\brv[ :]+(\d+)/g.exec(ua) || [];
-	        return 'IE '+(tem[1] || '');
-	    }
-	    if(M[1]=== 'Chrome'){
-	        tem= ua.match(/\bOPR\/(\d+)/);
-	        if(tem!= null) return 'Opera '+tem[1];
-	    }
-	    M= M[2]? [M[1], M[2]]: [navigator.appName, navigator.appVersion, '-?'];
-	    if((tem= ua.match(/version\/(\d+)/i))!= null) M.splice(1, 1, tem[1]);
-	    return M.join('');
-	})();
+	for (var i in supported) {
 
-	var isChrome = (navigator.sayswho.indexOf("Chrome4") > -1);
-	var isFirefox = (navigator.sayswho.indexOf("Firefox3") > -1);
-	var isSafari = (navigator.sayswho.indexOf("Safari8") > -1);
-	var isOpera = (navigator.sayswho.indexOf("Opera 3") > -1);
+		var b = browser.split("/");
+		var s = supported[i].split("/");
+		if (b[0] == s[0]) {
+			if(b[1].replace(".", "") >= s[1]) {
+				issupported = true;
+			}
+		} 
+	}
 
-	var isOperaOnIOS = (navigator.sayswho.indexOf("Safari9537") > -1);
-	var isChromeOnIOS = (navigator.sayswho.indexOf("Safari600") > -1);
+	console.log(navigator.userAgent);
 
-	window.alert(navigator.sayswho);
-
-	if (isChrome || isFirefox || isSafari || isOpera || isChromeOnIOS || isOperaOnIOS) {
+	if (issupported) {
 		playbutton.style.backgroundColor ="red";
 	} else {
 		playbutton.onclick=null;
@@ -36,3 +26,37 @@ window.addEventListener('load', function(){
 	}
 
 }, false)
+
+
+function getBrowser() {
+
+	var ua = navigator.userAgent;
+	var indent = ["Chrome", "Firefox", "OPR", "OPiOS", "CriOS", "Version"];
+	var os = ["Android", "iPhone", "iPad"];
+	var start;
+	var end;
+	var output;
+
+	for (var i in indent) {
+
+		if (ua.search(indent[i]) > -1) {
+			start = ua.search(indent[i]);
+			end = ua.search(indent[i])+indent[i].length+3;
+			output = ua.substring(start,end);
+
+			// Safari
+			if (ua.search("Version") > -1 && ua.search(os[2]) > -1 || ua.search(os[1]) > -1 ) {
+				output = "Safari"+output.substring(output.length-3,output.length);
+			}
+
+			//dafault Android Browser
+			if (ua.search("Version") > -1 && ua.search(os[0]) > -1 ) {
+				output = "default"+output.substring(output.length-3,output.length);
+			}
+		}
+
+	}
+
+	return output;
+	console.log(output);
+}
