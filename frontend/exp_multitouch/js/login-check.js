@@ -2,21 +2,20 @@ window.addEventListener('load', function(){
 
 	var playbutton  = document.getElementById('playbutton');
 	var browser = getBrowser();
-	var supported = ["Firefox/31", "Opera/30", "Chrome/42", "Safari/8", "OPR/30"];
+	var supported = ["Firefox/31", "Opera/30", "Chrome/42", "Safari/7", "OPR/30", "CriOS/43", "OPiOS/10"];
 	var issupported  = false;
 
 	for (var i in supported) {
 
 		var b = browser.split("/");
 		var s = supported[i].split("/");
+		
 		if (b[0] == s[0]) {
 			if(b[1].replace(".", "") >= s[1]) {
 				issupported = true;
 			}
 		} 
 	}
-
-	console.log(navigator.userAgent);
 
 	if (issupported) {
 		playbutton.style.backgroundColor ="red";
@@ -58,5 +57,4 @@ function getBrowser() {
 	}
 
 	return output;
-	console.log(output);
 }
