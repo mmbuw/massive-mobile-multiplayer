@@ -273,6 +273,7 @@ body {
 	width: 100%;
 	margin-bottom: 50px;
 	border-bottom: 1px #333 solid;
+	display: inline-block;
 }
 
 .leavingpage p {
@@ -280,6 +281,11 @@ body {
 	font-family: Arial;
 
 }
+
+.leavingpage .headline {
+	padding: 60px 0px 60px 0px;	
+}
+
 .leavingpage .selection {
 	float: left;	
 }
@@ -299,6 +305,8 @@ body {
 .selectionset {
 	width: 100%;
     margin: 40px auto 40px auto;
+    padding-bottom: 50px;
+   	border-bottom: 1px solid #ccc;
 }
 
 .selectionset p{
@@ -306,10 +314,35 @@ body {
 	font-size: 0.5em;
 }
 
+.leavingpage .textfield {
+	width: 85%;
+	height: 20%;
+	font-size: 0.8em;
+	margin: 40px 40px 40px 60px;
+}
+
+.leavingpage button {
+	width: 100%;
+	text-align: center;
+	height: 10%;
+	background-color: red;
+	color: white;
+	font-weight: bold;
+	font-size: 1em;
+	border: none;
+}
+
+.leavingpage button:hover {
+	background-color: #ccc;
+}
 
 /****************************************************************************
  Misc
 *****************************************************************************/
+
+.bold {
+	font-weight: bold;
+}
 
 .form-page {
 	clear: both;
