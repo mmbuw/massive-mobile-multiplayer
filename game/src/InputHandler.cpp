@@ -214,7 +214,7 @@ void InputHandler::addToDevices(int deviceID, std::string const& name, std::stri
     currentInputDevicesMutex_.lock();
     currentInputDevices_.insert(std::make_pair(deviceID, newlyFoundInputDevice));
     currentInputDevicesMutex_.unlock();
-    std::cout << "Added an input device with ID " << deviceID << " called " << name << " on " << eventString << std::endl;
+    std::cout << "[" << std::time(0) << "] Added an input device with ID " << deviceID << " called " << name << " on " << eventString << std::endl;
 }
 
 std::map<int, InputDevice*>::iterator InputHandler::removeDevice(int deviceID)
@@ -228,7 +228,7 @@ std::map<int, InputDevice*>::iterator InputHandler::removeDevice(int deviceID)
         
         //remove device
         delete iteratorToDelete->second;
-        std::cout << "Removed input device " << deviceID << std::endl;
+        std::cout << "[" << std::time(0) << "] Removed input device " << deviceID << std::endl;
         currentInputDevicesMutex_.lock();
         std::map<int, InputDevice*>::iterator nextIterator = currentInputDevices_.erase(iteratorToDelete);
         currentInputDevicesMutex_.unlock();
