@@ -1,6 +1,6 @@
 function doesConnectionExist() {
     var xhr = new XMLHttpRequest();
-    var file = "http://localhost/mmm/goodbye.html";
+    var file = "http://29.4.93.1/goodbye.html";
 
      
     xhr.open('HEAD', file, false);
@@ -23,7 +23,7 @@ console.log(doesConnectionExist());
 window.addEventListener('load', function(){
 
 	if (!doesConnectionExist()) {
-		document.getElementById('form').action = "http://www.basicbits.de/area51/form.php";
+		document.getElementById('form').action = "http://www.basicbits.de/area51/mmm/form.php";
 	}
 
 });
