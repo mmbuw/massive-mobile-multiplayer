@@ -10,10 +10,11 @@ if(isset($_POST['submit'])){
 	$q5 = $_POST['q5'];
 	$q6 = $_POST['q6'];
 	$q7 = $_POST['q7'];
+    $q7 = $_POST['q8'];
 	    
  
 	# Title of the CSV
-	$Content = $q1.",".$q2.",".$q3.",".$q4.",".$q5.",".$q6.",".$q7."\n";
+	$Content = $q1.",".$q2.",".$q3.",".$q4.",".$q5.",".$q6.",".$q7.",".$q8."\n";
 
 	$fp = fopen("/var/www/feedback/feedback-".date("d-m-y-h:i:s").".csv","a"); // $fp is now the file pointer to file $filename
 
