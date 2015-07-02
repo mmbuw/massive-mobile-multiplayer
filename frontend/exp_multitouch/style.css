@@ -202,9 +202,9 @@ body {
 }
 
 .landingpage p {
-	padding: 0px 60px 0px 60px;
+	padding: 0px 20px 0px 20px;
 	font-family: Arial;
-	font-size: 3em;
+	font-size: 2em;
 }
 
 .browsercheck {
@@ -229,7 +229,7 @@ body {
 .loginpage p {
 	padding: 0px 60px 0px 60px;
 	font-family: Arial;
-	font-size: 3em;
+	font-size: 2em;
 }
 
 .loginpage section {
@@ -245,14 +245,14 @@ body {
 .loginpage input {
 	width: 100%;
 	padding: 25px;
-	font-size: 3em;
+	font-size: 2em;
 	margin-bottom: 30px;
 }
 
 .loginpage button {
 	width: 100%;
 	padding: 25px;
-	font-size: 3em;
+	font-size: 2em;
 	background-color: #333333;
 	color: white;
 	margin-bottom: 60px;

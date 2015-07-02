@@ -3,6 +3,7 @@
 		<meta charset="ISO-8859-1"> 
 		<link rel="stylesheet" type="text/css" href="./style.css">
 		<script src="./js/jquery.min.js"></script>
+		<script src="./js/form.js"></script>
 	</head>
 	<body>
 		<div class="wrapper leavingpage">
@@ -12,9 +13,9 @@
 				<p>Help us to improve this platform and provide some feedback.</p>
 			</section>
 			<section class="questionaire">
-			<form>
+			<form action="form.php" method="post">
 				<p>Learning to control the player was easy for me.</p>
-				<fieldset id="q1" class="selectionset">
+				<fieldset id="q1" name="q1" class="selectionset">
 					<div class="selection">
 					<p>totally disagree</p>				
 					</div>
@@ -54,7 +55,7 @@
 					<br style="clear:left;">
 				</fieldset>
 				<p>I found it easy to join the game.</p>
-				<fieldset id="q2" class="selectionset">
+				<fieldset id="q2" name="q2" class="selectionset">
 					<div class="selection">
 					<p>totally disagree</p>				
 					</div>
@@ -94,7 +95,7 @@
 					<br style="clear:left;">
 				</fieldset>
 				<p>I experienced trouble while connecting to the game.</p>
-				<fieldset id="q3" class="selectionset">
+				<fieldset id="q3" name="q3" class="selectionset">
 					<div class="selection">
 					<p>totally disagree</p>				
 					</div>
@@ -134,7 +135,7 @@
 					<br style="clear:left;">
 				</fieldset>
 				<p>The player always reacted as I expected.</p>
-				<fieldset id="q4" class="selectionset">
+				<fieldset id="q4" name="q4" class="selectionset">
 					<div class="selection">
 					<p>totally disagree</p>				
 					</div>
@@ -174,7 +175,7 @@
 					<br style="clear:left;">
 				</fieldset>
 				<p>I noticed some delay while playing the game.</p>
-				<fieldset id="q5" class="selectionset">
+				<fieldset id="q5" name="q5" class="selectionset">
 					<div class="selection">
 					<p>totally disagree</p>				
 					</div>
@@ -214,7 +215,7 @@
 					<br style="clear:left;">
 				</fieldset>
 				<p>I had the feeling that some of my input was lost.</p>
-				<fieldset id="q6" class="selectionset">
+				<fieldset id="q6" name="q6" class="selectionset">
 					<div class="selection">
 					<p>totally disagree</p>				
 					</div>
@@ -254,8 +255,8 @@
 					<br style="clear:left;">
 				</fieldset>
 				<p>Additional Annotations:</p>
-				<textarea class="textfield" type="text" id="q7" rows="10" wrap="soft"></textarea>
-				<button class="send" type="button" id="send">Send</button>
+				<textarea class="textfield" type="text" id="q7" name="q7" rows="10" wrap="soft"></textarea>
+				<button class="send" type="submit" name="submit" value="submit" id="send">Send</button>
 			</form>
 			</section>
 			<section class="questionaire">
