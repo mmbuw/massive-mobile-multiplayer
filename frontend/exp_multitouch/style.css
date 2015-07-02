@@ -344,6 +344,9 @@ body {
 	font-weight: bold;
 }
 
+#ctimg {
+	display: none;
+}
 .form-page {
 	clear: both;
 	width: 300px;
