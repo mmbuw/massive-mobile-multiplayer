@@ -4,7 +4,9 @@ Game::Game(int screenWidth, int screenHeight) : ballWasInLeftGoal_(false),
                screenWidth_(screenWidth), screenHeight_(screenHeight), ballWasInRightGoal_(false), 
 			   pointsBlueTeam_(0), pointsRedTeam_(0), goalAnimationScoreUpdateDone_(false),
 			   numPlayersRed_(0), numPlayersBlue_(0), inGoalAnimation_(false), inEndAnimation_(false)
-{}
+{
+	resetScore();
+}
 
 
 Game::~Game()
@@ -132,6 +134,7 @@ void Game::renderBackground(sf::RenderWindow* window)
 	{
 		window->draw(field_[i]);
 	}
+	window->draw(instructionString_);
 }
 
 
@@ -202,6 +205,7 @@ void Game::renderTime(sf::RenderWindow* window)
 		//prepare game end animation
 		inEndAnimation_ = true;
 		endAnimationStartTime_ = Clock::now();
+		std::cout << "[" << std::time(0) << "] Game ended " << pointsBlueTeam_ << ":" << pointsRedTeam_ << std::endl;
 
 		if (pointsRedTeam_ > pointsBlueTeam_)
 		{
@@ -446,6 +450,7 @@ void Game::resetScore()
 {
 	pointsBlueTeam_ = 0;
 	pointsRedTeam_ = 0;
+	std::cout << "[" << std::time(0) << "] Starting a new game" << std::endl;
 }
 
 
@@ -819,6 +824,12 @@ void Game::createFpsDisplay()
 	fpsString_.setCharacterSize(screenHeight_*0.03);
 
 	fpsString_.move(0.85*screenWidth_,0.94*screenHeight_);
+
+	instructionString_.setFont(font_);
+	instructionString_.setCharacterSize(screenHeight_*0.05);
+	instructionString_.move(0.06*screenWidth_,0.8*screenHeight_);
+	instructionString_.setColor(sf::Color(0,0,0));
+	instructionString_.setString("Connect to evoke Wifi    Open mmmball.evoke.eu");
 }
 
 

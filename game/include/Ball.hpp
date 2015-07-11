@@ -49,6 +49,7 @@ class Ball : public PhysicalCircle
 		double rightGoalEndLine_;
 	
 		Player* lastPlayerTouch_;
+                sf::Texture ballTexture_;
 
 		int startX_;
 		int startY_;

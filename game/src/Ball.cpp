@@ -11,6 +11,12 @@ Ball::Ball(int startX, int startY) : PhysicalCircle(1.0, startX, startY, 25.0, 0
 	shape_.setOrigin(radius_, radius_);
 
 	shape_.setPosition(posX_, posY_);
+
+        if (!ballTexture_.loadFromFile("resources/boingball.png"))
+        {
+		std::cout << "Ball.cpp Error loading ball texture." << std::endl;
+        }
+	shape_.setTexture(&ballTexture_);
 }
 
 

@@ -73,7 +73,7 @@ int main()
 				std::stringstream responseStream;
 
 				//do not allow multiple connections by same host
-				if (currentPlayerConnections.find(newClientSocket->getRemoteAddress().toInteger()) != currentPlayerConnections.end())
+				if (currentPlayerConnections.find(newClientSocket->getRemoteAddress().toInteger()) != currentPlayerConnections.end() || currentPlayerConnections.size() > 16)
 				{
 					responseStream << "HTTP/1.1 403 Forbidden\r\n\r\n";
 				}

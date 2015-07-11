@@ -83,6 +83,7 @@ class Game
 		sf::Text red_;
 		sf::Text score_;
 		sf::Text fpsString_;
+		sf::Text instructionString_;
 		sf::Font font_;
 		sf::Text time_;
 		sf::Font scoreFont_;

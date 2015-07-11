@@ -181,7 +181,8 @@ function releaseCircle(e) {
   Socket
 ****************************************************************************************************************/
 function initSocket() {
-	socket = new WebSocket("ws://29.4.93.1:53000");
+	socket = new WebSocket("ws://10.0.14.10:53000");
+//        socket = new WebSocket("ws://29.4.93.1:53000");
 	//socket = new WebSocket("ws://localhost:53000");
 
 	socket.onerror = function(error) {
