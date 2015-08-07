@@ -15,7 +15,7 @@ The Massive Mobile Multiplayer Framework is a sofware platform designed to enabl
 
 
 ## Contributors
-Tim Weißker (tim.weissker@uni-weimar.de)
-Andreas Berst (andreas.berst@uni-weimar.de)
-Johannes Hartmann (johannes.hartmann@uni-weimar.de)
+Tim Weißker (tim.weissker@uni-weimar.de)<br>
+Andreas Berst (andreas.berst@uni-weimar.de)<br>
+Johannes Hartmann (johannes.hartmann@uni-weimar.de)<br>
 Florian Echtler (florian.echtler@uni-weimar.de)
