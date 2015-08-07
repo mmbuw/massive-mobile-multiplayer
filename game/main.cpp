@@ -1,5 +1,6 @@
 #include <SFML/System.hpp>
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include <iostream>
 #include <time.h>
 
@@ -46,6 +47,17 @@ int main()
 		bool lPressed(false);
 	#endif
 
+	//music
+	sf::Music backgroundMusic;
+	if (!backgroundMusic.openFromFile("resources/background.ogg"))
+    {	
+    	std::cout << "[main.cpp] Error loading background music." << std::endl; 
+    	return 1;
+    }
+    backgroundMusic.setLoop(true);
+	backgroundMusic.play();
+
+	//main loop
 	while (window.isOpen()) 
 	{
 		window.clear(sf::Color(255,255,0));
