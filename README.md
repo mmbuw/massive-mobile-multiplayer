@@ -21,13 +21,43 @@ We have used and tested two platforms on which we opened a Wifi network and assi
 Example configuration of hostapd (make sure your Wifi adapter supports AP mode):
 
 ```
-  Coming soon
+ interface=wlan0
+ driver=nl80211
+ 
+ logger_syslog=-1
+ logger_syslog_level=0
+ logger_stdout=-1
+ logger_stdout_level=0
+ 
+ dump_file=/tmp/hostapd.dump
+ ctrl_interface=/var/run/hostapd
+ ctrl_interface_group=0
+ 
+ ssid=MMM
+ country_code=DE
+ hw_mode=g
+ channel=6
+ beacon_int=100
+ dtim_period=2
+ max_num_sta=32
+ rts_threshold=2347
+ fragm_threshold=2346
+ 
+ macaddr_acl=0
+ ignore_broadcast_ssid=0
+ 
+ eapol_key_index_workaround=0
+ eap_server=0
+ 
+ own_ip_addr=127.0.0.1
 ```
 
 Example configuration of dnsmasq:
 
 ```
-  Coming soon
+  address=/#/29.4.93.1
+  interface=wlan0
+  dhcp-range=29.4.93.2,29.4.93.254,15m
 ```
 
 ### Using network-manager and isc-dhcp-server on Ubuntu
