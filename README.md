@@ -13,6 +13,8 @@ The Massive Mobile Multiplayer Framework is a sofware platform designed to enabl
  - Run the compiled MMMBall application in game/build. You need to be superuser for that in order to have access to the event devices
  - On the client devices, connect to the web server in a browser, and follow the displayed instructions to join the game
 
+ - For new application contexts to be developed, the stubs in templates/ may help.
+
 # Troubleshooting
 ## Wireless network and DHCP server
 We have used and tested two platforms on which we opened a Wifi network and assigned IP addresses to the connecting client devices. Therefore, we assigned the IP address 29.4.93.1 to the respective server and gave out an address range of 29.4.93.10 to 29.4.93.254 to connecting client devices. 

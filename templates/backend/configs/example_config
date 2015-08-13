@@ -1,0 +1,19 @@
+//configuration file syntax:
+//[type | event] NAME OPTIONAL_ALIAS
+
+type EV_KEY K
+event BTN_A A
+
+type EV_ABS V
+event ABS_X
+event ABS_Y
+
+// according to this configuration file,
+// proper socket messages would be:
+// ^EV_KEY BTN_A 1$ 	- set button A's value to 1
+// ^K A 1$              - set button A's value to 1 using defined aliases
+// ^EV_ABS ABS_X 100$   - set the ABS_X event to 100
+// ^EV_ABS * 100 200$   - set ABS_X to 100 and ABS_Y to 200
+// ^V * 100 200$		- set ABS_X to 100 and ABS_Y to 200 using aliases
+//						- * notation only works for EV_ABS and EV_REL
+//						- the order of events is written in backend/main.cpp at the beginning
