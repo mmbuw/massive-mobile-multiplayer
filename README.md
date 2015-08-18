@@ -6,7 +6,7 @@ The Massive Mobile Multiplayer Framework is a sofware platform designed to enabl
  - Install necessary dependencies on server: SFML2, python3; if you use a Raspberry Pi, a special fork of SFML2 (e.g https://github.com/mickelson/sfml) needs to be compiled
  - Install a web server and make its root directory point to the www_root symlink in the project's root directory
  - Connect the server to a network from which it is reachable for client devices, or open a Wifi network yourself (see troubleshooting section for hints)
- - Paste the IP address for accessing the server to the WebSocket creation in frontend/exp_multitouch/js/controller.js (towards the end)
+ - Paste the IP address for accessing the server to the WebSocket creation in frontend/js/controller.js (towards the end)
  - Compile the backend module using the provided Makefile in backend/ and MMMBall's configuration file: make CONFIG=configs/mmm-ball
  - Run the compiled backend module in backend/build. The application needs to have read and write access to /dev/uinput in order to create event devices
  - Compile MMMBall using the provided Makefile in game/
