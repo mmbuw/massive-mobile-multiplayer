@@ -1,9 +1,10 @@
 #include "Game.hpp"
 
-Game::Game(int screenWidth, int screenHeight) : ballWasInLeftGoal_(false),
+Game::Game(int screenWidth, int screenHeight, std::string resourcesPath) : ballWasInLeftGoal_(false),
                screenWidth_(screenWidth), screenHeight_(screenHeight), ballWasInRightGoal_(false), 
 			   pointsBlueTeam_(0), pointsRedTeam_(0), goalAnimationScoreUpdateDone_(false),
-			   numPlayersRed_(0), numPlayersBlue_(0), inGoalAnimation_(false), inEndAnimation_(false)
+			   numPlayersRed_(0), numPlayersBlue_(0), inGoalAnimation_(false), inEndAnimation_(false),
+			   resourcesPath_(resourcesPath)
 {}
 
 
@@ -766,12 +767,12 @@ void Game::createScoreLine()
 	scoreLine_.setFillColor(sf::Color(0,0,0));
 
 	//create text
-	if (!font_.loadFromFile("resources/font.ttf"))
+	if (!font_.loadFromFile(resourcesPath_ + std::string("/font.ttf")))
 	{
 		std::cout << "[Game.cpp] Error loading font." << std::endl;
 	}
 
-	if (!scoreFont_.loadFromFile("resources/blox.ttf"))
+	if (!scoreFont_.loadFromFile(resourcesPath_ + std::string("/blox.ttf")))
 	{
 		std::cout << "[Game.cpp] Error loading score font." << std::endl;
 	}
@@ -810,7 +811,7 @@ void Game::createScoreLine()
 
 void Game::createFpsDisplay()
 {
-	if (!font_.loadFromFile("resources/font.ttf"))
+	if (!font_.loadFromFile(resourcesPath_ + std::string("/font.ttf")))
 	{
 		std::cout << "[Game.cpp] Error loading font." << std::endl;
 	}
@@ -834,7 +835,7 @@ void Game::calculateLinePoistions()
 
 void Game::initTime() 
 {	
-	if (!font_.loadFromFile("resources/font.ttf"))
+	if (!font_.loadFromFile(resourcesPath_ + std::string("/font.ttf")))
 	{
 		std::cout << "[Game.cpp] Error loading font." << std::endl;
 	}

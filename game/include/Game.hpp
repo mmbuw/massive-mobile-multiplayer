@@ -26,7 +26,7 @@ class Game
 {
 	
 	public:
-		Game(int screenWidth, int screenHeight);
+		Game(int screenWidth, int screenHeight, std::string resourcesPath);
 		~Game();
 
 		//player management
@@ -125,6 +125,8 @@ class Game
 
 		int numPlayersRed_;
 		int numPlayersBlue_;
+
+		std::string resourcesPath_;
 };
 
 sf::Vector2f const lerp(sf::Vector2f const& start, sf::Vector2f const& end, float timeStep);

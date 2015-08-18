@@ -9,7 +9,7 @@
 
 #define INSERT_KEYBOARD_DEBUG_PLAYER false
 
-int main()
+int main(int argc, char* argv[])
 {
 	srand (time(NULL));
 	sf::Clock Clock;
@@ -17,9 +17,14 @@ int main()
 	sf::RenderWindow window(sf::VideoMode(sf::VideoMode::getDesktopMode().width,sf::VideoMode::getDesktopMode().width,20), "MMMBall", sf::Style::Fullscreen);
 	//sf::RenderWindow window(sf::VideoMode(sf::VideoMode::getDesktopMode().width,sf::VideoMode::getDesktopMode().width,20), "MMMBall");
 	window.setVerticalSyncEnabled(true);
+
+	std::string programName(argv[0]);
+	std::string programDirectory(programName.substr(0, programName.find_last_of("/")));
+	std::string resourcesPath(std::string(programDirectory) + std::string("/../resources"));
 	
 	Game* game = new Game(sf::VideoMode::getDesktopMode().width,
-		                  sf::VideoMode::getDesktopMode().height);
+		                  sf::VideoMode::getDesktopMode().height,
+		                  resourcesPath);
 
 	game->createField();
 	
@@ -49,7 +54,7 @@ int main()
 
 	//music
 	sf::Music backgroundMusic;
-	if (!backgroundMusic.openFromFile("resources/background.ogg"))
+	if (!backgroundMusic.openFromFile(resourcesPath + std::string("/background.ogg")))
     {	
     	std::cout << "[main.cpp] Error loading background music." << std::endl; 
     	return 1;
