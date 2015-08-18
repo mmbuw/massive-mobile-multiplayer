@@ -181,9 +181,9 @@ function releaseCircle(e) {
   Socket
 ****************************************************************************************************************/
 function initSocket() {
-	socket = new WebSocket("ws://29.4.93.1:53000");
-	//socket = new WebSocket("ws://localhost:53000");
-
+	
+	socket = new WebSocket('ws://' + configuration.server_ip + ':' + configuration.server_port)
+	
 	socket.onerror = function(error) {
  		window.location.href = './leaving.html';
 	};
