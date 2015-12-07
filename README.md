@@ -16,6 +16,23 @@ The Massive Mobile Multiplayer Framework is a sofware platform designed to enabl
  - For new application contexts to be developed, the stubs in templates/ may help.
 
 # Troubleshooting
+## Compilation of mickelson's version of SFML
+As outline by mickelson himself, the following steps need to be executed in order to get the Raspberry-Pi-version of SFML running.
+
+Install necessary dependencies:
+```
+sudo apt-get install cmake libx11-dev libx11-xcb-dev libflac-dev libogg-dev libvorbis-dev libopenal-dev libjpeg8-dev libfreetype6-dev libxcb-randr0-dev libxcb-image0-dev libxcb-util0-dev libxcb-ewmh-dev libxcb-keysyms1-dev libxcb-icccm4-dev libudev-dev libavutil-dev libavcodec-dev libavformat-dev libavfilter-dev libswscale-dev libavresample-dev libfontconfig1-dev
+```
+
+Configure and compile SFML:
+```
+git clone -b rpi https://github.com/mickelson/SFML sfml-pi
+mkdir sfml-pi/build;cd sfml-pi/build
+cmake -DEGL_INCLUDE_DIR=/opt/vc/include -DEGL_LIBRARY=/opt/vc/lib/libEGL.so -DFREETYPE_INCLUDE_DIR_freetype2=/usr/include -DFREETYPE_INCLUDE_DIR_ft2build=/usr/include/freetype2 -DGLES_INCLUDE_DIR=/opt/vc/include -DGLES_LIBRARY=/opt/vc/lib/libGLESv1_CM.so -DSFML_BCMHOST=1 ..
+sudo make install
+sudo ldconfig
+```
+
 ## Wireless network and DHCP server
 We have used and tested two platforms on which we opened a Wifi network and assigned IP addresses to the connecting client devices. Therefore, we assigned the IP address 29.4.93.1 to the respective server and gave out an address range of 29.4.93.10 to 29.4.93.254 to connecting client devices. 
 
@@ -105,6 +122,9 @@ When MMMBall does not respond to the inputs given by the device, the firewall ma
 `sudo iptables -A OUTPUT -p tcp --dport 53000 -j ACCEPT`
 
 If you want to keep these rules after a reboot, the `iptables-persistent` package helps.
+
+## Access to /dev/uinput
+In order to access the input device interface, MMMBall needs to have read and write access to /dev/uinput. In order to achieve this, one an add a group "udev_group" and add the current user to it. In order for this group to gain access to /dev/uinput, refer to this website: http://wahki.mameau.com/index.php?title=Advanced:udev-uinput-rules
 
 # Contributors
 Tim Weißker (tim.weissker@uni-weimar.de)<br>
