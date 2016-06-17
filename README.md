@@ -1,5 +1,5 @@
-# Massive Mobile Multiplayer Framework
-The Massive Mobile Multiplayer Framework is a sofware platform designed to enable setup-free interaction with shared public displays through personal mobile devices. In this repository, we provide its backend implementation together with the MMMBall application, a real-time soccer game to which client devices can connect and play along. Using a frontend interface which resembles a game controller, users can control their respective soccer players easily.
+# Massive Mobile Multiuser Framework
+The Massive Mobile Multiuser Framework is a sofware platform designed to enable setup-free interaction with shared public displays through personal mobile devices. In this repository, we provide its backend implementation together with the MMMBall application, a real-time soccer game to which client devices can connect and play along. Using a frontend interface which resembles a game controller, users can control their respective soccer players easily.
 
 
 # Setup and Installation
@@ -14,6 +14,11 @@ The Massive Mobile Multiplayer Framework is a sofware platform designed to enabl
  - On the client devices, connect to the web server in a browser, and follow the displayed instructions to join the game
 
  - For new application contexts to be developed, the stubs in templates/ may help.
+
+# Publications and Demos
+ - Evoke 2015 Interactive Competition (www.evoke.eu/2015), Video: https://www.youtube.com/watch?v=JMjnLeUSLN4
+ - T. Weißker, A. Berst, J. Hartmann, and F. Echtler. 2016. MMM Ball: Showcasing the Massive Mobile Multiuser Framework. In Proceedings of the 2016 CHI Conference Extended Abstracts on Human Factors in Computing Systems (CHI EA '16). ACM, New York, NY, USA, 3796-3799. DOI: http://dx.doi.org/10.1145/2851581.2890232 
+ - T. Weißker, A. Berst, J. Hartmann, and F. Echtler. 2016. The Massive Mobile Multiuser Framework: Enabling Ad-hoc Realtime Interaction on Public Displays with Mobile Devices. In Proceedings of the 5th International Symposium on Pervasive Displays (PerDis '16). ACM, New York, NY, USA
 
 # Troubleshooting
 ## Compilation of mickelson's version of SFML
