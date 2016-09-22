@@ -456,7 +456,7 @@ Acknowledgments
 ===============
 
 This work has been presented as a demo at the electronic arts festival
-*Evoke 2015*[3](#user-content-footnote-1) and at the *CHI 2016* interactivity session.
+*Evoke 2015*[<sup>3</sup>](#user-content-footnote-3) and at the *CHI 2016* interactivity session.
 
 References
 ==========
