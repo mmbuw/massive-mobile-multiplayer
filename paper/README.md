@@ -57,7 +57,7 @@ setup-free interaction, real-time capabilities and support for a large
 number of concurrent users.
 
 ![A massive multiplayer soccer game was implemented on the basis of
-$M^3$ framework. 17 users play concurrently on a large public display
+M³ framework. 17 users play concurrently on a large public display
 using their personal mobile devices at an electronic arts festival.<span
 data-label="fig:teaser"></span>](figures/teaser2_unbranded_contrast.jpg)
 
@@ -227,7 +227,7 @@ Analysis of Latency Sources
 
 In order to determine the viability of our approach for real-time
 interaction, we analyzed the total latency of the system. To this end,
-we deployed the server modules of the $M^3$ framework on a *Raspberry
+we deployed the server modules of the M³ framework on a *Raspberry
 Pi* to mirror the intended usage scenario as a low-power gaming
 appliance. Our main test client was a *Samsung GT-I8190* running
 *Chrome* on *Android 4.1.2*, which connected to the server using a WiFi
@@ -239,7 +239,7 @@ public screen flash up. Our goal was to estimate the total time a touch
 contact on the mobile device required to be recognized, processed and
 displayed on the shared public screen. The results of our latency
 analysis are illustrated in Figure \[fig:latency-sources\]. It can be
-divided into the processing times solely introduced by $M^3$ framework
+divided into the processing times solely introduced by M³ framework
 itself plus additional times dependent on the mobile device, the network
 and the public display in use.
 
@@ -247,7 +247,7 @@ Framework components
 --------------------
 
 An event arriving at the mobile operating system’s event management
-queue needs to be forwarded to the frontend module of $M^3$ running in
+queue needs to be forwarded to the frontend module of M³ running in
 the web browser, which then recognizes that the button on the virtual
 input device was pressed. This information is encoded in a message and
 sent to the server over the WebSocket connection. In order to quantify
@@ -256,18 +256,18 @@ the time needed for these steps, we wrote a script for the
 event pipeline in irregular intervals. By computing the time difference
 between event injection and network packet arrival at the Raspberry Pi
 server (using the *tcpdump* network capturing utility), we measured an
-average duration of 29.86 ms (standard deviation $\sigma$ = 6.13 ms) for
+average duration of 29.86 ms (standard deviation &sigma; = 6.13 ms) for
 these components. Further tests involving more modern client devices
 revealed that the time from event management queue to network packet
 arrival on the server can be even lower, going down to 12.12 ms
-($\sigma$ = 2.73 ms) on a Google Nexus 4.
+(&sigma; = 2.73 ms) on a Google Nexus 4.
 
 When a network packet arrives on the server, it needs to be processed by
-the backend module of $M^3$, and the intended event needs to be
+the backend module of M³, and the intended event needs to be
 triggered on the corresponding event device. We measured 100 time
 differences between the arrival of a network packet and the time stamp
 of the triggered event, resulting in an average latency of 0.84 ms
-($\sigma$ = 0.37 ms) for the backend module.
+(&sigma; = 0.37 ms) for the backend module.
 
 In the last step, the application module needs some additional time to
 react to the triggered event on the event device. In our example, we
@@ -275,7 +275,7 @@ therefore measured the time differences between an event’s time stamp
 and the time of the method call coloring the circle on the shared public
 display. As our application’s main loop runs at 60Hz, we expected a
 worst case time of 16.67 ms for this step. Measurements with 100 events
-resulted in an average of 8.89 ms ($\sigma$ = 4.67 ms), confirming this
+resulted in an average of 8.89 ms (&sigma; = 4.67 ms), confirming this
 expectation.
 
 External components
@@ -312,7 +312,7 @@ sensor and output system, Ng et al. showed that even latencies below 10
 ms can still be noticed by some users \[18\]. However, as we are
 targeting commodity hardware, we consequently aimed for a total system
 latency below 70 ms to avoid impeding user performance. The measured
-components of $M^3$ framework total up to 39.59 ms (Samsung GT-I8190)
+components of M³ framework total up to 39.59 ms (Samsung GT-I8190)
 and 21.85 ms (Google Nexus 4). Even when adding the estimated latencies
 introduced by external components, we still achieve an estimated latency
 of 66.99 ms for the older Samsung device and 49.25 ms for the more
@@ -330,9 +330,9 @@ additional network hops. Naturally, when the network complexity is
 higher, the resulting additional latency needs to be added to the total,
 as also indicated in earlier research by Clinch et al. \[6\]. In an
 additional experiment, we connected the server to the Internet and
-measured an average round-trip time of 111.50 ms ($\sigma$ = 61.38 ms)
+measured an average round-trip time of 111.50 ms (&sigma; = 61.38 ms)
 over a 4G connection, resulting in approximately 55 ms of additional
-latency. Compared to the average round-trip time of 15.77 ms ($\sigma$ =
+latency. Compared to the average round-trip time of 15.77 ms (&sigma; =
 7.94 ms) for the local WiFi network which consequently contributes about
 8 ms of latency, this is a noticeable difference, which is likely even
 larger when an earlier-generation network is used. Consequently, when
@@ -398,19 +398,19 @@ We asked our users to rate six aspects of their experience on a 6-point
 Likert scale (with 1 representing “totally disagree” and 6 being
 “totally agree”). We have illustrated the questions and their respective
 scores in Figure \[fig:survey-results\]. The perceived latency and the
-feeling that given input got lost were both rated low (median $Mdn$ = 2;
-mode $Mo$ = 1), which confirms that $M^3$ framework’s implementation
+feeling that given input got lost were both rated low (median *Mdn* = 2;
+mode *Mo* = 1), which confirms that M³ framework’s implementation
 functions fast and correctly. Furthermore, people found it very easy to
-join the game ($Mdn$ = 6; $Mo$ = 6) and also to learn how to control
-their player figure on the shared screen ($Mdn$ = 5; $Mo$ = 6). While
+join the game (*Mdn* = 6; *Mo* = 6) and also to learn how to control
+their player figure on the shared screen (*Mdn* = 5; *Mo* = 6). While
 most of the people didn’t experience problems during connecting to the
-game ($Mdn$ = 3; $Mo$ = 1), the median score indicates that there were
+game (*Mdn* = 3; *Mo* = 1), the median score indicates that there were
 some exceptions. We assume that this value was heavily influenced by the
 fact that recent Android phones often automatically disconnect from WiFi
 networks that do not provide Internet access, which was the case for our
 network. The most negative feedback was given to the question whether
-the player figure always reacted to user input as expected ($Mdn$ = 4;
-$Mo$ = 3), which we partially lead back to our rather uncommon
+the player figure always reacted to user input as expected (*Mdn* = 4;
+*Mo* = 3), which we partially lead back to our rather uncommon
 acceleration-based transfer function \[25\] supplemented by our friction
 simulation.
 
