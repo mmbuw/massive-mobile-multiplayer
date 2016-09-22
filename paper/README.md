@@ -349,7 +349,7 @@ based on a Raspberry Pi. We assumed that attracting people to test the
 interface was easier when using a playful application as opposed to an
 artificial test setup or a more work-focused implementation as also
 indicated by other research \[16\]. Consequently, we developed a video
-game loosely based off *HaxBall*[<sub>2</sub>](#user-content-footnote-2), a simplified 2D soccer variant. It
+game loosely based off [*HaxBall*](http://www.haxball.com), a simplified 2D soccer variant. It
 is well suited as a stress test for our framework as it requires
 constant interaction and fast reaction times while allowing players to
 join or leave at any time. This game was deployed during an open-lab
@@ -456,7 +456,7 @@ Acknowledgments
 ===============
 
 This work has been presented as a demo at the electronic arts festival
-*Evoke 2015*[<sup>3</sup>](#user-content-footnote-3) and at the *CHI 2016* interactivity session.
+[*Evoke 2015*](https://www.evoke.eu/2015/) and at the *CHI 2016* interactivity session.
 
 References
 ==========
@@ -592,7 +592,3 @@ ___
 
 \[1\]<a id="footnote-1"></a>: Out of 97 total participating devices, 27 were identified as Apple
     devices via their MAC addresses.
-
-\[2\]<a id="footnote-2"></a>: <http://www.haxball.com>
-
-\[3\]<a id="footnote-3"></a>: <https://www.evoke.eu/2015/>
