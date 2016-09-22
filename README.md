@@ -18,7 +18,7 @@ The Massive Mobile Multiuser Framework is a sofware platform designed to enable 
 # Publications and Demos
  - Evoke 2015 Interactive Competition (www.evoke.eu/2015), Video: https://www.youtube.com/watch?v=JMjnLeUSLN4
  - T. Weißker, A. Berst, J. Hartmann, and F. Echtler. 2016. MMM Ball: Showcasing the Massive Mobile Multiuser Framework. In Proceedings of the 2016 CHI Conference Extended Abstracts on Human Factors in Computing Systems (CHI EA '16). ACM, New York, NY, USA, 3796-3799. DOI: http://dx.doi.org/10.1145/2851581.2890232 
- - T. Weißker, A. Berst, J. Hartmann, and F. Echtler. 2016. The Massive Mobile Multiuser Framework: Enabling Ad-hoc Realtime Interaction on Public Displays with Mobile Devices. In Proceedings of the 5th International Symposium on Pervasive Displays (PerDis '16). ACM, New York, NY, USA
+ - T. Weißker, A. Berst, J. Hartmann, and F. Echtler. 2016. The Massive Mobile Multiuser Framework: Enabling Ad-hoc Realtime Interaction on Public Displays with Mobile Devices. In Proceedings of the 5th International Symposium on Pervasive Displays (PerDis '16). ACM, New York, NY, USA, 168-174. DOI: http://dx.doi.org/10.1145/2914920.2915004
 
 # Troubleshooting
 ## Compilation of mickelson's version of SFML
