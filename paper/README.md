@@ -1,29 +1,28 @@
----
-abstract: |
-    In this paper, we present the Massive Mobile Multiuser (M³) framework, a
-    software platform designed to enable setup-free, real-time, concurrent
-    interaction with shared public displays through large numbers of
-    personal mobile devices. This work is motivated by the fact that
-    simultaneous interaction of multiple persons with public displays
-    requires either dedicated tracking hardware to detect gestures or touch,
-    or a way for users to interact through their personal mobile devices.
-    The latter option provides more flexibility but also presents a
-    heightened entry barrier as it often requires installation of custom
-    software.
+# The Massive Mobile Multiuser Framework: Enabling Ad-Hoc Realtime Interaction with Public Displays
 
-    To address these issues, M³ enables immediate interaction through the
-    mobile browser without requiring prior setup on the user side, and
-    real-time interaction suitable for fast multiplayer games. We present a
-    detailed analysis of latency sources and findings from two real-world
-    deployments of our framework in public settings with up to 17 concurrent
-    users. Despite a resource-constrained environment and an unpredictable
-    selection of client devices, M³ consistently delivers performance
-    suitable for real-time interaction.
-author:
-- '\'
-bibliography: 'sample.bib'
-csl: 'acm-sigchi-proceedings.csl'
-...
+### Tim Weißker, Andreas Berst, Johannes Hartmann, Florian Echtler
+
+Abstract
+========
+In this paper, we present the Massive Mobile Multiuser (M³) framework, a
+software platform designed to enable setup-free, real-time, concurrent
+interaction with shared public displays through large numbers of
+personal mobile devices. This work is motivated by the fact that
+simultaneous interaction of multiple persons with public displays
+requires either dedicated tracking hardware to detect gestures or touch,
+or a way for users to interact through their personal mobile devices.
+The latter option provides more flexibility but also presents a
+heightened entry barrier as it often requires installation of custom
+software.
+
+To address these issues, M³ enables immediate interaction through the
+mobile browser without requiring prior setup on the user side, and
+real-time interaction suitable for fast multiplayer games. We present a
+detailed analysis of latency sources and findings from two real-world
+deployments of our framework in public settings with up to 17 concurrent
+users. Despite a resource-constrained environment and an unpredictable
+selection of client devices, M³ consistently delivers performance
+suitable for real-time interaction.
 
 Introduction and Motivation
 ===========================
@@ -60,7 +59,7 @@ number of concurrent users.
 ![A massive multiplayer soccer game was implemented on the basis of
 $M^3$ framework. 17 users play concurrently on a large public display
 using their personal mobile devices at an electronic arts festival.<span
-data-label="fig:teaser"></span>](figures/teaser2_unbranded_contrast.jpg){width="0.95\columnwidth"}
+data-label="fig:teaser"></span>](figures/teaser2_unbranded_contrast.jpg)
 
 In this paper, we give an overview of the architecture of M³, describe
 our analysis and measurements of the system’s latency, and present our
@@ -131,8 +130,8 @@ similar approach with depth cameras, focusing on a playful experience in
 a shop window for multiple passersby, was presented by Müller et al.
 @muller_looking_2012.
 
-Architecture of $M^3$ Framework
-===============================
+Architecture of M³ Framework
+============================
 
 The M³ Framework consists of a *client-server architecture*, in which a
 server performs the application logic and renders a visualization of its
@@ -149,9 +148,9 @@ module runs on the mobile client device; the backend and the application
 module are deployed on the server to which the public display is
 connected. To send messages to the the server, a wireless communication
 channel is used.<span
-data-label="fig:system-architecture"></span>](figures/framework03.png){width="\columnwidth"}
+data-label="fig:system-architecture"></span>](figures/framework03.png)
 
-\[t\] ![image](figures/latency.png){width="100.00000%"}
+![Latency Analysis](figures/latency.png)
 
 Frontend
 --------
@@ -345,8 +344,8 @@ real-time interaction is required, we suggest using a local WiFi
 network; otherwise, connecting to the server via the Internet may be a
 viable alternative.
 
-Real-World Deployment of $M^3$
-==============================
+Real-World Deployment of M³
+===========================
 
 In order to evaluate our framework in a real-life setting with
 fast-paced multi-user interaction, we implemented a gaming appliance
@@ -375,9 +374,9 @@ by a colored player circle on the field.
 ![The frontend module of the deployed soccer game using M³ framework
 obtains relative input values by simulating a joystick; furthermore, a
 dedicated screen area serves as a discrete button input.<span
-data-label="fig:controller-layout"></span>](figures/controller_live_4.jpg){width="0.95\columnwidth"}
+data-label="fig:controller-layout"></span>](figures/controller_live_4.jpg)
 
-\[ht\] ![image](figures/diagram_enhanced_3.png){width="2.0\columnwidth"}
+![image](figures/diagram_enhanced_3.png)
 
 Over the course of two days and a total of about 8 hours, we recorded a
 total of 143 games with user participation. Note that the framework was
