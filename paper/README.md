@@ -23,6 +23,7 @@ author:
 - '\'
 bibliography: 'sample.bib'
 csl: 'acm-sigchi-proceedings.csl'
+css: itations
 ...
 
 Introduction and Motivation
@@ -41,10 +42,10 @@ more users, an alternative is to employ the users’ personal mobile
 devices. Unfortunately, this approach suffers from a heightened entry
 barrier as users are usually required to install a custom app before
 interaction is possible. A recent example for such a scenario is
-TextBlaster by Vertanen et al. @vertanen2014textblaster. Given that only
-a short time window is available to engage potential users in a
-walk-up-and-use scenario @muller_requirements_2010, the end result is
-often that no interaction will take place after all.
+TextBlaster by Vertanen et al. \[22\]. Given that only a short time
+window is available to engage potential users in a walk-up-and-use
+scenario \[15\], the end result is often that no interaction will take
+place after all.
 
 To address these issues, we present the Massive Mobile Multiuser (M³)
 framework, which allows setup-free, real-time interaction with public
@@ -86,37 +87,36 @@ display.
 Vision-based interaction usually employs an approach where the public
 display is viewed through a live video feed on the mobile device and
 interaction is done through touch on the video representation. A seminal
-example is Touch Projector by Boring et al. @boring_touch_2010 although
-earlier work by Ballagas et al. @ballagas_sweep_2005 already presented a
-similar approach on non-touch devices. Common limitations of this
-approach are that it requires a custom app to be installed before
-interaction can take place, and that the mobile device has to be held in
-a camera-like pose to enable interaction.
+example is Touch Projector by Boring et al. \[4\] although earlier work
+by Ballagas et al. \[3\] already presented a similar approach on
+non-touch devices. Common limitations of this approach are that it
+requires a custom app to be installed before interaction can take place,
+and that the mobile device has to be held in a camera-like pose to
+enable interaction.
 
 Browser-based interaction, on the other hand, emphasizes the aspect of
 requiring no setup prior to interaction, which is performed through the
 pre-installed web browser on the mobile device. For example, Kubitza et
-al. present VEII @kubitza_using_2013 [@kubitza_veii:_2015], which allows
-on-site modificiation of public displays in museums through a mobile
-device. Alt et al. present Digifieds @alt_digifieds:_2011
-[@alt_interaction_2013], a framework to exchange content with public
-digital notice boards using a combination of mobile apps and custom
-websites. Geel et al. show PresiShare @geel_presishare:_2013, a
-setup-less web application for mobile devices, which uses QR codes to
-share media on multiple public displays. MoCHA, a modular web-based
-multi-device framework by Oat et al. uses QR codes to establish the
-connection between client and server @oat_mocha_2014.
+al. present VEII \[13,14\], which allows on-site modificiation of public
+displays in museums through a mobile device. Alt et al. present
+Digifieds \[1,2\], a framework to exchange content with public digital
+notice boards using a combination of mobile apps and custom websites.
+Geel et al. show PresiShare \[10\], a setup-less web application for
+mobile devices, which uses QR codes to share media on multiple public
+displays. MoCHA, a modular web-based multi-device framework by Oat et
+al. uses QR codes to establish the connection between client and server
+\[19\].
 
-Dingler et al. present uCanvas @dingler_ucanvas:_2015, a web-based
-framework to employ the mobile device’s accelerometer for interaction
-with the public display. In the context of collaborative music creation,
-Weitzner et al. developed MassMobile @weitzner_massmobile:_2013, an
-audience participation framework designed to control a large Max/MSP
-installation. Also, recent versions of the Android operating system
-include Google Nearby @google_nearby_2015, an API designed to enable
-interaction between co-located smartphones and optionally also shared
-displays. The latter approach, however, again requires prior
-installation of a custom app and is not platform-independent.
+Dingler et al. present uCanvas \[7\], a web-based framework to employ
+the mobile device’s accelerometer for interaction with the public
+display. In the context of collaborative music creation, Weitzner et al.
+developed MassMobile \[23\], an audience participation framework
+designed to control a large Max/MSP installation. Also, recent versions
+of the Android operating system include Google Nearby \[11\], an API
+designed to enable interaction between co-located smartphones and
+optionally also shared displays. The latter approach, however, again
+requires prior installation of a custom app and is not
+platform-independent.
 
 Both the smartphone-camera- and browser-based research directions do not
 seem to focus on simultaneous real-time interaction from multiple users.
@@ -124,12 +124,11 @@ Although both approaches should in theory be capable of supporting
 multiple concurrent users, this has not been investigated extensively.
 When multi-user capability is desired, most research currently centers
 around gesture-based interaction using sensors such as the Kinect. One
-current example is ShadowTouch by Elhart et al.
-@elhart_shadowtouch:_2015, in which the users’ silhouettes are overlaid
-over the display and augmented with individual selection menus. A
-similar approach with depth cameras, focusing on a playful experience in
-a shop window for multiple passersby, was presented by Müller et al.
-@muller_looking_2012.
+current example is ShadowTouch by Elhart et al. \[8\], in which the
+users’ silhouettes are overlaid over the display and augmented with
+individual selection menus. A similar approach with depth cameras,
+focusing on a playful experience in a shop window for multiple
+passersby, was presented by Müller et al. \[17\].
 
 Architecture of $M^3$ Framework
 ===============================
@@ -160,17 +159,16 @@ When a user wants to participate, they wirelessly connect their mobile
 device to the server. By opening a specific URL in a browser, the
 connected client is supplied with the *front-end* module of the
 framework via a regular web server. This module opens a *WebSocket*
-@fette2011websocket connection to the backend for realtime
-communication. In order to collect input data from the user, it displays
-a virtual input device interface using HTML5 and JavaScript. Examples
-for simulated input device interfaces include a virtual keyboard or a
-game controller. The frontend currently supports the mobile Firefox,
-Safari and Chrome browsers. As the concrete appearance of this mobile
-interface depends on the intended usage scenario, it is the task of the
-developer to create the involved UI elements together with their touch
-event handling. After a touch has been recognized, the framework
-specifies the encoding of messages to be sent to the server via the
-WebSocket connection.
+\[9\] connection to the backend for realtime communication. In order to
+collect input data from the user, it displays a virtual input device
+interface using HTML5 and JavaScript. Examples for simulated input
+device interfaces include a virtual keyboard or a game controller. The
+frontend currently supports the mobile Firefox, Safari and Chrome
+browsers. As the concrete appearance of this mobile interface depends on
+the intended usage scenario, it is the task of the developer to create
+the involved UI elements together with their touch event handling. After
+a touch has been recognized, the framework specifies the encoding of
+messages to be sent to the server via the WebSocket connection.
 
 Backend
 -------
@@ -290,12 +288,12 @@ the *monkeyrunner* tool. However, in real-world deployments of our
 architecture, touch events are generated by the user; thus, we need to
 examine the time which is needed to recognize touches on the mobile
 device’s touch layer and to forward them to the event queue. This is
-extensively discussed by Padre @Padre2014 and Chang @chang2014, which
-leads us to assume an average latency of 16.6 ms for the touchscreen
-(considering the touchscreen itself is sampled at 100 Hz, but internally
-synchronized to the LCD refresh rate of 60 Hz, which results in slightly
-varying response times to a touch), plus an additional 2.5 ms for
-internal preprocessing.
+extensively discussed by Padre \[20\] and Chang \[5\], which leads us to
+assume an average latency of 16.6 ms for the touchscreen (considering
+the touchscreen itself is sampled at 100 Hz, but internally synchronized
+to the LCD refresh rate of 60 Hz, which results in slightly varying
+response times to a touch), plus an additional 2.5 ms for internal
+preprocessing.
 
 Finally, we also need to take the refresh rate of the public display
 into account, which introduces some additional time after the draw call
@@ -308,20 +306,19 @@ Interpretation and discussion
 -----------------------------
 
 Until recently, interactive systems aimed to achieve latency below 100
-ms according to Wickens @wickens_engineering_2012. However, more recent
-work by Ivkovic et al. @ivkovic_quantifying_2015 showed that user
-performance in targeting and tracking tasks already begins to decline
-slightly at latencies around 70 ms when compared to a baseline latency
-of 11 ms. Using a custom high-speed touch sensor and output system, Ng
-et al. showed that even latencies below 10 ms can still be noticed by
-some users @ng_lowlatency_2012. However, as we are targeting commodity
-hardware, we consequently aimed for a total system latency below 70 ms
-to avoid impeding user performance. The measured components of $M^3$
-framework total up to 39.59 ms (Samsung GT-I8190) and 21.85 ms (Google
-Nexus 4). Even when adding the estimated latencies introduced by
-external components, we still achieve an estimated latency of 66.99 ms
-for the older Samsung device and 49.25 ms for the more modern Nexus
-device.
+ms according to Wickens \[24\]. However, more recent work by Ivkovic et
+al. \[12\] showed that user performance in targeting and tracking tasks
+already begins to decline slightly at latencies around 70 ms when
+compared to a baseline latency of 11 ms. Using a custom high-speed touch
+sensor and output system, Ng et al. showed that even latencies below 10
+ms can still be noticed by some users \[18\]. However, as we are
+targeting commodity hardware, we consequently aimed for a total system
+latency below 70 ms to avoid impeding user performance. The measured
+components of $M^3$ framework total up to 39.59 ms (Samsung GT-I8190)
+and 21.85 ms (Google Nexus 4). Even when adding the estimated latencies
+introduced by external components, we still achieve an estimated latency
+of 66.99 ms for the older Samsung device and 49.25 ms for the more
+modern Nexus device.
 
 As a result, we can state that our setup is fully compatible with
 applications requiring real-time communication. Although our analysis
@@ -333,8 +330,8 @@ As mentioned before, the illustrated values were measured with client
 devices directly connected to the server using a WiFi connection without
 additional network hops. Naturally, when the network complexity is
 higher, the resulting additional latency needs to be added to the total,
-as also indicated in earlier research by Clinch et al. @clinch2012close.
-In an additional experiment, we connected the server to the Internet and
+as also indicated in earlier research by Clinch et al. \[6\]. In an
+additional experiment, we connected the server to the Internet and
 measured an average round-trip time of 111.50 ms ($\sigma$ = 61.38 ms)
 over a 4G connection, resulting in approximately 55 ms of additional
 latency. Compared to the average round-trip time of 15.77 ms ($\sigma$ =
@@ -353,14 +350,13 @@ fast-paced multi-user interaction, we implemented a gaming appliance
 based on a Raspberry Pi. We assumed that attracting people to test the
 interface was easier when using a playful application as opposed to an
 artificial test setup or a more work-focused implementation as also
-indicated by other research @muller_communiplay:_2014. Consequently, we
-developed a video game loosely based off *HaxBall*[^2], a simplified 2D
-soccer variant. It is well suited as a stress test for our framework as
-it requires constant interaction and fast reaction times while allowing
-players to join or leave at any time. This game was deployed during an
-open-lab event at our university as well as during a digital arts
-exhibition. For the actual look of the game, refer to Figure
-\[fig:teaser\].
+indicated by other research \[16\]. Consequently, we developed a video
+game loosely based off *HaxBall*[^2], a simplified 2D soccer variant. It
+is well suited as a stress test for our framework as it requires
+constant interaction and fast reaction times while allowing players to
+join or leave at any time. This game was deployed during an open-lab
+event at our university as well as during a digital arts exhibition. For
+the actual look of the game, refer to Figure \[fig:teaser\].
 
 The game constantly repeats rounds of 3 minutes duration, which users
 can join at any given time. For our system, this is done by simply
@@ -417,8 +413,8 @@ networks that do not provide Internet access, which was the case for our
 network. The most negative feedback was given to the question whether
 the player figure always reacted to user input as expected ($Mdn$ = 4;
 $Mo$ = 3), which we partially lead back to our rather uncommon
-acceleration-based transfer function @Zhai1995 supplemented by our
-friction simulation.
+acceleration-based transfer function \[25\] supplemented by our friction
+simulation.
 
 Conclusion and Future Work
 ==========================
@@ -447,23 +443,149 @@ an interesting use case for the framework.
 
 Prior studies suggest that using mobile touch displays as input for
 controlling content on larger screens perform better than or equivalent
-to mobile-only or hybrid modalities in simple search tasks @Rashid2012.
+to mobile-only or hybrid modalities in simple search tasks \[21\].
 However, the more complex the mobile frontend becomes, the more
 attention shifts between the displays are needed to accomplish a task.
 This is mainly due to the need of locating specific interface elements
 and the lack of haptic feedback provided by the touch surface. In order
 to reduce this number of attention shifts, another interesting extension
 to the framework could involve using device motion in the frontend to
-supplement touch inputs, similar to @dingler_ucanvas:_2015. As the
-configurable backend already supports the full set of input events
-defined in the Linux kernel, including accelerometer data, no changes
-are required there.
+supplement touch inputs, similar to \[7\]. As the configurable backend
+already supports the full set of input events defined in the Linux
+kernel, including accelerometer data, no changes are required there.
 
 Acknowledgments
 ===============
 
 This work has been presented as a demo at the electronic arts festival
 *Evoke 2015*[^3] and at the *CHI 2016* interactivity session.
+
+1\. Florian Alt, Thomas Kubitza, Dominik Bial, et al. 2011. Digifieds:
+Insights into deploying digital public notice areas in the wild. In
+*Proceedings of the 10th International Conference on Mobile and
+Ubiquitous Multimedia* (MUM ’11), 165–174. Retrieved June 23, 2015 from
+<http://dl.acm.org/citation.cfm?id=2107618>
+
+2\. Florian Alt, Alireza Sahami Shirazi, Thomas Kubitza, and Albrecht
+Schmidt. 2013. Interaction techniques for creating and exchanging
+content with public displays. In *Proceedings of the SIGCHI Conference
+on Human Factors in Computing Systems* (CHI ’12), 1709–1718. Retrieved
+June 23, 2015 from <http://dl.acm.org/citation.cfm?id=2466226>
+
+3\. Rafael Ballagas, Michael Rohs, and Jennifer G. Sheridan. 2005. Sweep
+and Point and Shoot: Phonecam-based Interactions for Large Public
+Displays. In *CHI ’05 Extended Abstracts on Human Factors in Computing
+Systems* (CHI EA ’05), 1200–1203.
+<http://doi.org/10.1145/1056808.1056876>
+
+4\. Sebastian Boring, Dominikus Baur, Andreas Butz, Sean Gustafson, and
+Patrick Baudisch. 2010. Touch Projector: Mobile Interaction Through
+Video. In *Proceedings of the SIGCHI Conference on Human Factors in
+Computing Systems* (CHI ’10), 2287–2296.
+<http://doi.org/10.1145/1753326.1753671>
+
+5\. Mason Chang. 2014. Android touch resampling algorithm. 
+
+6\. Sarah Clinch, Jan Harkes, Adrian Friday, Nigel Davies, and Mahadev
+Satyanarayanan. 2012. How close is close enough? Understanding the role
+of cloudlets in supporting display appropriation by mobile users. In
+*Pervasive computing and communications (perCom), 2012 iEEE
+international conference on*, 122–127.
+
+7\. Tilman Dingler, Tobias Bagg, Yves Grau, Niels Henze, and Albrecht
+Schmidt. 2015. uCanvas: A Web Framework for Spontaneous Smartphone
+Interaction with Ubiquitous Displays. In *Human-Computer Interaction –
+INTERACT 2015*, Julio Abascal, Simone Barbosa, Mirko Fetter, Tom Gross,
+Philippe Palanque and Marco Winckler (eds.). Springer International
+Publishing, 402–409. Retrieved September 15, 2015 from
+<http://link.springer.com/chapter/10.1007/978-3-319-22698-9_27>
+
+8\. Ivan Elhart, Federico Scacchi, Evangelos Niforatos, and Marc
+Langheinrich. 2015. ShadowTouch: A Multi-user Application Selection
+Interface for Interactive Public Displays. In *Proceedings of the 4th
+International Symposium on Pervasive Displays* (PerDis ’15), 209–216.
+<http://doi.org/10.1145/2757710.2757735>
+
+9\. Ian Fette and Alexey Melnikov. 2011. The WebSocket Protocol
+(RFC6455). 
+
+10\. Matthias Geel, Daniel Huguenin, and Moira C. Norrie. 2013.
+PresiShare: Opportunistic Sharing and Presentation of Content Using
+Public Displays and QR Codes. In *Proceedings of the 2Nd ACM
+International Symposium on Pervasive Displays* (PerDis ’13), 103–108.
+<http://doi.org/10.1145/2491568.2491591>
+
+11\. Google, Inc. 2015. Nearby. 
+
+12\. Zenja Ivkovic, Ian Stavness, Carl Gutwin, and Steven Sutcliffe.
+2015. Quantifying and mitigating the negative effects of local latencies
+on aiming in 3D shooter games. In *Proceedings of the 33rd annual aCM
+conference on human factors in computing systems* (CHI ’15), 135–144.
+<http://doi.org/10.1145/2702123.2702432>
+
+13\. Thomas Kubitza, Sarah Clinch, Nigel Davies, and Marc Langheinrich.
+2013. Using mobile devices to personalize pervasive displays. *ACM
+SIGMOBILE Mobile Computing and Communications Review* 16, 4: 26–27.
+Retrieved June 23, 2015 from <http://dl.acm.org/citation.cfm?id=2436211>
+
+14\. Thomas Kubitza, Sascha Thullner, and Albrecht Schmidt. 2015. VEII: A
+Toolkit for Editing Multimedia Content of Interactive Installations
+On-site. In *Proceedings of the 4th International Symposium on Pervasive
+Displays* (PerDis ’15), 249–250.
+<http://doi.org/10.1145/2757710.2776806>
+
+15\. Jörg Müller, Florian Alt, Daniel Michelis, and Albrecht Schmidt.
+2010. Requirements and Design Space for Interactive Public Displays. In
+*Proceedings of the International Conference on Multimedia* (MM ’10),
+1285–1294. <http://doi.org/10.1145/1873951.1874203>
+
+16\. Jörg Müller, Dieter Eberle, and Konrad Tollmar. 2014. Communiplay: A
+Field Study of a Public Display Mediaspace. In *Proceedings of the 32Nd
+Annual ACM Conference on Human Factors in Computing Systems* (CHI ’14),
+1415–1424. <http://doi.org/10.1145/2556288.2557001>
+
+17\. Jörg Müller, Robert Walter, Gilles Bailly, Michael Nischt, and
+Florian Alt. 2012. Looking Glass: A Field Study on Noticing
+Interactivity of a Shop Window. In *Proceedings of the SIGCHI Conference
+on Human Factors in Computing Systems* (CHI ’12), 297–306.
+<http://doi.org/10.1145/2207676.2207718>
+
+18\. Albert Ng, Julian Lepinski, Daniel Wigdor, Steven Sanders, and Paul
+Dietz. 2012. Designing for low-latency direct-touch input. In
+*Proceedings of the 25th annual aCM symposium on user interface software
+and technology* (UIST ’12), 453–464.
+<http://doi.org/10.1145/2380116.2380174>
+
+19\. E. Oat, M. Di Francesco, and T. Aura. 2014. MoCHA: Augmenting
+pervasive displays through mobile devices and web-based technologies. In
+*Pervasive computing and communications workshops (pERCOM workshops),
+2014 iEEE international conference on*, 506–511.
+<http://doi.org/10.1109/PerComW.2014.6815258>
+
+20\. Joe Padre. 2014. Understanding touch responsiveness - Touchscreen
+technology series 2. 
+
+21\. Umar Rashid, Miguel A. Nacenta, and Aaron Quigley. 2012. The cost of
+display switching: A comparison of mobile, large display and hybrid uI
+configurations. In *Proceedings of the international working conference
+on advanced visual interfaces* (AVI ’12), 99–106.
+<http://doi.org/10.1145/2254556.2254577>
+
+22\. Keith Vertanen, Justin Emge, Haythem Memmi, and Per Ola Kristensson.
+2014. Text blaster: A multi-player touchscreen typing game. In *CHI ’14
+extended abstracts on human factors in computing systems* (CHI eA ’14),
+379–382. <http://doi.org/10.1145/2559206.2574802>
+
+23\. Nathan Weitzner, Jason Freeman, Yan-Ling Chen, and Stephen Garrett.
+2013. massMobile: Towards a flexible framework for large-scale
+participatory collaborations in live performances. *Organised Sound* 18,
+Special Issue 01: 30–42. <http://doi.org/10.1017/S1355771812000222>
+
+24\. Christopher D. Wickens, Justin G. Hollands, and Raja Parasuraman.
+2012. *Engineering Psychology & Human Performance*. CRC Press, Boston.
+
+25\. Shumin Zhai. 1995. Human performance in six degree of freedom input
+control. 17–18.
 
 [^1]: Out of 97 total participating devices, 27 were identified as Apple
     devices via their MAC addresses.
