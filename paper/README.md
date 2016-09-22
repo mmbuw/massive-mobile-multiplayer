@@ -585,7 +585,7 @@ Special Issue 01: 30–42. <http://doi.org/10.1017/S1355771812000222>
 25\. Shumin Zhai. 1995. Human performance in six degree of freedom input
 control. 17–18.
 
-[^1]: Out of 97 total participating devices, 27 were identified as Apple
+[^1](#footnote-1): Out of 97 total participating devices, 27 were identified as Apple
     devices via their MAC addresses.
 
 [^2]: <http://www.haxball.com>
