@@ -322,7 +322,7 @@ As a result, we can state that our setup is fully compatible with
 applications requiring real-time communication. Although our analysis
 focused on Android devices due to their better-documented internals,
 comparable performance was observed on a variety of iOS-based devices
-during our real-world deployments.[^1]
+during our real-world deployments.[<sub>1</sub>](#user-content-footnote-1)
 
 As mentioned before, the illustrated values were measured with client
 devices directly connected to the server using a WiFi connection without
@@ -349,7 +349,7 @@ based on a Raspberry Pi. We assumed that attracting people to test the
 interface was easier when using a playful application as opposed to an
 artificial test setup or a more work-focused implementation as also
 indicated by other research \[16\]. Consequently, we developed a video
-game loosely based off *HaxBall*[^2], a simplified 2D soccer variant. It
+game loosely based off *HaxBall*[<sub>2</sub>](#user-content-footnote-2), a simplified 2D soccer variant. It
 is well suited as a stress test for our framework as it requires
 constant interaction and fast reaction times while allowing players to
 join or leave at any time. This game was deployed during an open-lab
@@ -376,7 +376,7 @@ data-label="fig:controller-layout"></span>](figures/controller_live_4.jpg)
 Over the course of two days and a total of about 8 hours, we recorded a
 total of 143 games with user participation. Note that the framework was
 running continuously and without interruptions for the whole time
-period. On average, the games were played by 5.36 ($\sigma$ = 3.01)
+period. On average, the games were played by 5.36 (&sigma; = 3.01)
 participants and ended with a total of 5.51 goals scored, which were
 nearly equally distributed over the two teams. The average user’s
 connection lasted for 305.8 seconds, which equals to roughly 5.1 minutes
