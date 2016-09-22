@@ -456,7 +456,10 @@ Acknowledgments
 ===============
 
 This work has been presented as a demo at the electronic arts festival
-*Evoke 2015*[^3] and at the *CHI 2016* interactivity session.
+*Evoke 2015*[3](#user-content-footnote-1) and at the *CHI 2016* interactivity session.
+
+References
+==========
 
 1\. Florian Alt, Thomas Kubitza, Dominik Bial, et al. 2011. Digifieds:
 Insights into deploying digital public notice areas in the wild. In
@@ -584,6 +587,8 @@ Special Issue 01: 30–42. <http://doi.org/10.1017/S1355771812000222>
 
 25\. Shumin Zhai. 1995. Human performance in six degree of freedom input
 control. 17–18.
+
+___
 
 \[1\]<a id="footnote-1"></a>: Out of 97 total participating devices, 27 were identified as Apple
     devices via their MAC addresses.
