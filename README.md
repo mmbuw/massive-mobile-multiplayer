@@ -1,5 +1,5 @@
 # Massive Mobile Multiuser Framework
-The Massive Mobile Multiuser Framework is a sofware platform designed to enable setup-free interaction with shared public displays through personal mobile devices. In this repository, we provide its backend implementation together with the MMMBall application, a real-time soccer game to which client devices can connect and play along. Using a frontend interface which resembles a game controller, users can control their respective soccer players easily.
+The Massive Mobile Multiuser Framework is a software platform designed to enable setup-free interaction with shared public displays through personal mobile devices. In this repository, we provide its backend implementation together with the MMMBall application, a real-time soccer game to which client devices can connect and play along. Using a frontend interface which resembles a game controller, users can control their respective soccer players easily.
 
 
 # Setup and Installation
