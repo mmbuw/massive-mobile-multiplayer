@@ -604,7 +604,7 @@ void Game::createField()
 	createGreen();
 	sf::Vector2f fieldCenter = centerCircle_.getPosition();
 	createBall(fieldCenter.x, fieldCenter.y);
-	ball_->setAllLines(leftLineAt_,rightLineAt_,topLineAt_,bottomLineAt_);
+	ball_->setAllLines(screenWidth_, screenHeight_, leftLineAt_,rightLineAt_,topLineAt_,bottomLineAt_);
 	createGoals();
 	createScoreLine();
 	createFpsDisplay();

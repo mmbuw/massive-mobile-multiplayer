@@ -191,7 +191,7 @@ std::string const Ball::getLastPlayerTouchName() const
 	return "";
 }
 
-void Ball::setAllLines(double left, double right, double top, double bottom) {
+void Ball::setAllLines(double screenWidth, double screenHeight, double left, double right, double top, double bottom) {
 
 	leftBorderLine_ = left;
 	rightBorderLine_ = right;
@@ -201,15 +201,12 @@ void Ball::setAllLines(double left, double right, double top, double bottom) {
 	temporaryTopBorder_ = topBorderLine_;
 	temporaryBottomBorder_ = bottomBorderLine_;
 
-	screenWidth_ = sf::VideoMode::getDesktopMode().width;
-	screenHeight_ = sf::VideoMode::getDesktopMode().height;
-
 	double middleoflines = ((bottomBorderLine_-topBorderLine_)/2)+topBorderLine_;
 
-	goalStartHeight_ = middleoflines-(0.15*screenHeight_);
-	goalEndHeight_ = middleoflines+(0.15*screenHeight_);
+	goalStartHeight_ = middleoflines-(0.15*screenHeight);
+	goalEndHeight_ = middleoflines+(0.15*screenHeight);
 
-	leftGoalEndLine_ = 0.01822916*screenWidth_;
-	rightGoalEndLine_ = 0.96145832*screenWidth_;
+	leftGoalEndLine_ = 0.01822916*screenWidth;
+	rightGoalEndLine_ = 0.96145832*screenWidth;
 
 }
