@@ -242,7 +242,7 @@ int main()
 			            {
 			            	int nameStartIndex = 5;
 			            	int nameEndIndex = message.find("$");
-			            	std::string name = message.substr(nameStartIndex, nameEndIndex-nameStartIndex);
+			            	std::string name = message.substr(nameStartIndex+1, nameEndIndex-nameStartIndex-1);
 
 			            	std::cout << "[Client " << playerConnection->getID() << "] Assigning name: " << name << std::endl;
 			            	playerConnection->setName(name);

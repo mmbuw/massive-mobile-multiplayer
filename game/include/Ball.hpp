@@ -26,14 +26,11 @@ class Ball : public PhysicalCircle
 		bool isInRightGoal() const;
 		void setLastPlayerTouch(Player* player);
 		std::string const getLastPlayerTouchName() const;
-		void setAllLines(double left, double right, double top, double bottom);
+		void setAllLines(double screenWidth, double screenHeight, double left, double right, double top, double bottom);
 	
 	private:
 		bool inLeftGoal_;
 		bool inRightGoal_;
-
-		double screenWidth_;
-		double screenHeight_;
 
 		double leftBorderLine_;
 		double rightBorderLine_;

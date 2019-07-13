@@ -1,7 +1,7 @@
 #include "Player.hpp"
 
 Player::Player(int startX, int startY, sf::Color border, sf::Color center, std::string const& name, int number) :
-	PhysicalCircle(10.2, startX, startY, 35.0, 0.8), borderColor_(border), centerColor_(center), 
+	PhysicalCircle(10.2, startX, startY, 35.0, 1.0), borderColor_(border), centerColor_(center), 
 	blockShootFrames_(0), startX_(startX), startY_(startY), name_(name), shirtNumber_(number)
 {
 	shootCircleRadius_ = computeShootCircleRadius();

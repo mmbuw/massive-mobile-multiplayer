@@ -185,7 +185,7 @@ function initSocket() {
 	socket = new WebSocket('ws://' + configuration.server_ip + ':' + configuration.server_port)
 	
 	socket.onerror = function(error) {
- 		window.location.href = './leaving.html';
+ 		window.location.href = './goodbye.html';
 	};
 
 	socket.onopen = function() { 
@@ -230,7 +230,7 @@ function closeSocket() {
 ****************************************************************************************************************/
 function checkLogin() {
 	if(sessionStorage.getItem('playername') === null) {
-		window.location.href = './leaving.html';
+		window.location.href = './goodbye.html';
 	}
 }
 
@@ -238,5 +238,5 @@ function logout(){
 	window.sessionStorage.removeItem('team');
 	window.sessionStorage.removeItem('number');
 	closeSocket();
-	window.location.href = './leaving.html';
+	window.location.href = './goodbye.html';
 }
