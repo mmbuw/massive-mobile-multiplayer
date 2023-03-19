@@ -188,7 +188,9 @@ void Game::renderScoreLine(sf::RenderWindow* window)
 
 void Game::renderFpsDisplay(sf::RenderWindow* window, float value)
 {
-	fpsString_.setString(std::to_string(value) + " fps");
+	std::stringstream stream;
+	stream << std::fixed << std::setprecision(2) << value;
+	fpsString_.setString(stream.str() + " fps");
 	window->draw(fpsString_);
 }
 
@@ -818,8 +820,9 @@ void Game::createFpsDisplay()
 
 	fpsString_.setFont(font_);
 	fpsString_.setCharacterSize(screenHeight_*0.03);
+	fpsString_.setFillColor(sf::Color(50,50,50));
 
-	fpsString_.move(0.85*screenWidth_,0.94*screenHeight_);
+	fpsString_.move(0.88*screenWidth_,0.94*screenHeight_);
 }
 
 
