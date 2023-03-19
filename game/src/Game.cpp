@@ -83,7 +83,7 @@ Player* Game::addNewPlayer(std::string const& name)
 		redNumbersInUse_[number] = true;
 	}
 
-	Player* newPlayer = new Player(spawnPosition.x, spawnPosition.y, sf::Color(0,0,0), teamColor, name, number);
+	Player* newPlayer = new Player(spawnPosition.x, spawnPosition.y, sf::Color(0,0,0), teamColor, name, number, resourcesPath_);
 	
 	//adjust player radius to other players
 	float newRadius;

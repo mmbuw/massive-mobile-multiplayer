@@ -1,8 +1,8 @@
 #include "Player.hpp"
 
-Player::Player(int startX, int startY, sf::Color border, sf::Color center, std::string const& name, int number) :
+Player::Player(int startX, int startY, sf::Color border, sf::Color center, std::string const& name, int number, std::string resourcesPath) :
 	PhysicalCircle(10.2, startX, startY, 35.0, 1.0), borderColor_(border), centerColor_(center), 
-	blockShootFrames_(0), startX_(startX), startY_(startY), name_(name), shirtNumber_(number)
+	blockShootFrames_(0), startX_(startX), startY_(startY), resourcesPath_(resourcesPath), name_(name), shirtNumber_(number)
 {
 	shootCircleRadius_ = computeShootCircleRadius();
 
@@ -22,7 +22,7 @@ Player::Player(int startX, int startY, sf::Color border, sf::Color center, std::
 	shootCircle_.setOrigin(shootCircleRadius_, shootCircleRadius_);
 	shootCircle_.setPosition(startX, startY);
 
-	if (!font_.loadFromFile("resources/font.ttf"))
+	if (!font_.loadFromFile(resourcesPath_ + std::string("/font.ttf")))
 	{
 		std::cout << "[Player.cpp] Error loading font." << std::endl;
 	}
