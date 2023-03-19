@@ -3,7 +3,7 @@ The Massive Mobile Multiuser Framework is a software platform designed to enable
 
 
 # Setup and Installation
- - Install necessary dependencies on server: SFML2, python3; if you use a Raspberry Pi, a special fork of SFML2 (e.g https://github.com/mickelson/sfml) needs to be compiled
+ - Install necessary dependencies on server: SFML, python3. If you use a Raspberry Pi, you previously needed a special fork of SFML (e.g https://github.com/mickelson/sfml), which is now no longer necessary by installing it from the official package repositories: ```sudo apt install libsfml-dev```
  - Install a web server and make its root directory point to the www_root symlink in the project's root directory
  - Connect the server to a network from which it is reachable for client devices, or open a Wifi network yourself (see troubleshooting section for hints)
  - Paste the server's IP address to the frontend WebSocket configuration file: frontend/configuration/configuration.js
@@ -21,23 +21,6 @@ The Massive Mobile Multiuser Framework is a software platform designed to enable
  - T. Weißker, A. Berst, J. Hartmann, and F. Echtler. 2016. The Massive Mobile Multiuser Framework: Enabling Ad-hoc Realtime Interaction on Public Displays with Mobile Devices. In Proceedings of the 5th International Symposium on Pervasive Displays (PerDis '16). ACM, New York, NY, USA, 168-174. DOI: http://dx.doi.org/10.1145/2914920.2915004
 
 # Troubleshooting
-## Compilation of mickelson's version of SFML
-As outline by mickelson himself, the following steps need to be executed in order to get the Raspberry-Pi-version of SFML running.
-
-Install necessary dependencies:
-```
-sudo apt-get install cmake libx11-dev libx11-xcb-dev libflac-dev libogg-dev libvorbis-dev libopenal-dev libjpeg8-dev libfreetype6-dev libxcb-randr0-dev libxcb-image0-dev libxcb-util0-dev libxcb-ewmh-dev libxcb-keysyms1-dev libxcb-icccm4-dev libudev-dev libavutil-dev libavcodec-dev libavformat-dev libavfilter-dev libswscale-dev libavresample-dev libfontconfig1-dev
-```
-
-Configure and compile SFML:
-```
-git clone -b rpi https://github.com/mickelson/SFML sfml-pi
-mkdir sfml-pi/build;cd sfml-pi/build
-cmake -DEGL_INCLUDE_DIR=/opt/vc/include -DEGL_LIBRARY=/opt/vc/lib/libEGL.so -DFREETYPE_INCLUDE_DIR_freetype2=/usr/include -DFREETYPE_INCLUDE_DIR_ft2build=/usr/include/freetype2 -DGLES_INCLUDE_DIR=/opt/vc/include -DGLES_LIBRARY=/opt/vc/lib/libGLESv1_CM.so -DSFML_BCMHOST=1 ..
-sudo make install
-sudo ldconfig
-```
-
 ## Wireless network and DHCP server
 We have used and tested two platforms on which we opened a Wifi network and assigned IP addresses to the connecting client devices. Therefore, we assigned the IP address 29.4.93.1 to the respective server and gave out an address range of 29.4.93.10 to 29.4.93.254 to connecting client devices. 
 
