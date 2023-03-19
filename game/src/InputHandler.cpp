@@ -234,6 +234,7 @@ std::map<int, InputDevice*>::iterator InputHandler::removeDevice(int deviceID)
         currentInputDevicesMutex_.unlock();
         return nextIterator;
     }
+    return currentInputDevices_.end();
 }
 
 void InputHandler::processAddRemoveQueries()
