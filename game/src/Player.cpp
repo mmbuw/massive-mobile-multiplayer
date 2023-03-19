@@ -33,7 +33,7 @@ Player::Player(int startX, int startY, sf::Color border, sf::Color center, std::
 
 	nameText_.setFont(font_);
 	nameText_.setString(name_);
-	nameText_.setColor(sf::Color(0,0,0));
+	nameText_.setFillColor(sf::Color(0,0,0));
 	nameText_.setCharacterSize(6.0/7.0 * radius_);
 }
 

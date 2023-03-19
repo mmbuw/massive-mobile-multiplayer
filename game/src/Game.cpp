@@ -206,22 +206,22 @@ void Game::renderTime(sf::RenderWindow* window)
 
 		if (pointsRedTeam_ > pointsBlueTeam_)
 		{
-			goalTextOne_.setColor(sf::Color(255,0,0));
+			goalTextOne_.setFillColor(sf::Color(255,0,0));
 			goalTextOne_.setString("red wins");
-			goalTextTwo_.setColor(sf::Color(255,0,0));
+			goalTextTwo_.setFillColor(sf::Color(255,0,0));
 
 		}
 		else if (pointsBlueTeam_ > pointsRedTeam_)
 		{
-			goalTextOne_.setColor(sf::Color(0,0,255));
+			goalTextOne_.setFillColor(sf::Color(0,0,255));
 			goalTextOne_.setString("blue wins");
-			goalTextTwo_.setColor(sf::Color(0,0,255));
+			goalTextTwo_.setFillColor(sf::Color(0,0,255));
 		}
 		else
 		{
-			goalTextOne_.setColor(sf::Color(0,0,0));
+			goalTextOne_.setFillColor(sf::Color(0,0,0));
 			goalTextOne_.setString("draw");
-			goalTextTwo_.setColor(sf::Color(0,0,0));
+			goalTextTwo_.setFillColor(sf::Color(0,0,0));
 		}
 
 		goalTextTwo_.setString(std::to_string(pointsBlueTeam_) + " to " + std::to_string(pointsRedTeam_));
@@ -247,11 +247,11 @@ void Game::renderTime(sf::RenderWindow* window)
 
 	if (remainingSeconds <= 10)
 	{
-		time_.setColor(sf::Color(255,255,0));
+		time_.setFillColor(sf::Color(255,255,0));
 	}
 	else
 	{
-		time_.setColor(sf::Color(255,255,255));
+		time_.setFillColor(sf::Color(255,255,255));
 	}
 
 	if (inEndAnimation_)
@@ -461,8 +461,8 @@ void Game::checkForGoal()
 		ball_->setColor(sf::Color(0,0,0));
 
 		goalTextOne_.setString(ball_->getLastPlayerTouchName() + " scores");
-		goalTextOne_.setColor(sf::Color(255, 0, 0));
-		goalTextTwo_.setColor(sf::Color(255, 0, 0));
+		goalTextOne_.setFillColor(sf::Color(255, 0, 0));
+		goalTextTwo_.setFillColor(sf::Color(255, 0, 0));
 		celebratingTeam_ = sf::Color(255,0,0);
 
 		goalTextTwo_.setString(std::to_string(pointsRedTeam_-1));
@@ -477,8 +477,8 @@ void Game::checkForGoal()
 		ball_->setColor(sf::Color(0,0,0));
 
 		goalTextOne_.setString(ball_->getLastPlayerTouchName() + " scores");
-		goalTextOne_.setColor(sf::Color(0, 0, 255));
-		goalTextTwo_.setColor(sf::Color(0, 0, 255));
+		goalTextOne_.setFillColor(sf::Color(0, 0, 255));
+		goalTextTwo_.setFillColor(sf::Color(0, 0, 255));
 		celebratingTeam_ = sf::Color(0,0,255);
 
 		goalTextTwo_.setString(std::to_string(pointsBlueTeam_-1));
