@@ -9,10 +9,8 @@ window.addEventListener('load', function(){
 		button = document.getElementById('button');
 		wrapper = document.getElementById('canvas-wrap');
 		canvas = document.getElementById('sadstick');
-		circle = document.getElementById('circle');
 		hint = document.getElementById('mmmturn');
 
-		colorbase = 'grey';
 		idletimer = setTimeout(logout, 3000000);
 		context = null;
 		socket = null;
@@ -20,17 +18,25 @@ window.addEventListener('load', function(){
 		starty = null;
 		socket = null;
 
-		initSocket();
-		initView();
+		stickRadius = 40;
+		stickMaxDistance = 3 * stickRadius;
+		teamColor = '#bbbbbb';
+		stickIsDragged = false;
+		stickDraggingColor = "black";
+		inputMaxValue = 255;
 
-		window.addEventListener('resize', updateBasicView, false);
+		initSocket();
+
+		window.addEventListener('resize', onWindowResize, false);
+		onWindowResize();
 
 		button.addEventListener('touchstart', pushButton, false);
 		button.addEventListener('touchend', releaseButton, false);
 
-		circle.addEventListener('touchstart', pushCircle, false);
-		circle.addEventListener('touchmove', moveCircle, false);
-		circle.addEventListener('touchend', releaseCircle, false);
+		canvas.addEventListener('touchstart', touchCanvas, false);
+		canvas.addEventListener('touchmove', moveTouchOnCanvas, false);
+		canvas.addEventListener('touchend', releaseCanvasTouch, false);
+
 
 }, false)
 
@@ -39,46 +45,33 @@ window.addEventListener('load', function(){
   Controller Basic View, Functions
 ****************************************************************************************************************/
 
-
 function isLandscape() {
-		var width = window.innerWidth;
-		var height = window.innerHeight;
+	var width = window.innerWidth;
+	var height = window.innerHeight;
 
-		if (width < height) {
-			hint.style.display="block";
-			button.style.display="none";
-			circle.style.display="none";
-			canvas.style.display="none";
-			socketSend(socket, 'V * '+ 0 + ' ' + 0);
-		} else {
-			hint.style.display="none";
-			button.style.display="inline";
-			circle.style.display="block";
-			canvas.style.display="inline";
-		}
-
-		
+	if (width < height) {
+		hint.style.display="block";
+		button.style.display="none";
+		canvas.style.display="none";
+		socketSend(socket, 'V * '+ 0 + ' ' + 0);
+	} else {
+		hint.style.display="none";
+		button.style.display="inline";
+		canvas.style.display="inline";
+	}
 }
 
-function initView() {
-		isLandscape();
-		context = canvas.getContext('2d');
-	 	canvas.width =  window.innerWidth/2;
- 		canvas.height = window.innerHeight;
- 		var canvasCenterX = canvas.width /2;
- 		var canvasCenterY = canvas.height /2;
- 		circle.style.left = canvasCenterX - circle.offsetWidth/2;
- 		circle.style.top = canvasCenterY - circle.offsetHeight/2;
+function onWindowResize() {
+	isLandscape();
+	setCanvasSize();
+	clearCanvas();
 }
 
-function updateBasicView() {
-		isLandscape();
-	    canvas.width =  window.innerWidth/2;
- 		canvas.height = window.innerHeight;
- 		var canvasCenterX = canvas.width /2;
- 		var canvasCenterY = canvas.height /2;
- 		circle.style.left = canvasCenterX - circle.offsetWidth/2;
- 		circle.style.top = canvasCenterY - circle.offsetHeight/2;
+function setCanvasSize() {
+	context = canvas.getContext('2d');
+	canvas.width =  window.innerWidth/2;
+	canvas.height = window.innerHeight;
+	canvasCenter = [canvas.width/2, canvas.height/2];
 }
 
 function colorBackground(object, color) {
@@ -93,36 +86,36 @@ function resetTimer() {
 /****************************************************************************************************************
   Canvas Draw
 ****************************************************************************************************************/
-function drawControllerStick(currx, curry) {
-		clearCanvas();
-		drawLineFromCenterTo(currx, curry);
-		drawCircleAtPos(currx,curry);
+function drawControllerStick(pos, color) {
+	clearCanvas();
+	drawLineFromCenterTo(pos);
+	drawCircleAtPos(pos, stickRadius, color);
 }
 
-function drawLineFromCenterTo(currx, curry) {
-	 	var canvasCenterX = canvas.width /2;
- 		var canvasCenterY = canvas.height /2;
-		context.beginPath();
- 		context.moveTo(canvasCenterX ,canvasCenterY);
-	    context.lineTo(currx, curry);
-	    context.closePath();
-	    context.stroke();
+function drawLineFromCenterTo(pos) {
+	context.beginPath();
+	context.moveTo(canvasCenter[0],canvasCenter[1]);
+	context.lineTo(pos[0], pos[1]);
+	context.closePath();
+	context.stroke();
 }
 
-function drawCircleAtPos(currx, curry) {
-		context.beginPath();
-	    context.arc(currx, curry, 50, 0, 2 * Math.PI, false);
-	    context.fillStyle = 'black';
-		context.fill();
-		context.lineWidth = 5;
-	    context.closePath();
-	    context.stroke();
+function drawCircleAtPos(pos, radius, color) {
+	context.beginPath();
+	context.arc(pos[0], pos[1], radius, 0, 2 * Math.PI, false);
+	context.fillStyle = color;
+	context.fill();
+	context.lineWidth = 3;
+	context.closePath();
+	context.stroke();
 }
 
 function clearCanvas() {
-		context.clearRect(0, 0, canvas.width, canvas.height);
-		context.lineWidth = 4;
-	    context.shadowColor = "transparent";
+	context.clearRect(0, 0, canvas.width, canvas.height);
+	context.lineWidth = 4;
+	context.shadowColor = "transparent";
+	drawCircleAtPos(canvasCenter, stickRadius, teamColor);
+	drawCircleAtPos(canvasCenter, stickMaxDistance, "transparent");
 }
 
 
@@ -139,42 +132,57 @@ function pushButton(e) {
 }
 
 function releaseButton() {
-	colorBackground(button, colorbase);
+	colorBackground(button, teamColor);
 }
 
-function pushCircle(e) {
+function touchCanvas(e) {
 	e.preventDefault();
 	var touchobj = e.changedTouches[0];
-	startx = parseInt(touchobj.clientX);
-	starty = parseInt(touchobj.clientX);
-	circle.style.display ="none";
+	var touchCoords = [parseInt(touchobj.clientX), parseInt(touchobj.clientY)];
+    var touchToCenter = [canvasCenter[0]-touchCoords[0], canvasCenter[1]-touchCoords[1]];
+	var touchDistance = Math.sqrt(touchToCenter[0]*touchToCenter[0] + touchToCenter[1]*touchToCenter[1]);
 
-	var canvasCenterX = canvas.width /2;
-	var canvasCenterY = canvas.height /2;
-	drawControllerStick(canvasCenterX,canvasCenterY);
+	if (touchDistance < stickRadius)
+	{
+		stickIsDragged = true;
+		stickDraggingOffset = touchToCenter;
+		drawControllerStick(canvasCenter, stickDraggingColor);
+		socketSend(socket, 'V * '+ 0 + ' ' + 0);
+	}
 
+	resetTimer();
+}
+
+function moveTouchOnCanvas(e) {
+
+	if (stickIsDragged)
+	{
+		var touchobj = e.changedTouches[0];
+		var touchCoords = [parseInt(touchobj.clientX), parseInt(touchobj.clientY)];
+		var stickCoords = [touchCoords[0]+stickDraggingOffset[0], touchCoords[1]+stickDraggingOffset[1]];
+		var centerToStick = [stickCoords[0]-canvasCenter[0], stickCoords[1]-canvasCenter[1]];
+		var centerToStickMag = Math.sqrt(centerToStick[0]*centerToStick[0] + centerToStick[1]*centerToStick[1]);
+
+		if (centerToStickMag > stickMaxDistance)
+		{
+			var shorteningFactor = stickMaxDistance/centerToStickMag;
+			centerToStick = [centerToStick[0]*shorteningFactor, centerToStick[1]*shorteningFactor];
+			centerToStickMag = stickMaxDistance;
+			stickCoords = [canvasCenter[0]+centerToStick[0], canvasCenter[1]+centerToStick[1]];
+		}
+		drawControllerStick(stickCoords, stickDraggingColor);
+
+		var normalizedStickCoords = [centerToStick[0]/stickMaxDistance, centerToStick[1]/stickMaxDistance];
+		var inputToSend = [Math.round(normalizedStickCoords[0]*inputMaxValue), Math.round(normalizedStickCoords[1]*inputMaxValue)];
+		socketSend(socket, 'V * '+ inputToSend[0] + ' ' + inputToSend[1]);
+	}
+	resetTimer();
+}
+
+function releaseCanvasTouch(e) {
+	stickIsDragged = false;
 	socketSend(socket, 'V * '+ 0 + ' ' + 0);
-	resetTimer();
-}
-
-function moveCircle(e) {
-	e.preventDefault();
-	var touchobj = e.changedTouches[0];
-	var currx = parseInt(touchobj.clientX);
-	var curry = parseInt(touchobj.clientY);
-	drawControllerStick(currx,curry);
-
-	diffx = currx - startx;
-	diffy = curry - starty;
-
-	resetTimer();
-	socketSend(socket, 'V * '+ diffx + ' ' + diffy);
-}
-
-function releaseCircle(e) {
-	circle.style.display = "";
 	clearCanvas();
-	socketSend(socket, 'V * '+ 0 + ' ' + 0);
 }
 
 /****************************************************************************************************************
@@ -200,20 +208,18 @@ function initSocket() {
 		window.sessionStorage.setItem("number", splitted_string[2]);
 
 		if(sessionStorage.getItem('team') == "RED") {
-	    	colorbase = 'red';
-	    	button.style.backgroundColor = colorbase;
-	    	circle.style.backgroundColor = colorbase;
-
+	    	teamColor = 'red';
+	    	button.style.backgroundColor = teamColor;
 	    } else if(sessionStorage.getItem('team') == "BLUE") {
-	    	colorbase = 'blue';
-	    	button.style.backgroundColor = colorbase;
-	    	circle.style.backgroundColor = colorbase;
+	    	teamColor = 'blue';
+	    	button.style.backgroundColor = teamColor;
 	    }	
 	}
 }
 
 function socketSend(socket, message) {
 	messageToSend = '^' + message + '$';
+	//console.log(messageToSend);
 	if (socket.readyState == 1) {
 		socket.send(messageToSend);
 	}
