@@ -22,8 +22,10 @@ window.addEventListener('load', function(){
 		stickMaxDistance = 3 * stickRadius;
 		teamColor = '#bbbbbb';
 		stickIsDragged = false;
-		stickDraggingColor = "black";
 		inputMaxValue = 255;
+
+		//////
+		teamColor = "blue";
 
 		initSocket();
 
@@ -114,7 +116,8 @@ function clearCanvas() {
 	context.clearRect(0, 0, canvas.width, canvas.height);
 	context.lineWidth = 4;
 	context.shadowColor = "transparent";
-	drawCircleAtPos(canvasCenter, stickRadius, teamColor);
+	drawCircleAtPos(canvasCenter, stickRadius*0.25, '#bbbbbb');
+	if (!stickIsDragged) drawCircleAtPos(canvasCenter, stickRadius, teamColor);
 	drawCircleAtPos(canvasCenter, stickMaxDistance, "transparent");
 }
 
@@ -146,7 +149,7 @@ function touchCanvas(e) {
 	{
 		stickIsDragged = true;
 		stickDraggingOffset = touchToCenter;
-		drawControllerStick(canvasCenter, stickDraggingColor);
+		drawControllerStick(canvasCenter, teamColor);
 		socketSend(socket, 'V * '+ 0 + ' ' + 0);
 	}
 
@@ -170,7 +173,7 @@ function moveTouchOnCanvas(e) {
 			centerToStickMag = stickMaxDistance;
 			stickCoords = [canvasCenter[0]+centerToStick[0], canvasCenter[1]+centerToStick[1]];
 		}
-		drawControllerStick(stickCoords, stickDraggingColor);
+		drawControllerStick(stickCoords, teamColor);
 
 		var normalizedStickCoords = [centerToStick[0]/stickMaxDistance, centerToStick[1]/stickMaxDistance];
 		var inputToSend = [Math.round(normalizedStickCoords[0]*inputMaxValue), Math.round(normalizedStickCoords[1]*inputMaxValue)];
@@ -193,7 +196,7 @@ function initSocket() {
 	socket = new WebSocket('ws://' + configuration.server_ip + ':' + configuration.server_port)
 	
 	socket.onerror = function(error) {
- 		window.location.href = './goodbye.html';
+ 		//window.location.href = './goodbye.html';
 	};
 
 	socket.onopen = function() { 
@@ -236,7 +239,7 @@ function closeSocket() {
 ****************************************************************************************************************/
 function checkLogin() {
 	if(sessionStorage.getItem('playername') === null) {
-		window.location.href = './goodbye.html';
+		//window.location.href = './goodbye.html';
 	}
 }
 
@@ -244,5 +247,5 @@ function logout(){
 	window.sessionStorage.removeItem('team');
 	window.sessionStorage.removeItem('number');
 	closeSocket();
-	window.location.href = './goodbye.html';
+	//window.location.href = './goodbye.html';
 }
