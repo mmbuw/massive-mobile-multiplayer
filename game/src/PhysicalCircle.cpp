@@ -1,7 +1,7 @@
 #include "PhysicalCircle.hpp"
 
 PhysicalCircle::PhysicalCircle(float mass, float posX, float posY, float radius, float frictionCoefficient) : 
-	mass_(mass), posX_(posX), posY_(posY), velX_(0.0), velY_(0.0), radius_(radius), frictionCoefficient_(frictionCoefficient) {}
+	mass_(mass), posX_(posX), posY_(posY), velX_(0.0), velY_(0.0), radius_(radius), frictionCoefficient_(frictionCoefficient), lastFrameTime_(Clock::now()) {}
 
 /* virtual */ PhysicalCircle::~PhysicalCircle() {}
 
@@ -10,9 +10,9 @@ PhysicalCircle::PhysicalCircle(float mass, float posX, float posY, float radius,
 	window->draw(shape_);
 }
 
-/* virtual */ void PhysicalCircle::frameFrictionUpdate()
+/* virtual */ void PhysicalCircle::frameFrictionUpdate(float timeFactor)
 {
-	float frictionDecrement = frictionCoefficient_;
+	float frictionDecrement = frictionCoefficient_ * timeFactor;
 
 	float currentSpeed = computeCurrentSpeed();
 
@@ -35,8 +35,12 @@ PhysicalCircle::PhysicalCircle(float mass, float posX, float posY, float radius,
 
 /* virtual */ void PhysicalCircle::frameUpdate()
 {
-	frameFrictionUpdate();
-	setPosition(posX_ + velX_, posY_ + velY_);
+	Clock::time_point nowTime = Clock::now();
+	int elapsedMilliseconds = (std::chrono::duration_cast<milliseconds>(nowTime - lastFrameTime_)).count();
+	float timeFactor = (elapsedMilliseconds/1000.0)*100.0;
+	frameFrictionUpdate(timeFactor);
+	setPosition(posX_ + velX_ * timeFactor, posY_ + velY_ * timeFactor);
+	lastFrameTime_ = nowTime;
 }
 
 /* virtual */ void PhysicalCircle::setPosition(float x, float y)
