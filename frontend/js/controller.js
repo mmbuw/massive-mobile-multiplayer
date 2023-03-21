@@ -22,10 +22,8 @@ window.addEventListener('load', function(){
 		stickMaxDistance = 3 * stickRadius;
 		teamColor = '#bbbbbb';
 		stickIsDragged = false;
-		inputMaxValue = 255;
-
-		//////
-		teamColor = "blue";
+		sendInputMaxValue = 255;
+		redirectOnError = false;
 
 		initSocket();
 
@@ -176,7 +174,7 @@ function moveTouchOnCanvas(e) {
 		drawControllerStick(stickCoords, teamColor);
 
 		var normalizedStickCoords = [centerToStick[0]/stickMaxDistance, centerToStick[1]/stickMaxDistance];
-		var inputToSend = [Math.round(normalizedStickCoords[0]*inputMaxValue), Math.round(normalizedStickCoords[1]*inputMaxValue)];
+		var inputToSend = [Math.round(normalizedStickCoords[0]*sendInputMaxValue), Math.round(normalizedStickCoords[1]*sendInputMaxValue)];
 		socketSend(socket, 'V * '+ inputToSend[0] + ' ' + inputToSend[1]);
 	}
 	resetTimer();
@@ -196,7 +194,7 @@ function initSocket() {
 	socket = new WebSocket('ws://' + configuration.server_ip + ':' + configuration.server_port)
 	
 	socket.onerror = function(error) {
- 		//window.location.href = './goodbye.html';
+ 		if (redirectOnError) window.location.href = './goodbye.html';
 	};
 
 	socket.onopen = function() { 
@@ -239,7 +237,7 @@ function closeSocket() {
 ****************************************************************************************************************/
 function checkLogin() {
 	if(sessionStorage.getItem('playername') === null) {
-		//window.location.href = './goodbye.html';
+		if (redirectOnError) window.location.href = './goodbye.html';
 	}
 }
 
@@ -247,5 +245,5 @@ function logout(){
 	window.sessionStorage.removeItem('team');
 	window.sessionStorage.removeItem('number');
 	closeSocket();
-	//window.location.href = './goodbye.html';
+	if (redirectOnError) window.location.href = './goodbye.html';
 }
