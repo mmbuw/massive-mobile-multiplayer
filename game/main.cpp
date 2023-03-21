@@ -7,7 +7,7 @@
 #include "InputHandler.hpp"
 #include "Game.hpp"
 
-#define INSERT_KEYBOARD_DEBUG_PLAYER false
+#define INSERT_KEYBOARD_DEBUG_PLAYER true
 
 int main(int argc, char* argv[])
 {
@@ -16,7 +16,7 @@ int main(int argc, char* argv[])
 
 	sf::RenderWindow window(sf::VideoMode(sf::VideoMode::getDesktopMode().width,sf::VideoMode::getDesktopMode().width,20), "MMMBall", sf::Style::Fullscreen);
 	//sf::RenderWindow window(sf::VideoMode(sf::VideoMode::getDesktopMode().width,sf::VideoMode::getDesktopMode().width,20), "MMMBall");
-	window.setVerticalSyncEnabled(true);
+	//window.setVerticalSyncEnabled(true);
 
 	std::string programName(argv[0]);
 	std::string programDirectory(programName.substr(0, programName.find_last_of("/")));
@@ -182,6 +182,11 @@ int main(int argc, char* argv[])
 		// input handling
 		inputHandler.processAddRemoveQueries();
 		inputHandler.processDeviceInputs();
+
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::R))
+		{
+			game->resetGame();
+		}
 		
 
 		// application logic

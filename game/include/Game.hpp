@@ -54,6 +54,7 @@ class Game
 		
 		//game logic methods
 		void performEndOfGameAnimation();
+		void resetGame();
 		void resetScore();
 		void checkForGoal();
 		void resetPlayers();

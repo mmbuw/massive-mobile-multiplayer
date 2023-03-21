@@ -413,11 +413,7 @@ void Game::performEndOfGameAnimation()
 	
 	if (elapsedMilliseconds > END_ANIMATION_DURATION_SEC * 1000)
 	{
-		ball_->resetToStart();
-		resetPlayers();
-		resetScore();
-		clock_.restart();
-		inEndAnimation_ = false;
+		resetGame();
 	}
 	else
 	{
@@ -442,6 +438,15 @@ void Game::performEndOfGameAnimation()
 		currentTextPos = lerp(lerpStart, lerpEnd, timeStep);
 		goalTextTwo_.setPosition(currentTextPos);
 	}
+}
+
+void Game::resetGame()
+{
+	ball_->resetToStart();
+	resetPlayers();
+	resetScore();
+	clock_.restart();
+	inEndAnimation_ = false;
 }
 
 
