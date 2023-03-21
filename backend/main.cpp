@@ -251,6 +251,7 @@ int main()
 			            {
 			            	//parse message formats: EVENT_TYPE EVENT_CODE VALUE
 			            	//                       [EV_ABS | EV_REL] VALUE1 VALUE2 VALUE3 ...
+							//std::cout << message << std::endl;
 
 				            std::stringstream messageStream(message);
 				            std::string typeString;
@@ -299,7 +300,8 @@ int main()
 				            else
 				            {
 				            	//illegal use of multiple values
-				            	std::cout << "[Server] Multiple values only allowed for EV_ABS and EV_REL." << std::endl;
+				            	std::cout << message << std::endl;
+								std::cout << "[Server] Multiple values only allowed for EV_ABS and EV_REL." << std::endl;
 				            }
 				        }
 				        else

@@ -1,7 +1,7 @@
 /****************************************************************************************************************
   OnLoad
 ****************************************************************************************************************/
-redirectOnError = true;
+redirectOnError = false;
 checkLogin();
 
 window.addEventListener('load', function(){
@@ -18,6 +18,7 @@ window.addEventListener('load', function(){
 		startx = null;
 		starty = null;
 		socket = null;
+		normalizedStickCoords = [0.0, 0.0];
 
 		stickRadius = 40;
 		stickMaxDistance = 2 * stickRadius;
@@ -36,6 +37,9 @@ window.addEventListener('load', function(){
 		canvas.addEventListener('touchstart', touchCanvas, false);
 		canvas.addEventListener('touchmove', moveTouchOnCanvas, false);
 		canvas.addEventListener('touchend', releaseCanvasTouch, false);
+
+		socketSendRate = 50; // updates per second
+		window.setInterval(intervalUpdate, (1.0/socketSendRate)*1000);
 }, false)
 
 
@@ -171,17 +175,24 @@ function moveTouchOnCanvas(e) {
 		}
 		drawControllerStick(stickCoords, teamColor);
 
-		var normalizedStickCoords = [centerToStick[0]/stickMaxDistance, centerToStick[1]/stickMaxDistance];
-		var inputToSend = [Math.round(normalizedStickCoords[0]*sendInputMaxValue), Math.round(normalizedStickCoords[1]*sendInputMaxValue)];
-		socketSend(socket, 'V * '+ inputToSend[0] + ' ' + inputToSend[1]);
+		normalizedStickCoords = [centerToStick[0]/stickMaxDistance, centerToStick[1]/stickMaxDistance];
 	}
 	resetTimer();
 }
 
 function releaseCanvasTouch(e) {
 	stickIsDragged = false;
+	normalizedStickCoords = [0.0, 0.0];
 	socketSend(socket, 'V * '+ 0 + ' ' + 0);
 	clearCanvas();
+}
+
+function intervalUpdate() {
+	if (stickIsDragged)
+	{
+		var inputToSend = [Math.round(normalizedStickCoords[0]*sendInputMaxValue), Math.round(normalizedStickCoords[1]*sendInputMaxValue)];
+		socketSend(socket, 'V * ' + inputToSend[0] + ' ' + inputToSend[1]);
+	}
 }
 
 /****************************************************************************************************************

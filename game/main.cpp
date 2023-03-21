@@ -14,9 +14,9 @@ int main(int argc, char* argv[])
 	srand (time(NULL));
 	sf::Clock Clock;
 
-	sf::RenderWindow window(sf::VideoMode(sf::VideoMode::getDesktopMode().width,sf::VideoMode::getDesktopMode().width,20), "MMMBall", sf::Style::Fullscreen);
 	//sf::RenderWindow window(sf::VideoMode(sf::VideoMode::getDesktopMode().width,sf::VideoMode::getDesktopMode().width,20), "MMMBall");
-	//window.setVerticalSyncEnabled(true);
+	sf::RenderWindow window(sf::VideoMode(sf::VideoMode::getDesktopMode().width,sf::VideoMode::getDesktopMode().width,20), "MMMBall", sf::Style::Fullscreen);
+	window.setVerticalSyncEnabled(true);
 
 	std::string programName(argv[0]);
 	std::string programDirectory(programName.substr(0, programName.find_last_of("/")));
