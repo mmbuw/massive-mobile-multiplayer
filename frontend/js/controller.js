@@ -1,6 +1,7 @@
 /****************************************************************************************************************
   OnLoad
 ****************************************************************************************************************/
+redirectOnError = false;
 checkLogin();
 
 window.addEventListener('load', function(){
@@ -19,11 +20,10 @@ window.addEventListener('load', function(){
 		socket = null;
 
 		stickRadius = 40;
-		stickMaxDistance = 3 * stickRadius;
+		stickMaxDistance = 2 * stickRadius;
 		teamColor = '#bbbbbb';
 		stickIsDragged = false;
 		sendInputMaxValue = 255;
-		redirectOnError = false;
 
 		initSocket();
 
@@ -36,8 +36,6 @@ window.addEventListener('load', function(){
 		canvas.addEventListener('touchstart', touchCanvas, false);
 		canvas.addEventListener('touchmove', moveTouchOnCanvas, false);
 		canvas.addEventListener('touchend', releaseCanvasTouch, false);
-
-
 }, false)
 
 
@@ -126,7 +124,7 @@ function clearCanvas() {
 
 function pushButton(e) {
 	e.preventDefault();
-	colorBackground(button,'#000000');
+	colorBackground(button,'#ffffff');
 	resetTimer();
 	socketSend(socket, 'K A 1');
 	socketSend(socket, 'K A 0');
@@ -199,7 +197,6 @@ function initSocket() {
 
 	socket.onopen = function() { 
 		socketSend(socket, 'NAME '+sessionStorage.getItem('playername'));
-		window.sessionStorage.removeItem('playername');
 	}
 
 	socket.onmessage = function(evt) {
@@ -214,7 +211,10 @@ function initSocket() {
 	    } else if(sessionStorage.getItem('team') == "BLUE") {
 	    	teamColor = 'blue';
 	    	button.style.backgroundColor = teamColor;
-	    }	
+	    }
+
+		button.innerHTML = "<div class='status-text'>Name: <span id='bold'>" + sessionStorage.getItem('playername') + "</span><br/><br/>Number: <span id='bold'>" + sessionStorage.getItem('number')  + "</span></div>";
+		clearCanvas();
 	}
 }
 
