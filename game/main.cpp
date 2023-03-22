@@ -14,8 +14,8 @@ int main(int argc, char* argv[])
 	srand (time(NULL));
 	sf::Clock Clock;
 
-	sf::RenderWindow window(sf::VideoMode(sf::VideoMode::getDesktopMode().width,sf::VideoMode::getDesktopMode().width,20), "MMMBall", sf::Style::Fullscreen);
 	//sf::RenderWindow window(sf::VideoMode(sf::VideoMode::getDesktopMode().width,sf::VideoMode::getDesktopMode().width,20), "MMMBall");
+	sf::RenderWindow window(sf::VideoMode(sf::VideoMode::getDesktopMode().width,sf::VideoMode::getDesktopMode().width,20), "MMMBall", sf::Style::Fullscreen);
 	window.setVerticalSyncEnabled(true);
 
 	std::string programName(argv[0]);
@@ -182,6 +182,11 @@ int main(int argc, char* argv[])
 		// input handling
 		inputHandler.processAddRemoveQueries();
 		inputHandler.processDeviceInputs();
+
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::R))
+		{
+			game->resetGame();
+		}
 		
 
 		// application logic

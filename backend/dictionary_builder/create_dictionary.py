@@ -1,3 +1,4 @@
+import os
 import sys
 
 # Command line parameters
@@ -9,6 +10,7 @@ def start():
 
     # get filenames and load files
     config_file_name = sys.argv[1]
+    config_file_abs_path = os.path.abspath(config_file_name)
     output_file_name = sys.argv[2]
 
     config_file = open(config_file_name, 'r')
@@ -25,7 +27,7 @@ def start():
     output_file.write('#include <string>\n')
     output_file.write('\n')
     output_file.write('const std::string configuration_file("' +
-                      config_file_name + '");\n')
+                      config_file_abs_path + '");\n')
     output_file.write('std::map<std::string, int> eventDictionary;\n')
     output_file.write('\n')
     output_file.write('void fillDictionary()\n')

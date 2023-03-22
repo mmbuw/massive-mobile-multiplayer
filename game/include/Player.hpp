@@ -15,7 +15,7 @@ class Player : public PhysicalCircle
 {
 
 	public:
-		Player(int startX, int startY, sf::Color border, sf::Color center, std::string const& name, int number);
+		Player(int startX, int startY, sf::Color border, sf::Color center, std::string const& name, int number, std::string resourcesPath);
 		
 		/* virtual */ void render(sf::RenderWindow* window) const;
 		/* virtual */ void frameUpdate();
@@ -54,6 +54,7 @@ class Player : public PhysicalCircle
 		int startX_;
 		int startY_;
 
+        std::string resourcesPath_;
 		sf::Text numberText_;
 		sf::Text nameText_;
 		sf::Font font_;

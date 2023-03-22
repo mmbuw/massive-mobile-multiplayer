@@ -83,8 +83,9 @@ void InputDevice::mapValuesAndApply()
 {
 	if (inputValueX_ != 0 || inputValueY_ != 0)
 	{
-		double inputToVelFactor = 12.0;
-		playerFigure_->addVelocityOffset(inputValueX_ * inputToVelFactor, inputValueY_ * inputToVelFactor);
+		double inputToVelFactor = 6.0 / 255.0;
+		//playerFigure_->addVelocityOffset(inputValueX_ * inputToVelFactor, inputValueY_ * inputToVelFactor);
+		playerFigure_->setVelocity(inputValueX_ * inputToVelFactor, inputValueY_ * inputToVelFactor);
 	}
 
 	if (inputButtonA_)

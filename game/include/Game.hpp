@@ -4,7 +4,9 @@
 #include <SFML/System.hpp>
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#include <iomanip>
 #include <string>
+#include <sstream>
 #include <set>
 #include <cmath>
 #include <chrono>
@@ -52,6 +54,7 @@ class Game
 		
 		//game logic methods
 		void performEndOfGameAnimation();
+		void resetGame();
 		void resetScore();
 		void checkForGoal();
 		void resetPlayers();
